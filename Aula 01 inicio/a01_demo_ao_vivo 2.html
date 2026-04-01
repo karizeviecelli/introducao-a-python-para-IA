@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo ao Vivo — O que é programar? · Aula 01</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;color:#1e293b;background:#eef2ff;min-height:100vh;padding:20px}
+.wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.page-hdr{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
+.page-hdr h1{font-size:16px;font-weight:600}.page-hdr p{font-size:12px;color:#94a3b8}
+.prog-track{grid-column:1/-1;height:3px;background:#e2e8f0;border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:#4f46e5;border-radius:2px;transition:width .3s ease;width:0%}
+.panel{border:1px solid #c7d2fe;border-radius:12px;overflow:hidden;background:#fff}
+.ph{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1px solid #c7d2fe;background:#eef2ff}
+.pt{font-size:12px;font-weight:500;color:#3730a3}
+.dots-r{display:flex;gap:5px}
+.dot{width:10px;height:10px;border-radius:50%}
+pre{background:#1e293b;color:#e2e8f0;padding:15px;font-family:'Courier New',monospace;font-size:12px;line-height:1.8;min-height:300px;overflow:auto;white-space:pre}
+.cursor{display:inline-block;width:2px;height:14px;background:#a5b4fc;vertical-align:middle;animation:blink .9s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.preview-body{min-height:300px;overflow-y:auto;background:#f8fafc;padding:16px;font-family:'Courier New',monospace;font-size:13px;line-height:1.9}
+.out-line{padding:1px 0;color:#1e293b}
+.out-line.cm{color:#64748b;font-style:italic}
+.out-line.ok{color:#4f46e5;font-weight:600}
+.out-line.err{color:#dc2626}
+.out-line.prompt{color:#94a3b8}
+.step-bar{grid-column:1/-1;border:1px solid #c7d2fe;border-radius:12px;background:#fff;display:flex;align-items:center;gap:10px;padding:11px 15px;flex-wrap:wrap}
+.sbadge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#eef2ff;color:#4f46e5;border:1px solid #a5b4fc}
+.slabel{font-size:12px;color:#64748b;flex:1;line-height:1.4}
+.cb{font-size:12px;font-weight:500;padding:6px 14px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#1e293b;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
+.cb:hover{background:#f1f5f9}.cb.go{background:#4f46e5;color:#fff;border-color:#4f46e5}.cb.go:hover{background:#4338ca}
+.cb:disabled{opacity:.35;pointer-events:none}
+.narr{grid-column:1/-1;border:1px solid #c7d2fe;border-radius:10px;padding:11px 15px;background:#eef2ff;font-size:13px;color:#312e81;line-height:1.6;min-height:50px}
+.narr strong{color:#3730a3;font-weight:600}
+.k{color:#93c5fd}.p{color:#c4b5fd}.v{color:#6ee7b7}.s{color:#fda4af}.cm2{color:#475569;font-style:italic}.fn{color:#fbbf24}
+@media(max-width:680px){.wrap{grid-template-columns:1fr}.panel:last-of-type{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="page-hdr"><h1>Demonstração ao vivo — O que é programar? Primeiros passos</h1><p>Aula 01 · 45 min · Docente digita no Colab, alunos acompanham</p></div>
+  <div class="prog-track"><div class="prog-fill" id="prog"></div></div>
+  <div class="panel">
+    <div class="ph"><span class="pt">Google Colab — aula01.ipynb</span><div class="dots-r"><div class="dot" style="background:#ef4444"></div><div class="dot" style="background:#f59e0b"></div><div class="dot" style="background:#10b981"></div></div></div>
+    <pre><span id="code-out"></span><span class="cursor"></span></pre>
+  </div>
+  <div class="panel">
+    <div class="ph"><span class="pt">Output — resultado da célula</span><div class="dots-r"><div class="dot" style="background:#ef4444"></div><div class="dot" style="background:#f59e0b"></div><div class="dot" style="background:#10b981"></div></div></div>
+    <div class="preview-body" id="preview"></div>
+  </div>
+  <div class="narr" id="narr">Pronto para começar. Clique em <strong>Iniciar digitação</strong>.</div>
+  <div class="step-bar">
+    <span class="sbadge" id="sbadge">Etapa 1 / 8</span>
+    <span class="slabel" id="sdesc">Olá, mundo — a primeira célula</span>
+    <button class="cb" id="bp" onclick="prevS()" disabled>← Anterior</button>
+    <button class="cb go" id="bplay" onclick="playS()">▶ Iniciar digitação</button>
+    <button class="cb" id="bn" onclick="nextS()" disabled>Próxima →</button>
+  </div>
+</div>
+<script>
+const STEPS=[
+{label:'Olá, mundo — a primeira célula',
+narr:'<strong>Docente:</strong> "Vamos começar com o clássico. Todo programador escreve isso primeiro. print() é uma função — você manda o Python exibir algo. Shift+Enter para executar."',
+code:`<span class="fn">print</span>(<span class="s">"Olá, mundo!"</span>)\n<span class="fn">print</span>(<span class="s">"Meu primeiro programa Python."</span>)\n<span class="fn">print</span>(<span class="v">2026</span>)`,
+prev:`<div class="out-line ok">Olá, mundo!</div><div class="out-line ok">Meu primeiro programa Python.</div><div class="out-line ok">2026</div>`},
+{label:'Criando variáveis — as caixas',
+narr:'<strong>Docente:</strong> "Uma variável é uma caixa com um nome. O = não é igualdade matemática — significa: guarde esse valor nessa caixa. Vamos criar três e usar print() para ver o conteúdo."',
+code:`<span class="cm2"># Criando variáveis</span>\n<span class="p">nome</span>   = <span class="s">"Maria"</span>\n<span class="p">idade</span>  = <span class="v">25</span>\n<span class="p">altura</span> = <span class="v">1.68</span>\n\n<span class="fn">print</span>(<span class="p">nome</span>)\n<span class="fn">print</span>(<span class="p">idade</span>)\n<span class="fn">print</span>(<span class="p">altura</span>)`,
+prev:`<div class="out-line ok">Maria</div><div class="out-line ok">25</div><div class="out-line ok">1.68</div>`},
+{label:'Os 4 tipos de dados',
+narr:'<strong>Docente:</strong> "Python tem 4 tipos básicos: int, float, str e bool. Ele descobre o tipo sozinho. A função type() nos mostra qual tipo está guardado em cada caixa."',
+code:`<span class="p">qtd</span>      = <span class="v">32</span>          <span class="cm2"># int</span>\n<span class="p">media</span>    = <span class="v">7.5</span>         <span class="cm2"># float</span>\n<span class="p">cidade</span>   = <span class="s">"Curitiba"</span>  <span class="cm2"># str</span>\n<span class="p">aprovado</span> = <span class="v">True</span>        <span class="cm2"># bool</span>\n\n<span class="fn">print</span>(<span class="fn">type</span>(<span class="p">qtd</span>))\n<span class="fn">print</span>(<span class="fn">type</span>(<span class="p">media</span>))\n<span class="fn">print</span>(<span class="fn">type</span>(<span class="p">cidade</span>))\n<span class="fn">print</span>(<span class="fn">type</span>(<span class="p">aprovado</span>))`,
+prev:`<div class="out-line ok">&lt;class 'int'&gt;</div><div class="out-line ok">&lt;class 'float'&gt;</div><div class="out-line ok">&lt;class 'str'&gt;</div><div class="out-line ok">&lt;class 'bool'&gt;</div>`},
+{label:'f-strings — juntar texto e variáveis',
+narr:'<strong>Docente:</strong> "A f-string é a forma elegante de montar mensagens. Coloco um f antes das aspas e uso chaves {} para inserir variáveis. O Python substitui a variável pelo valor automaticamente."',
+code:`<span class="p">nome</span>  = <span class="s">"Carlos"</span>\n<span class="p">idade</span> = <span class="v">28</span>\n<span class="p">cidade</span> = <span class="s">"Florianópolis"</span>\n\n<span class="fn">print</span>(<span class="s">f"Olá! Sou {</span><span class="p">nome</span><span class="s">}."</span>)\n<span class="fn">print</span>(<span class="s">f"Tenho {</span><span class="p">idade</span><span class="s">} anos."</span>)\n<span class="fn">print</span>(<span class="s">f"Moro em {</span><span class="p">cidade</span><span class="s">}."</span>)\n<span class="fn">print</span>(<span class="s">f"Ano que vem terei {</span><span class="p">idade</span><span class="s"> + 1} anos."</span>)`,
+prev:`<div class="out-line ok">Olá! Sou Carlos.</div><div class="out-line ok">Tenho 28 anos.</div><div class="out-line ok">Moro em Florianópolis.</div><div class="out-line ok">Ano que vem terei 29 anos.</div>`},
+{label:'Operações aritméticas',
+narr:'<strong>Docente:</strong> "Python faz as mesmas operações de uma calculadora. Os símbolos são quase os mesmos — exceto ** para potência e // para divisão inteira. Vamos calcular um IMC."',
+code:`<span class="cm2"># Operações básicas</span>\n<span class="fn">print</span>(<span class="v">10</span> + <span class="v">3</span>)   <span class="cm2"># 13</span>\n<span class="fn">print</span>(<span class="v">10</span> - <span class="v">3</span>)   <span class="cm2"># 7</span>\n<span class="fn">print</span>(<span class="v">10</span> * <span class="v">3</span>)   <span class="cm2"># 30</span>\n<span class="fn">print</span>(<span class="v">10</span> / <span class="v">3</span>)   <span class="cm2"># 3.333...</span>\n<span class="fn">print</span>(<span class="v">10</span> ** <span class="v">2</span>)  <span class="cm2"># 100</span>\n\n<span class="cm2"># Calculadora de IMC</span>\n<span class="p">peso</span>   = <span class="v">70</span>\n<span class="p">altura</span> = <span class="v">1.75</span>\n<span class="p">imc</span>    = <span class="p">peso</span> / <span class="p">altura</span> ** <span class="v">2</span>\n<span class="fn">print</span>(<span class="s">f"IMC: {</span><span class="p">imc</span><span class="s">:.1f}"</span>)`,
+prev:`<div class="out-line ok">13</div><div class="out-line ok">7</div><div class="out-line ok">30</div><div class="out-line ok">3.3333333333333335</div><div class="out-line ok">100</div><div class="out-line ok">IMC: 22.9</div>`},
+{label:'input() — programa que conversa',
+narr:'<strong>Docente:</strong> "input() pausa o programa e espera o usuário digitar. Mas atenção: ele sempre retorna texto. Se quiser usar como número, precisa converter com int() ou float()."',
+code:`<span class="cm2"># Programa interativo</span>\n<span class="p">nome</span> = <span class="fn">input</span>(<span class="s">"Qual é o seu nome? "</span>)\n<span class="fn">print</span>(<span class="s">f"Olá, {</span><span class="p">nome</span><span class="s">}! Bem-vindo."</span>)\n\n<span class="cm2"># input() retorna str — converter para fazer contas</span>\n<span class="p">ano_nasc</span> = <span class="fn">int</span>(<span class="fn">input</span>(<span class="s">"Ano de nascimento: "</span>))\n<span class="p">idade</span>    = <span class="v">2026</span> - <span class="p">ano_nasc</span>\n<span class="fn">print</span>(<span class="s">f"Você tem aproximadamente {</span><span class="p">idade</span><span class="s">} anos."</span>)`,
+prev:`<div class="out-line prompt">Qual é o seu nome? <span style="color:#4f46e5">Ana</span></div><div class="out-line ok">Olá, Ana! Bem-vindo.</div><div class="out-line prompt">Ano de nascimento: <span style="color:#4f46e5">2000</span></div><div class="out-line ok">Você tem aproximadamente 26 anos.</div>`},
+{label:'Conhecendo os erros — sem medo',
+narr:'<strong>Docente:</strong> "Vou provocar alguns erros de propósito. Errar é a melhor forma de aprender. Vamos ver o que cada mensagem diz e como corrigir. SyntaxError, NameError, TypeError."',
+code:`<span class="cm2"># Este código tem erros de propósito!</span>\n\n<span class="cm2"># 1. SyntaxError — parêntese faltando</span>\n<span class="cm2"># print("Olá"  ← isso quebraria</span>\n\n<span class="cm2"># 2. NameError — variável não existe</span>\n<span class="cm2"># print(ndome)  ← digitou errado</span>\n\n<span class="cm2"># 3. TypeError — str + int sem converter</span>\n<span class="p">idade</span> = <span class="fn">input</span>(<span class="s">"Idade: "</span>)\n<span class="cm2"># print(idade + 1)  ← isso quebraria!</span>\n\n<span class="cm2"># Versão correta:</span>\n<span class="p">idade</span> = <span class="fn">int</span>(<span class="fn">input</span>(<span class="s">"Idade: "</span>))\n<span class="fn">print</span>(<span class="s">f"Daqui a 1 ano: {</span><span class="p">idade</span><span class="s"> + 1}"</span>)`,
+prev:`<div class="out-line prompt">Idade: <span style="color:#4f46e5">20</span></div><div class="out-line ok">Daqui a 1 ano: 21</div>`},
+{label:'Mini programa completo — conversor de temperatura',
+narr:'<strong>Docente:</strong> "Vamos juntar tudo: variáveis, input, operação matemática, f-string e print. Um conversor de Celsius para Fahrenheit — funcional e útil."',
+code:`<span class="cm2"># Conversor de temperatura</span>\n<span class="cm2"># Fórmula: F = C * 9/5 + 32</span>\n\n<span class="fn">print</span>(<span class="s">"=== Conversor de Temperatura ==="</span>)\n\n<span class="p">celsius</span>    = <span class="fn">float</span>(<span class="fn">input</span>(<span class="s">"Temperatura em Celsius: "</span>))\n<span class="p">fahrenheit</span> = <span class="p">celsius</span> * <span class="v">9</span>/<span class="v">5</span> + <span class="v">32</span>\n\n<span class="fn">print</span>(<span class="s">f"{</span><span class="p">celsius</span><span class="s">:.1f}°C equivale a {</span><span class="p">fahrenheit</span><span class="s">:.1f}°F"</span>)`,
+prev:`<div class="out-line ok">=== Conversor de Temperatura ===</div><div class="out-line prompt">Temperatura em Celsius: <span style="color:#4f46e5">100</span></div><div class="out-line ok">100.0°C equivale a 212.0°F</div>`}
+];
+let cur=0,playing=false,timer=null;
+function render(){
+  document.getElementById('sbadge').textContent=`Etapa ${cur+1} / ${STEPS.length}`;
+  document.getElementById('sdesc').textContent=STEPS[cur].label;
+  document.getElementById('narr').innerHTML=STEPS[cur].narr;
+  document.getElementById('preview').innerHTML=STEPS[cur].prev;
+  document.getElementById('code-out').innerHTML='';
+  document.getElementById('prog').style.width=((cur+1)/STEPS.length*100)+'%';
+  document.getElementById('bp').disabled=cur===0;
+  document.getElementById('bn').disabled=cur===STEPS.length-1;
+  const pb=document.getElementById('bplay');pb.textContent='▶ Iniciar digitação';pb.className='cb go';
+}
+function playS(){
+  if(playing){clearTimeout(timer);playing=false;document.getElementById('bplay').textContent='▶ Iniciar digitação';return;}
+  playing=true;document.getElementById('bplay').textContent='⏸ Pausar';
+  const code=STEPS[cur].code;let i=0;const out=document.getElementById('code-out');out.innerHTML='';
+  function tick(){
+    if(!playing)return;
+    if(i<code.length){
+      if(code[i]==='<'){const end=code.indexOf('>',i);if(end>-1){out.innerHTML+=code.slice(i,end+1);i=end+1;}else{out.innerHTML+=code[i];i++;}}
+      else{out.innerHTML+=code[i];i++;}
+      timer=setTimeout(tick,i%7===0?16:4);
+    }else{playing=false;document.getElementById('bplay').textContent='✓ Concluído';document.getElementById('bn').disabled=cur===STEPS.length-1;}
+  }
+  tick();
+}
+function nextS(){if(cur<STEPS.length-1){cur++;render();}}
+function prevS(){if(cur>0){cur--;render();}}
+render();
+</script>
+</body>
+</html>
