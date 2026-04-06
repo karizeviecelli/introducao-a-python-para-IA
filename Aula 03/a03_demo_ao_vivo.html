@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo ao Vivo — Repetição com for e while · Aula 03</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;color:#1e293b;background:#f5f3ff;min-height:100vh;padding:20px}
+.wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.page-hdr{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
+.page-hdr h1{font-size:16px;font-weight:600}.page-hdr p{font-size:12px;color:#94a3b8}
+.prog-track{grid-column:1/-1;height:3px;background:#e2e8f0;border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:#7c3aed;border-radius:2px;transition:width .3s ease;width:0%}
+.panel{border:1px solid #ddd6fe;border-radius:12px;overflow:hidden;background:#fff}
+.ph{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1px solid #ddd6fe;background:#f5f3ff}
+.pt{font-size:12px;font-weight:500;color:#6d28d9}
+.dots-r{display:flex;gap:5px}
+.dot{width:10px;height:10px;border-radius:50%}
+pre{background:#1e293b;color:#e2e8f0;padding:15px;font-family:'Courier New',monospace;font-size:12px;line-height:1.8;min-height:300px;overflow:auto;white-space:pre}
+.cursor{display:inline-block;width:2px;height:14px;background:#c4b5fd;vertical-align:middle;animation:blink .9s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.preview-body{min-height:300px;overflow-y:auto;background:#f8fafc;padding:16px;font-family:'Courier New',monospace;font-size:13px;line-height:1.9}
+.out-line{padding:1px 0;color:#1e293b}
+.out-line.cm{color:#64748b;font-style:italic}
+.out-line.ok{color:#7c3aed;font-weight:600}
+.out-line.prompt{color:#94a3b8}
+.step-bar{grid-column:1/-1;border:1px solid #ddd6fe;border-radius:12px;background:#fff;display:flex;align-items:center;gap:10px;padding:11px 15px;flex-wrap:wrap}
+.sbadge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#f5f3ff;color:#7c3aed;border:1px solid #c4b5fd}
+.slabel{font-size:12px;color:#64748b;flex:1;line-height:1.4}
+.cb{font-size:12px;font-weight:500;padding:6px 14px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#1e293b;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
+.cb:hover{background:#f1f5f9}.cb.go{background:#7c3aed;color:#fff;border-color:#7c3aed}.cb.go:hover{background:#6d28d9}
+.cb:disabled{opacity:.35;pointer-events:none}
+.narr{grid-column:1/-1;border:1px solid #ddd6fe;border-radius:10px;padding:11px 15px;background:#f5f3ff;font-size:13px;color:#3b0764;line-height:1.6;min-height:50px}
+.narr strong{color:#6d28d9;font-weight:600}
+.next-page{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:10px}
+.next-page-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#7c3aed}
+.next-page-title{font-size:13px;font-weight:600;color:#1e293b;margin-top:2px}
+.next-page-btn{background:#7c3aed;color:#fff;border:none;padding:8px 18px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s;white-space:nowrap;text-decoration:none;display:inline-block}
+.next-page-btn:hover{background:#6d28d9}
+.k{color:#93c5fd}.p{color:#c4b5fd}.v{color:#6ee7b7}.s{color:#fda4af}.cm2{color:#475569;font-style:italic}.fn{color:#fbbf24}
+@media(max-width:680px){.wrap{grid-template-columns:1fr}.panel:last-of-type{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="page-hdr"><h1>Demonstração ao vivo — Repetição com for e while</h1><p>Aula 03 · 45 min · Docente digita no Colab, alunos acompanham</p></div>
+  <div class="prog-track"><div class="prog-fill" id="prog"></div></div>
+  <div class="panel">
+    <div class="ph"><span class="pt">Google Colab — aula03.ipynb</span><div class="dots-r"><div class="dot" style="background:#ef4444"></div><div class="dot" style="background:#f59e0b"></div><div class="dot" style="background:#10b981"></div></div></div>
+    <pre><span id="code-out"></span><span class="cursor"></span></pre>
+  </div>
+  <div class="panel">
+    <div class="ph"><span class="pt">Output — resultado da célula</span><div class="dots-r"><div class="dot" style="background:#ef4444"></div><div class="dot" style="background:#f59e0b"></div><div class="dot" style="background:#10b981"></div></div></div>
+    <div class="preview-body" id="preview"></div>
+  </div>
+  <div class="narr" id="narr">Pronto para começar. Clique em <strong>Iniciar digitação</strong>.</div>
+  <div class="step-bar">
+    <span class="sbadge" id="sbadge">Etapa 1 / 8</span>
+    <span class="slabel" id="sdesc">O for mais simples — range(5)</span>
+    <button class="cb" id="bp" onclick="prevS()" disabled>← Anterior</button>
+    <button class="cb go" id="bplay" onclick="playS()">▶ Iniciar digitação</button>
+    <button class="cb" id="bn" onclick="nextS()" disabled>Próxima →</button>
+  </div>
+  <div class="next-page" id="next-page" style="display:none">
+    <div><div class="next-page-label">Demonstração concluída</div><div class="next-page-title">▶ Prática Guiada — Repetição com for e while</div></div>
+    <a class="next-page-btn" href="a03_pratica_guiada.html">Abrir Prática →</a>
+  </div>
+</div>
+<script>
+const STEPS=[
+{label:'O for mais simples — range(5)',
+narr:'<strong>Docente:</strong> "Vamos começar com o for mais básico. range(5) gera os números 0,1,2,3,4. A variável i assume cada valor automaticamente. Reparem nos dois-pontos e na indentação — igual ao if."',
+code:`<span class="cm2"># for com range() — o mais básico</span>
+<span class="k">for</span> <span class="p">i</span> <span class="k">in</span> <span class="fn">range</span>(<span class="v">5</span>):
+    <span class="fn">print</span>(<span class="p">i</span>)
+
+<span class="cm2"># range começa em 0 por padrão</span>
+<span class="cm2"># range(5) → 0, 1, 2, 3, 4  (não inclui 5)</span>`,
+prev:`<div class="out-line ok">0</div><div class="out-line ok">1</div><div class="out-line ok">2</div><div class="out-line ok">3</div><div class="out-line ok">4</div>`},
+{label:'range com início e fim',
+narr:'<strong>Docente:</strong> "Dois argumentos: início (inclusivo) e fim (exclusivo). Esse detalhe do fim exclusivo é importante — sempre causa confusão no início. range(1, 6) vai até 5, não 6."',
+code:`<span class="cm2"># range(início, fim) — fim não é incluído!</span>
+<span class="k">for</span> <span class="p">i</span> <span class="k">in</span> <span class="fn">range</span>(<span class="v">1</span>, <span class="v">6</span>):
+    <span class="fn">print</span>(<span class="s">f"Repetição {i} de 5"</span>)
+
+<span class="cm2"># range com passo</span>
+<span class="fn">print</span>(<span class="s">"\\nNúmeros pares de 0 a 10:"</span>)
+<span class="k">for</span> <span class="p">n</span> <span class="k">in</span> <span class="fn">range</span>(<span class="v">0</span>, <span class="v">11</span>, <span class="v">2</span>):
+    <span class="fn">print</span>(<span class="p">n</span>, <span class="p">end</span>=<span class="s">" "</span>)`,
+prev:`<div class="out-line ok">Repetição 1 de 5</div><div class="out-line ok">Repetição 2 de 5</div><div class="out-line ok">Repetição 3 de 5</div><div class="out-line ok">Repetição 4 de 5</div><div class="out-line ok">Repetição 5 de 5</div><div class="out-line ok"></div><div class="out-line ok">Números pares de 0 a 10:</div><div class="out-line ok">0 2 4 6 8 10</div>`},
+{label:'for percorrendo uma lista',
+narr:'<strong>Docente:</strong> "O for não serve só para números. Ele percorre qualquer lista. A variável recebe cada item da lista automaticamente — sem precisar de índice."',
+code:`<span class="p">frutas</span> = [<span class="s">"maçã"</span>, <span class="s">"banana"</span>, <span class="s">"laranja"</span>, <span class="s">"uva"</span>]
+
+<span class="k">for</span> <span class="p">fruta</span> <span class="k">in</span> <span class="p">frutas</span>:
+    <span class="fn">print</span>(<span class="s">f"Fruta: {fruta}"</span>)
+
+<span class="cm2"># enumerate: índice + valor juntos</span>
+<span class="fn">print</span>(<span class="s">"\\nCom numeração:"</span>)
+<span class="k">for</span> <span class="p">i</span>, <span class="p">fruta</span> <span class="k">in</span> <span class="fn">enumerate</span>(<span class="p">frutas</span>):
+    <span class="fn">print</span>(<span class="s">f"{i+1}. {fruta}"</span>)`,
+prev:`<div class="out-line ok">Fruta: maçã</div><div class="out-line ok">Fruta: banana</div><div class="out-line ok">Fruta: laranja</div><div class="out-line ok">Fruta: uva</div><div class="out-line ok"></div><div class="out-line ok">Com numeração:</div><div class="out-line ok">1. maçã</div><div class="out-line ok">2. banana</div><div class="out-line ok">3. laranja</div><div class="out-line ok">4. uva</div>`},
+{label:'Acumulador — somando valores',
+narr:'<strong>Docente:</strong> "Padrão fundamental: iniciar uma variável FORA do laço e atualizar DENTRO. Sem isso, cada iteração reinicia o valor. Vamos somar de 1 a 100 — a resposta é 5050!"',
+code:`<span class="cm2"># Acumulador: variável começa fora do laço</span>
+<span class="p">total</span> = <span class="v">0</span>
+
+<span class="k">for</span> <span class="p">n</span> <span class="k">in</span> <span class="fn">range</span>(<span class="v">1</span>, <span class="v">101</span>):
+    <span class="p">total</span> += <span class="p">n</span>   <span class="cm2"># equivale a: total = total + n</span>
+
+<span class="fn">print</span>(<span class="s">f"Soma de 1 a 100 = {total}"</span>)
+
+<span class="cm2"># Contador: quantos números são pares?</span>
+<span class="p">pares</span> = <span class="v">0</span>
+<span class="k">for</span> <span class="p">n</span> <span class="k">in</span> <span class="fn">range</span>(<span class="v">1</span>, <span class="v">21</span>):
+    <span class="k">if</span> <span class="p">n</span> % <span class="v">2</span> == <span class="v">0</span>:
+        <span class="p">pares</span> += <span class="v">1</span>
+<span class="fn">print</span>(<span class="s">f"Pares de 1 a 20: {pares}"</span>)`,
+prev:`<div class="out-line ok">Soma de 1 a 100 = 5050</div><div class="out-line ok">Pares de 1 a 20: 10</div>`},
+{label:'while — repete até a condição mudar',
+narr:'<strong>Docente:</strong> "O while repete enquanto a condição for True. A grande diferença do for: não sabemos quantas vezes vai repetir — depende de algo que acontece durante a execução."',
+code:`<span class="cm2"># while básico — contador</span>
+<span class="p">contador</span> = <span class="v">1</span>
+<span class="k">while</span> <span class="p">contador</span> <= <span class="v">5</span>:
+    <span class="fn">print</span>(<span class="s">f"Contagem: {contador}"</span>)
+    <span class="p">contador</span> += <span class="v">1</span>   <span class="cm2"># sem isso → loop infinito!</span>
+
+<span class="fn">print</span>(<span class="s">"Fim da contagem"</span>)`,
+prev:`<div class="out-line ok">Contagem: 1</div><div class="out-line ok">Contagem: 2</div><div class="out-line ok">Contagem: 3</div><div class="out-line ok">Contagem: 4</div><div class="out-line ok">Contagem: 5</div><div class="out-line ok">Fim da contagem</div>`},
+{label:'while com input — aguarda resposta válida',
+narr:'<strong>Docente:</strong> "O while brilha quando precisamos repetir até o usuário fazer algo certo. Esse padrão é muito comum: validar entrada. O programa não avança enquanto a resposta estiver errada."',
+code:`<span class="cm2"># while aguardando resposta correta</span>
+<span class="p">resposta</span> = <span class="s">""</span>
+<span class="k">while</span> <span class="p">resposta</span> != <span class="s">"sim"</span> <span class="k">and</span> <span class="p">resposta</span> != <span class="s">"não"</span>:
+    <span class="p">resposta</span> = <span class="fn">input</span>(<span class="s">"Continuar? (sim/não): "</span>)
+    <span class="k">if</span> <span class="p">resposta</span> != <span class="s">"sim"</span> <span class="k">and</span> <span class="p">resposta</span> != <span class="s">"não"</span>:
+        <span class="fn">print</span>(<span class="s">"Digite apenas 'sim' ou 'não'."</span>)
+
+<span class="fn">print</span>(<span class="s">f"Você escolheu: {resposta}"</span>)`,
+prev:`<div class="out-line prompt">Continuar? (sim/não): <span style="color:#7c3aed">talvez</span></div><div class="out-line ok">Digite apenas 'sim' ou 'não'.</div><div class="out-line prompt">Continuar? (sim/não): <span style="color:#7c3aed">sim</span></div><div class="out-line ok">Você escolheu: sim</div>`},
+{label:'break e continue',
+narr:'<strong>Docente:</strong> "break para o laço imediatamente. continue pula para a próxima iteração. São úteis, mas use com moderação — laços com muitos break e continue ficam difíceis de ler."',
+code:`<span class="cm2"># break — para quando encontra o número</span>
+<span class="k">for</span> <span class="p">n</span> <span class="k">in</span> <span class="fn">range</span>(<span class="v">1</span>, <span class="v">11</span>):
+    <span class="k">if</span> <span class="p">n</span> == <span class="v">6</span>:
+        <span class="fn">print</span>(<span class="s">"Achei o 6! Parando."</span>)
+        <span class="k">break</span>
+    <span class="fn">print</span>(<span class="p">n</span>)
+
+<span class="cm2"># continue — pula os pares</span>
+<span class="fn">print</span>(<span class="s">"\\nÍmpares de 1 a 10:"</span>)
+<span class="k">for</span> <span class="p">n</span> <span class="k">in</span> <span class="fn">range</span>(<span class="v">1</span>, <span class="v">11</span>):
+    <span class="k">if</span> <span class="p">n</span> % <span class="v">2</span> == <span class="v">0</span>:
+        <span class="k">continue</span>
+    <span class="fn">print</span>(<span class="p">n</span>, <span class="p">end</span>=<span class="s">" "</span>)`,
+prev:`<div class="out-line ok">1</div><div class="out-line ok">2</div><div class="out-line ok">3</div><div class="out-line ok">4</div><div class="out-line ok">5</div><div class="out-line ok">Achei o 6! Parando.</div><div class="out-line ok"></div><div class="out-line ok">Ímpares de 1 a 10:</div><div class="out-line ok">1 3 5 7 9</div>`},
+{label:'Programa completo — calculadora de média',
+narr:'<strong>Docente:</strong> "Fechamos com o programa mais completo até agora: usa for, range(), acumulador, if e f-string juntos. Coleta N notas do usuário e calcula a média da turma."',
+code:`<span class="fn">print</span>(<span class="s">"=== Calculadora de Média ==="</span>)
+
+<span class="p">qtd</span>  = <span class="fn">int</span>(<span class="fn">input</span>(<span class="s">"Quantos alunos? "</span>))
+<span class="p">soma</span> = <span class="v">0</span>
+
+<span class="k">for</span> <span class="p">i</span> <span class="k">in</span> <span class="fn">range</span>(<span class="v">1</span>, <span class="p">qtd</span> + <span class="v">1</span>):
+    <span class="p">nota</span> = <span class="fn">float</span>(<span class="fn">input</span>(<span class="s">f"Nota do aluno {i}: "</span>))
+    <span class="p">soma</span> += <span class="p">nota</span>
+
+<span class="p">media</span> = <span class="p">soma</span> / <span class="p">qtd</span>
+<span class="fn">print</span>(<span class="s">f"\\nMédia da turma: {media:.1f}"</span>)
+
+<span class="k">if</span> <span class="p">media</span> >= <span class="v">7</span>:
+    <span class="fn">print</span>(<span class="s">"Turma aprovada!"</span>)
+<span class="k">else</span>:
+    <span class="fn">print</span>(<span class="s">"Turma precisa reforçar."</span>)`,
+prev:`<div class="out-line ok">=== Calculadora de Média ===</div><div class="out-line prompt">Quantos alunos? <span style="color:#7c3aed">3</span></div><div class="out-line prompt">Nota do aluno 1: <span style="color:#7c3aed">8.0</span></div><div class="out-line prompt">Nota do aluno 2: <span style="color:#7c3aed">7.5</span></div><div class="out-line prompt">Nota do aluno 3: <span style="color:#7c3aed">9.0</span></div><div class="out-line ok"></div><div class="out-line ok">Média da turma: 8.2</div><div class="out-line ok">Turma aprovada!</div>`}
+];
+let cur=0,playing=false,timer=null;
+function render(){
+  document.getElementById('sbadge').textContent=`Etapa ${cur+1} / ${STEPS.length}`;
+  document.getElementById('sdesc').textContent=STEPS[cur].label;
+  document.getElementById('narr').innerHTML=STEPS[cur].narr;
+  document.getElementById('preview').innerHTML=STEPS[cur].prev;
+  document.getElementById('code-out').innerHTML='';
+  document.getElementById('prog').style.width=((cur+1)/STEPS.length*100)+'%';
+  document.getElementById('bp').disabled=cur===0;
+  document.getElementById('bn').disabled=cur===STEPS.length-1;
+  const pb=document.getElementById('bplay');pb.textContent='▶ Iniciar digitação';pb.className='cb go';
+  document.getElementById('next-page').style.display=cur===STEPS.length-1?'flex':'none';
+}
+function playS(){
+  if(playing){clearTimeout(timer);playing=false;document.getElementById('bplay').textContent='▶ Iniciar digitação';return;}
+  playing=true;document.getElementById('bplay').textContent='⏸ Pausar';
+  const code=STEPS[cur].code;let i=0;const out=document.getElementById('code-out');out.innerHTML='';
+  function tick(){
+    if(!playing)return;
+    if(i<code.length){
+      if(code[i]==='<'){const end=code.indexOf('>',i);if(end>-1){out.innerHTML+=code.slice(i,end+1);i=end+1;}else{out.innerHTML+=code[i];i++;}}
+      else{out.innerHTML+=code[i];i++;}
+      timer=setTimeout(tick,i%7===0?16:4);
+    }else{playing=false;document.getElementById('bplay').textContent='✓ Concluído';document.getElementById('bn').disabled=cur===STEPS.length-1;if(cur===STEPS.length-1)document.getElementById('next-page').style.display='flex';}
+  }
+  tick();
+}
+function nextS(){if(cur<STEPS.length-1){cur++;render();}}
+function prevS(){if(cur>0){cur--;render();}}
+render();
+</script>
+</body>
+</html>

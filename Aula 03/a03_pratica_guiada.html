@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prática Guiada — Repetição com for e while · Aula 03</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;color:#1e293b;background:#f5f3ff;min-height:100vh;padding:22px}
+.wrap{max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:11px}
+.pg-header{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.pg-title{font-size:17px;font-weight:600}.pg-meta{font-size:12px;color:#64748b;margin-top:2px}
+.pg-time{font-size:12px;font-weight:600;background:#ede9fe;border:1px solid #ddd6fe;padding:4px 12px;border-radius:8px;color:#7c3aed}
+.prog-row{display:flex;align-items:center;gap:9px}
+.pb{flex:1;height:7px;background:#e2e8f0;border-radius:4px;overflow:hidden}
+.pf{height:100%;background:#7c3aed;border-radius:4px;transition:width .4s ease;width:0%}
+.pt{font-size:12px;font-weight:600;color:#64748b;min-width:60px;text-align:right}
+.sc{border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;background:#fff;transition:border-color .2s}
+.sc.done-c{border-color:#86efac}.sc.open-c{border-color:#c4b5fd}
+.sh{display:flex;align-items:flex-start;gap:11px;padding:12px 13px;cursor:pointer;user-select:none;transition:background .15s}
+.sh:hover{background:#f8fafc}.sc.open-c .sh{background:#f5f3ff}
+.chk{width:21px;height:21px;border-radius:6px;border:1.5px solid #cbd5e1;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:all .18s;cursor:pointer;background:#fff}
+.chk:hover{border-color:#7c3aed;background:#ede9fe}.chk.done{background:#22c55e;border-color:#22c55e}
+.chk svg{display:none}.chk.done svg{display:block}
+.si{flex:1}.sn2{font-size:11px;font-weight:600;color:#94a3b8;margin-bottom:2px;text-transform:uppercase;letter-spacing:.04em}
+.st{font-size:13px;font-weight:600;color:#1e293b;line-height:1.3}.stm{font-size:11px;color:#94a3b8;margin-top:2px}
+.cv{color:#94a3b8;font-size:11px;margin-top:4px;transition:transform .22s;flex-shrink:0}
+.sc.open-c .cv{transform:rotate(180deg)}
+.sb{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.sc.open-c .sb{max-height:1600px}
+.sbi{padding:0 13px 14px;border-top:1px solid #f1f5f9}
+.il{display:flex;flex-direction:column;gap:6px;margin:11px 0}
+.ii{display:flex;gap:9px;font-size:13px;color:#475569;line-height:1.55;align-items:flex-start}
+.in{width:19px;height:19px;min-width:19px;border-radius:5px;background:#ede9fe;color:#7c3aed;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;margin-top:1px}
+code{font-family:'Courier New',monospace;font-size:12px;background:#f1f5f9;padding:1px 5px;border-radius:3px;border:1px solid #e2e8f0}
+.cb2{background:#1e293b;border-radius:8px;padding:12px 15px;font-family:'Courier New',monospace;font-size:12px;line-height:1.8;color:#94a3b8;margin:9px 0;overflow-x:auto;white-space:pre}
+.k{color:#93c5fd}.p{color:#c4b5fd}.v{color:#6ee7b7}.s{color:#fda4af}.c{color:#475569;font-style:italic}.fn{color:#fbbf24}
+.tip{background:#f5f3ff;border-left:3px solid #7c3aed;padding:8px 12px;font-size:12px;color:#3b0764;line-height:1.5;margin-top:8px}
+.tip strong{color:#6d28d9;font-weight:600}
+.mb{display:inline-flex;align-items:center;gap:5px;background:#f8fafc;border:1px solid #cbd5e1;color:#64748b;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .18s;margin-top:10px}
+.mb:hover{background:#f0fdf4;color:#15803d;border-color:#86efac}
+.mb.done-btn{background:#f0fdf4;color:#15803d;border-color:#86efac;pointer-events:none}
+.sbox{background:#f5f3ff;border:1px solid #c4b5fd;border-radius:14px;padding:20px;text-align:center;display:none}
+.sbox.show{display:block}
+.sbox h3{font-size:16px;font-weight:600;color:#7c3aed;margin-bottom:6px}
+.sbox p{font-size:13px;color:#6d28d9;line-height:1.6}
+.next-page{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:10px;margin-top:4px}
+.next-page-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#7c3aed}
+.next-page-title{font-size:13px;font-weight:600;color:#1e293b;margin-top:2px}
+.next-page-btn{background:#7c3aed;color:#fff;border:none;padding:8px 18px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s;white-space:nowrap;text-decoration:none;display:inline-block}
+.next-page-btn:hover{background:#6d28d9}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="pg-header">
+    <div><div class="pg-title">Prática guiada — Repetição com for e while</div><div class="pg-meta">Siga os passos no Colab. Marque cada um quando terminar.</div></div>
+    <span class="pg-time">60 min disponíveis</span>
+  </div>
+  <div class="prog-row"><div class="pb"><div class="pf" id="pf"></div></div><div class="pt" id="pt">0 / 6</div></div>
+  <div id="steps"></div>
+  <div class="sbox" id="sbox">
+    <h3>🔁 Laços dominados!</h3>
+    <p>for, while, acumuladores e break/continue prontos.<br>Hora do desafio autônomo!</p>
+  </div>
+  <div class="next-page" id="next-page" style="display:none">
+    <div><div class="next-page-label">Prática concluída</div><div class="next-page-title">🏆 Desafio Autônomo — Repetição com for e while</div></div>
+    <a class="next-page-btn" href="a03_desafio.html">Abrir Desafio →</a>
+  </div>
+</div>
+<script>
+const STEPS=[
+{title:'Tabuada com for e range()',time:'8 min',
+instrs:['Peça um número ao usuário com <code>int(input())</code>','Use <code>for i in range(1, 11):</code> para percorrer de 1 a 10','Dentro do laço, imprima: <code>f"{n} x {i} = {n*i}"</code>','Teste com os números 5, 7 e 12'],
+code:`<span class="p">n</span> = <span class="fn">int</span>(<span class="fn">input</span>(<span class="s">"Tabuada de qual número? "</span>))\n<span class="fn">print</span>(<span class="s">f"\\n=== Tabuada do {n} ==="</span>)\n<span class="k">for</span> <span class="p">i</span> <span class="k">in</span> <span class="fn">range</span>(<span class="v">1</span>, <span class="v">11</span>):\n    <span class="fn">print</span>(<span class="s">f"{n} x {i:2} = {n*i:3}"</span>)`,
+tip:'<strong>:2 e :3</strong> dentro de f-strings reservam espaços para alinhamento. <code>{i:2}</code> usa ao menos 2 caracteres — deixa a tabuada em colunas alinhadas.'},
+{title:'Acumulador — somar e contar',time:'10 min',
+instrs:['Crie um acumulador <code>soma = 0</code> e percorra <code>range(1, 51)</code>','Some todos os números de 1 a 50 e imprima o resultado (deve ser 1275)','Em uma nova célula, conte quantos números de 1 a 50 são divisíveis por 3','Use <code>if n % 3 == 0:</code> dentro do laço para filtrar'],
+code:`<span class="c"># Acumulador: soma de 1 a 50</span>\n<span class="p">soma</span> = <span class="v">0</span>\n<span class="k">for</span> <span class="p">n</span> <span class="k">in</span> <span class="fn">range</span>(<span class="v">1</span>, <span class="v">51</span>):\n    <span class="p">soma</span> += <span class="p">n</span>\n<span class="fn">print</span>(<span class="s">f"Soma 1 a 50: {soma}"</span>)\n\n<span class="c"># Contador: divisíveis por 3</span>\n<span class="p">cont</span> = <span class="v">0</span>\n<span class="k">for</span> <span class="p">n</span> <span class="k">in</span> <span class="fn">range</span>(<span class="v">1</span>, <span class="v">51</span>):\n    <span class="k">if</span> <span class="p">n</span> % <span class="v">3</span> == <span class="v">0</span>:\n        <span class="p">cont</span> += <span class="v">1</span>\n<span class="fn">print</span>(<span class="s">f"Divisíveis por 3: {cont}"</span>)`,
+tip:'<strong>Atenção ao escopo:</strong> a variável acumuladora DEVE ser declarada ANTES do for. Se declarar dentro, ela é reiniciada a cada iteração e você perde o acumulado.'},
+{title:'for sobre lista — processar notas',time:'10 min',
+instrs:['Crie uma lista com 5 notas: <code>notas = [7.5, 8.0, 6.5, 9.0, 5.5]</code>','Use <code>for nota in notas:</code> para percorrer e imprimir cada uma','Calcule a média: some todas as notas no laço e divida por <code>len(notas)</code>','Bônus: use enumerate() para imprimir o número do aluno junto da nota'],
+code:`<span class="p">notas</span> = [<span class="v">7.5</span>, <span class="v">8.0</span>, <span class="v">6.5</span>, <span class="v">9.0</span>, <span class="v">5.5</span>]\n<span class="p">soma</span> = <span class="v">0</span>\n\n<span class="k">for</span> <span class="p">i</span>, <span class="p">nota</span> <span class="k">in</span> <span class="fn">enumerate</span>(<span class="p">notas</span>):\n    <span class="fn">print</span>(<span class="s">f"Aluno {i+1}: {nota}"</span>)\n    <span class="p">soma</span> += <span class="p">nota</span>\n\n<span class="p">media</span> = <span class="p">soma</span> / <span class="fn">len</span>(<span class="p">notas</span>)\n<span class="fn">print</span>(<span class="s">f"\\nMédia: {media:.1f}"</span>)`,
+tip:'<strong>len(lista)</strong> retorna o tamanho da lista. Prefira usar <code>len(notas)</code> em vez de escrever o número fixo — assim o programa funciona mesmo se você mudar a lista.'},
+{title:'while — validar entrada do usuário',time:'10 min',
+instrs:['Use while para repetir até o usuário digitar um número entre 1 e 10','Peça um número, verifique se está no intervalo válido e só saia do while quando estiver','Exiba uma mensagem de erro a cada tentativa inválida','Ao sair do while, exiba o número ao quadrado'],
+code:`<span class="p">numero</span> = <span class="v">0</span>\n<span class="k">while</span> <span class="p">numero</span> < <span class="v">1</span> <span class="k">or</span> <span class="p">numero</span> > <span class="v">10</span>:\n    <span class="p">numero</span> = <span class="fn">int</span>(<span class="fn">input</span>(<span class="s">"Digite um número de 1 a 10: "</span>))\n    <span class="k">if</span> <span class="p">numero</span> < <span class="v">1</span> <span class="k">or</span> <span class="p">numero</span> > <span class="v">10</span>:\n        <span class="fn">print</span>(<span class="s">"Fora do intervalo! Tente novamente."</span>)\n\n<span class="fn">print</span>(<span class="s">f"{numero} ao quadrado = {numero**2}"</span>)`,
+tip:'<strong>Inicialize a variável antes do while</strong> com um valor que faça a condição ser True logo de início. Aqui, <code>numero = 0</code> garante que o while entra pelo menos uma vez.'},
+{title:'break — encontrar o primeiro número',time:'8 min',
+instrs:['Crie uma lista: <code>valores = [12, 7, 34, 5, 28, 3, 19]</code>','Use for + break para encontrar o primeiro número maior que 20 e parar','Exiba o número encontrado e em qual posição da lista ele está','Bônus: use continue para imprimir só os números menores que 10 da mesma lista'],
+code:`<span class="p">valores</span> = [<span class="v">12</span>, <span class="v">7</span>, <span class="v">34</span>, <span class="v">5</span>, <span class="v">28</span>, <span class="v">3</span>, <span class="v">19</span>]\n\n<span class="k">for</span> <span class="p">i</span>, <span class="p">v</span> <span class="k">in</span> <span class="fn">enumerate</span>(<span class="p">valores</span>):\n    <span class="k">if</span> <span class="p">v</span> > <span class="v">20</span>:\n        <span class="fn">print</span>(<span class="s">f"Primeiro > 20: {v} (posição {i})"</span>)\n        <span class="k">break</span>\n\n<span class="c"># continue: apenas os menores que 10</span>\n<span class="fn">print</span>(<span class="s">"Menores que 10:"</span>)\n<span class="k">for</span> <span class="p">v</span> <span class="k">in</span> <span class="fn">valores</span>:\n    <span class="k">if</span> <span class="p">v</span> >= <span class="v">10</span>:\n        <span class="k">continue</span>\n    <span class="fn">print</span>(<span class="p">v</span>)`,
+tip:'<strong>break</strong> sai do laço imediatamente. O código após o break na mesma iteração não executa. Use quando já encontrou o que precisava e não faz sentido continuar.'},
+{title:'Mini desafio — jogo de adivinhar',time:'14 min',
+instrs:['O programa define um número secreto: <code>secreto = 42</code>','Use while True para repetir até o usuário acertar','A cada tentativa errada, diga se o palpite foi alto ou baixo','Conte as tentativas e exiba quantas foram necessárias ao acertar'],
+code:`<span class="p">secreto</span>    = <span class="v">42</span>\n<span class="p">tentativas</span> = <span class="v">0</span>\n\n<span class="k">while</span> <span class="v">True</span>:\n    <span class="p">palpite</span> = <span class="fn">int</span>(<span class="fn">input</span>(<span class="s">"Adivinhe o número (1-100): "</span>))\n    <span class="p">tentativas</span> += <span class="v">1</span>\n\n    <span class="k">if</span> <span class="p">palpite</span> == <span class="p">secreto</span>:\n        <span class="fn">print</span>(<span class="s">f"Parabéns! {tentativas} tentativas."</span>)\n        <span class="k">break</span>\n    <span class="k">elif</span> <span class="p">palpite</span> < <span class="p">secreto</span>:\n        <span class="fn">print</span>(<span class="s">"Muito baixo!"</span>)\n    <span class="k">else</span>:\n        <span class="fn">print</span>(<span class="s">"Muito alto!"</span>)`,
+tip:'<strong>while True</strong> cria um laço infinito de propósito — mas com break para sair. É o padrão correto quando não sabemos quantas vezes o usuário vai errar antes de acertar.'}
+];
+let done=new Set();
+function build(){
+  const list=document.getElementById('steps');STEPS.forEach((s,i)=>{
+    const card=document.createElement('div');card.className='sc'+(i===0?' open-c':'');card.id='sc-'+i;
+    card.innerHTML=`<div class="sh" onclick="tog(${i})"><div class="chk" id="chk-${i}" onclick="event.stopPropagation();mk(${i})"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="si"><div class="sn2">Passo ${i+1} de ${STEPS.length}</div><div class="st">${s.title}</div><div class="stm">${s.time}</div></div><span class="cv">${i===0?'▲':'▼'}</span></div><div class="sb"><div class="sbi"><div class="il">${s.instrs.map((t,j)=>`<div class="ii"><div class="in">${j+1}</div><span>${t}</span></div>`).join('')}</div>${s.code?`<div class="cb2">${s.code}</div>`:''}<div class="tip">${s.tip}</div><button class="mb" id="mb-${i}" onclick="mk(${i})"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5l3.5 3.5 5.5-5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Marcar como concluído</button></div></div>`;
+    list.appendChild(card);
+  });
+}
+function tog(i){const c=document.getElementById('sc-'+i);const o=c.classList.contains('open-c');document.querySelectorAll('.sc').forEach(x=>{x.classList.remove('open-c');x.querySelector('.cv').textContent='▼';});if(!o){c.classList.add('open-c');c.querySelector('.cv').textContent='▲';}}
+function mk(i){if(done.has(i))return;done.add(i);document.getElementById('chk-'+i).classList.add('done');document.getElementById('sc-'+i).classList.add('done-c');const mb=document.getElementById('mb-'+i);mb.classList.add('done-btn');mb.innerHTML='<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5l3.5 3.5 5.5-5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Concluído!';upd();if(i<STEPS.length-1){document.querySelectorAll('.sc').forEach(x=>{x.classList.remove('open-c');x.querySelector('.cv').textContent='▼';});const nx=document.getElementById('sc-'+(i+1));nx.classList.add('open-c');nx.querySelector('.cv').textContent='▲';setTimeout(()=>nx.scrollIntoView({behavior:'smooth',block:'nearest'}),100);}if(done.size===STEPS.length){document.getElementById('sbox').classList.add('show');document.getElementById('next-page').style.display='flex';setTimeout(()=>document.getElementById('next-page').scrollIntoView({behavior:'smooth',block:'nearest'}),300);}}
+function upd(){document.getElementById('pf').style.width=Math.round((done.size/STEPS.length)*100)+'%';document.getElementById('pt').textContent=done.size+' / '+STEPS.length;}
+build();upd();
+</script>
+</body>
+</html>
