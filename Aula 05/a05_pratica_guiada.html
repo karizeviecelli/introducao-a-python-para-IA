@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prática Guiada — Funções e Reutilização de Código · Aula 05</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;color:#1e293b;background:#fffbeb;min-height:100vh;padding:22px}
+.wrap{max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:11px}
+.pg-header{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.pg-title{font-size:17px;font-weight:600}.pg-meta{font-size:12px;color:#64748b;margin-top:2px}
+.pg-time{font-size:12px;font-weight:600;background:#fef3c7;border:1px solid #fde68a;padding:4px 12px;border-radius:8px;color:#d97706}
+.prog-row{display:flex;align-items:center;gap:9px}
+.pb{flex:1;height:7px;background:#e2e8f0;border-radius:4px;overflow:hidden}
+.pf{height:100%;background:#d97706;border-radius:4px;transition:width .4s ease;width:0%}
+.pt{font-size:12px;font-weight:600;color:#64748b;min-width:60px;text-align:right}
+.sc{border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;background:#fff;transition:border-color .2s}
+.sc.done-c{border-color:#86efac}.sc.open-c{border-color:#fcd34d}
+.sh{display:flex;align-items:flex-start;gap:11px;padding:12px 13px;cursor:pointer;user-select:none;transition:background .15s}
+.sh:hover{background:#f8fafc}.sc.open-c .sh{background:#fffbeb}
+.chk{width:21px;height:21px;border-radius:6px;border:1.5px solid #cbd5e1;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:all .18s;cursor:pointer;background:#fff}
+.chk:hover{border-color:#d97706;background:#fef3c7}.chk.done{background:#22c55e;border-color:#22c55e}
+.chk svg{display:none}.chk.done svg{display:block}
+.si{flex:1}.sn2{font-size:11px;font-weight:600;color:#94a3b8;margin-bottom:2px;text-transform:uppercase;letter-spacing:.04em}
+.st{font-size:13px;font-weight:600;color:#1e293b;line-height:1.3}.stm{font-size:11px;color:#94a3b8;margin-top:2px}
+.cv{color:#94a3b8;font-size:11px;margin-top:4px;transition:transform .22s;flex-shrink:0}
+.sc.open-c .cv{transform:rotate(180deg)}
+.sb{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.sc.open-c .sb{max-height:1800px}
+.sbi{padding:0 13px 14px;border-top:1px solid #f1f5f9}
+.il{display:flex;flex-direction:column;gap:6px;margin:11px 0}
+.ii{display:flex;gap:9px;font-size:13px;color:#475569;line-height:1.55;align-items:flex-start}
+.in{width:19px;height:19px;min-width:19px;border-radius:5px;background:#fef3c7;color:#d97706;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;margin-top:1px}
+code{font-family:'Courier New',monospace;font-size:12px;background:#f1f5f9;padding:1px 5px;border-radius:3px;border:1px solid #e2e8f0}
+.cb2{background:#1e293b;border-radius:8px;padding:12px 15px;font-family:'Courier New',monospace;font-size:12px;line-height:1.8;color:#94a3b8;margin:9px 0;overflow-x:auto;white-space:pre}
+.k{color:#93c5fd}.p{color:#c4b5fd}.v{color:#6ee7b7}.s{color:#fda4af}.c{color:#475569;font-style:italic}.fn{color:#fbbf24}
+.tip{background:#fffbeb;border-left:3px solid #d97706;padding:8px 12px;font-size:12px;color:#78350f;line-height:1.5;margin-top:8px}
+.tip strong{color:#92400e;font-weight:600}
+.mb{display:inline-flex;align-items:center;gap:5px;background:#f8fafc;border:1px solid #cbd5e1;color:#64748b;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .18s;margin-top:10px}
+.mb:hover{background:#f0fdf4;color:#15803d;border-color:#86efac}
+.mb.done-btn{background:#f0fdf4;color:#15803d;border-color:#86efac;pointer-events:none}
+.sbox{background:#fffbeb;border:1px solid #fcd34d;border-radius:14px;padding:20px;text-align:center;display:none}
+.sbox.show{display:block}
+.sbox h3{font-size:16px;font-weight:600;color:#d97706;margin-bottom:6px}
+.sbox p{font-size:13px;color:#92400e;line-height:1.6}
+.next-page{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#fffbeb;border:1px solid #fde68a;border-radius:10px;margin-top:4px}
+.next-page-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#d97706}
+.next-page-title{font-size:13px;font-weight:600;color:#1e293b;margin-top:2px}
+.next-page-btn{background:#d97706;color:#fff;border:none;padding:8px 18px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s;white-space:nowrap;text-decoration:none;display:inline-block}
+.next-page-btn:hover{background:#b45309}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="pg-header">
+    <div><div class="pg-title">Prática guiada — Funções e Reutilização de Código</div><div class="pg-meta">Siga os passos no Colab. Marque cada um quando terminar.</div></div>
+    <span class="pg-time">60 min disponíveis</span>
+  </div>
+  <div class="prog-row"><div class="pb"><div class="pf" id="pf"></div></div><div class="pt" id="pt">0 / 6</div></div>
+  <div id="steps"></div>
+  <div class="sbox" id="sbox">
+    <h3>🔧 Funções dominadas!</h3>
+    <p>def, return, parâmetros, escopo e múltiplos retornos prontos.<br>Hora do desafio autônomo!</p>
+  </div>
+  <div class="next-page" id="next-page" style="display:none">
+    <div><div class="next-page-label">Prática concluída</div><div class="next-page-title">🏆 Desafio Autônomo — Funções e Reutilização de Código</div></div>
+    <a class="next-page-btn" href="a05_desafio.html">Abrir Desafio →</a>
+  </div>
+</div>
+<script>
+const STEPS=[
+{title:'Primeira função com return',time:'8 min',
+instrs:['Crie a função <code>calcular_imc(peso, altura)</code> que retorna o IMC calculado','Crie a função <code>classificar_imc(imc)</code> que retorna a categoria (Abaixo, Normal, Sobrepeso, Obesidade)','Chame as duas funções com pelo menos 3 pares de peso/altura diferentes','Confira que o valor retornado pode ser usado em comparações e f-strings'],
+code:`<span class="k">def</span> <span class="fn">calcular_imc</span>(<span class="p">peso</span>, <span class="p">altura</span>):\n    <span class="s">"""Retorna o IMC calculado."""</span>\n    <span class="k">return</span> <span class="p">peso</span> / <span class="p">altura</span> ** <span class="v">2</span>\n\n<span class="k">def</span> <span class="fn">classificar_imc</span>(<span class="p">imc</span>):\n    <span class="k">if</span> <span class="p">imc</span> < <span class="v">18.5</span>: <span class="k">return</span> <span class="s">"Abaixo do peso"</span>\n    <span class="k">if</span> <span class="p">imc</span> < <span class="v">25.0</span>: <span class="k">return</span> <span class="s">"Normal"</span>\n    <span class="k">if</span> <span class="p">imc</span> < <span class="v">30.0</span>: <span class="k">return</span> <span class="s">"Sobrepeso"</span>\n    <span class="k">return</span> <span class="s">"Obesidade"</span>\n\n<span class="p">imc</span> = <span class="fn">calcular_imc</span>(<span class="v">70</span>, <span class="v">1.75</span>)\n<span class="fn">print</span>(<span class="s">f"IMC {imc:.1f}: {classificar_imc(imc)}"</span>)`,
+tip:'<strong>Encadeamento:</strong> <code>classificar_imc(calcular_imc(70, 1.75))</code> chama a segunda com o resultado da primeira, tudo em uma linha. Legível e eficiente.'},
+{title:'Parâmetros com valores padrão',time:'8 min',
+instrs:['Crie a função <code>formatar_nota(nota, decimais=1, mostrar_conceito=True)</code>','Sem argumentos extras, exibe a nota com 1 decimal e o conceito','Com <code>decimais=2</code>, usa 2 casas; com <code>mostrar_conceito=False</code>, omite o conceito','Teste todas as combinações possíveis de argumentos'],
+code:`<span class="k">def</span> <span class="fn">formatar_nota</span>(<span class="p">nota</span>, <span class="p">decimais</span>=<span class="v">1</span>, <span class="p">mostrar_conceito</span>=<span class="v">True</span>):\n    <span class="p">texto</span> = <span class="s">f"{nota:.{decimais}f}"</span>\n    <span class="k">if</span> <span class="p">mostrar_conceito</span>:\n        <span class="p">conceito</span> = <span class="s">"OK"</span> <span class="k">if</span> <span class="p">nota</span> >= <span class="v">5</span> <span class="k">else</span> <span class="s">"Rep"</span>\n        <span class="p">texto</span> += <span class="s">f" ({conceito})"</span>\n    <span class="k">return</span> <span class="p">texto</span>\n\n<span class="fn">print</span>(<span class="fn">formatar_nota</span>(<span class="v">8.567</span>))\n<span class="fn">print</span>(<span class="fn">formatar_nota</span>(<span class="v">8.567</span>, <span class="p">decimais</span>=<span class="v">2</span>))\n<span class="fn">print</span>(<span class="fn">formatar_nota</span>(<span class="v">3.2</span>, <span class="p">mostrar_conceito</span>=<span class="v">False</span>))`,
+tip:'<strong>f"{nota:.{decimais}f}"</strong> usa uma variável dentro da formatação do f-string. O número de casas decimais vem da variável <code>decimais</code>, nao de um número fixo.'},
+{title:'Múltiplos retornos — estatísticas',time:'10 min',
+instrs:['Crie a função <code>estatisticas(numeros)</code> que retorna média, maior, menor e total de itens','Use desempacotamento para receber os 4 valores ao chamar','Teste com pelo menos 2 listas diferentes','Tente receber só parte dos valores usando <code>_</code> para ignorar: <code>media, _, _, _ = estatisticas(...)</code>'],
+code:`<span class="k">def</span> <span class="fn">estatisticas</span>(<span class="p">numeros</span>):\n    <span class="s">"""Retorna media, maior, menor e total."""</span>\n    <span class="k">return</span> (\n        <span class="fn">sum</span>(<span class="p">numeros</span>) / <span class="fn">len</span>(<span class="p">numeros</span>),\n        <span class="fn">max</span>(<span class="p">numeros</span>),\n        <span class="fn">min</span>(<span class="p">numeros</span>),\n        <span class="fn">len</span>(<span class="p">numeros</span>)\n    )\n\n<span class="p">med</span>, <span class="p">maior</span>, <span class="p">menor</span>, <span class="p">total</span> = <span class="fn">estatisticas</span>([<span class="v">7</span>, <span class="v">9</span>, <span class="v">4</span>, <span class="v">8</span>, <span class="v">6</span>])\n<span class="fn">print</span>(<span class="s">f"Media={med:.1f} Max={maior} Min={menor} N={total}"</span>)`,
+tip:'<strong>_ (underline)</strong> é a convenção para variáveis que nao precisamos. <code>med, _, _, _ = estatisticas(x)</code> pega apenas a média e descarta o resto. Deixa claro que os outros valores foram ignorados de propósito.'},
+{title:'Funções com listas — processar dados',time:'10 min',
+instrs:['Crie <code>filtrar_aprovados(turma, media_minima=5.0)</code> que recebe lista de dicionários e retorna só os aprovados','Crie <code>media_turma(turma)</code> que calcula a média geral de todas as notas','Use as duas funções juntas: filtre os aprovados e calcule a média só deles','Imprima o relatório final com nome e nota de cada aprovado'],
+code:`<span class="k">def</span> <span class="fn">media_aluno</span>(<span class="p">notas</span>):\n    <span class="k">return</span> <span class="fn">sum</span>(<span class="p">notas</span>) / <span class="fn">len</span>(<span class="p">notas</span>)\n\n<span class="k">def</span> <span class="fn">filtrar_aprovados</span>(<span class="p">turma</span>, <span class="p">minima</span>=<span class="v">5.0</span>):\n    <span class="p">aprovados</span> = []\n    <span class="k">for</span> <span class="p">a</span> <span class="k">in</span> <span class="p">turma</span>:\n        <span class="k">if</span> <span class="fn">media_aluno</span>(<span class="p">a</span>[<span class="s">"notas"</span>]) >= <span class="p">minima</span>:\n            <span class="p">aprovados</span>.<span class="fn">append</span>(<span class="p">a</span>)\n    <span class="k">return</span> <span class="p">aprovados</span>`,
+tip:'<strong>Funcao que retorna lista</strong> é muito comum. Filtre com for + if + append, e retorne a lista no final. Nao imprima dentro — deixe o chamador decidir o que fazer com os dados.'},
+{title:'Escopo — entendendo o isolamento',time:'8 min',
+instrs:['Escreva uma função <code>testar()</code> que cria uma variável <code>x = 100</code> e a imprime','Após chamar <code>testar()</code>, tente imprimir <code>x</code> fora da função e veja o NameError','Corrija usando return: faça a função retornar x e guarde o resultado em variável','Refaça o experimento com uma variável global — veja que a função pode lê-la, mas nao deve modificá-la'],
+code:`<span class="p">global_var</span> = <span class="s">"sou global"</span>\n\n<span class="k">def</span> <span class="fn">demonstrar_escopo</span>():\n    <span class="p">local_var</span> = <span class="s">"sou local"</span>\n    <span class="fn">print</span>(<span class="p">local_var</span>)      <span class="c"># OK</span>\n    <span class="fn">print</span>(<span class="p">global_var</span>)     <span class="c"># OK — pode ler global</span>\n    <span class="k">return</span> <span class="p">local_var</span>      <span class="c"># passa o valor para fora</span>\n\n<span class="p">valor</span> = <span class="fn">demonstrar_escopo</span>()\n<span class="fn">print</span>(<span class="p">valor</span>)             <span class="c"># OK — veio do return\n# print(local_var)     # NameError!`,
+tip:'<strong>Regra prática:</strong> nunca modifique variáveis globais dentro de funções. Receba tudo via parâmetros e devolva via return. Isso torna as funções previsíveis e fáceis de testar.'},
+{title:'Refatorar código das aulas anteriores',time:'16 min',
+instrs:['Pegue o desafio da Aula 03 (relatório de vendas) e transforme cada cálculo em uma função separada','Crie: <code>total_vendas(vendas)</code>, <code>media_diaria(vendas)</code>, <code>melhor_dia(vendas)</code>, <code>dias_acima_meta(vendas, meta)</code>','Crie uma função <code>gerar_relatorio(vendas, meta)</code> que chama todas as outras e exibe o resultado','Compare o antes e o depois — o programa ficou mais legível?'],
+code:`<span class="k">def</span> <span class="fn">total_vendas</span>(<span class="p">v</span>):    <span class="k">return</span> <span class="fn">sum</span>(<span class="p">v</span>)\n<span class="k">def</span> <span class="fn">media_diaria</span>(<span class="p">v</span>):   <span class="k">return</span> <span class="fn">sum</span>(<span class="p">v</span>) / <span class="fn">len</span>(<span class="p">v</span>)\n<span class="k">def</span> <span class="fn">melhor_dia</span>(<span class="p">v</span>):     <span class="k">return</span> <span class="fn">max</span>(<span class="p">v</span>)\n<span class="k">def</span> <span class="fn">dias_acima_meta</span>(<span class="p">v</span>, <span class="p">meta</span>=<span class="v">1000</span>):\n    <span class="k">return</span> <span class="fn">sum</span>(<span class="v">1</span> <span class="k">for</span> <span class="p">x</span> <span class="k">in</span> <span class="p">v</span> <span class="k">if</span> <span class="p">x</span> >= <span class="p">meta</span>)\n\n<span class="k">def</span> <span class="fn">gerar_relatorio</span>(<span class="p">v</span>, <span class="p">meta</span>=<span class="v">1000</span>):\n    <span class="fn">print</span>(<span class="s">f"Total: R$ {total_vendas(v):.2f}"</span>)\n    <span class="fn">print</span>(<span class="s">f"Media: R$ {media_diaria(v):.2f}"</span>)\n    <span class="fn">print</span>(<span class="s">f"Melhor dia: R$ {melhor_dia(v):.2f}"</span>)\n    <span class="fn">print</span>(<span class="s">f"Dias acima de R$ {meta}: {dias_acima_meta(v, meta)}"</span>)`,
+tip:'<strong>Refatorar</strong> é reescrever o código sem mudar o que ele faz — só melhorar a organização. É uma habilidade fundamental de programação profissional. Bom código se parece com texto bem escrito.'}
+];
+let done=new Set();
+function build(){
+  const list=document.getElementById('steps');STEPS.forEach((s,i)=>{
+    const card=document.createElement('div');card.className='sc'+(i===0?' open-c':'');card.id='sc-'+i;
+    card.innerHTML=`<div class="sh" onclick="tog(${i})"><div class="chk" id="chk-${i}" onclick="event.stopPropagation();mk(${i})"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="si"><div class="sn2">Passo ${i+1} de ${STEPS.length}</div><div class="st">${s.title}</div><div class="stm">${s.time}</div></div><span class="cv">${i===0?'▲':'▼'}</span></div><div class="sb"><div class="sbi"><div class="il">${s.instrs.map((t,j)=>`<div class="ii"><div class="in">${j+1}</div><span>${t}</span></div>`).join('')}</div>${s.code?`<div class="cb2">${s.code}</div>`:''}<div class="tip">${s.tip}</div><button class="mb" id="mb-${i}" onclick="mk(${i})"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5l3.5 3.5 5.5-5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Marcar como concluído</button></div></div>`;
+    list.appendChild(card);
+  });
+}
+function tog(i){const c=document.getElementById('sc-'+i);const o=c.classList.contains('open-c');document.querySelectorAll('.sc').forEach(x=>{x.classList.remove('open-c');x.querySelector('.cv').textContent='▼';});if(!o){c.classList.add('open-c');c.querySelector('.cv').textContent='▲';}}
+function mk(i){if(done.has(i))return;done.add(i);document.getElementById('chk-'+i).classList.add('done');document.getElementById('sc-'+i).classList.add('done-c');const mb=document.getElementById('mb-'+i);mb.classList.add('done-btn');mb.innerHTML='<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5l3.5 3.5 5.5-5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Concluído!';upd();if(i<STEPS.length-1){document.querySelectorAll('.sc').forEach(x=>{x.classList.remove('open-c');x.querySelector('.cv').textContent='▼';});const nx=document.getElementById('sc-'+(i+1));nx.classList.add('open-c');nx.querySelector('.cv').textContent='▲';setTimeout(()=>nx.scrollIntoView({behavior:'smooth',block:'nearest'}),100);}if(done.size===STEPS.length){document.getElementById('sbox').classList.add('show');document.getElementById('next-page').style.display='flex';setTimeout(()=>document.getElementById('next-page').scrollIntoView({behavior:'smooth',block:'nearest'}),300);}}
+function upd(){document.getElementById('pf').style.width=Math.round((done.size/STEPS.length)*100)+'%';document.getElementById('pt').textContent=done.size+' / '+STEPS.length;}
+build();upd();
+</script>
+</body>
+</html>

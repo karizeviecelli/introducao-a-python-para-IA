@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo ao Vivo — Funções e Reutilização de Código · Aula 05</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;color:#1e293b;background:#fffbeb;min-height:100vh;padding:20px}
+.wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.page-hdr{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
+.page-hdr h1{font-size:16px;font-weight:600}.page-hdr p{font-size:12px;color:#94a3b8}
+.prog-track{grid-column:1/-1;height:3px;background:#e2e8f0;border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:#d97706;border-radius:2px;transition:width .3s ease;width:0%}
+.panel{border:1px solid #fde68a;border-radius:12px;overflow:hidden;background:#fff}
+.ph{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1px solid #fde68a;background:#fffbeb}
+.pt{font-size:12px;font-weight:500;color:#92400e}
+.dots-r{display:flex;gap:5px}
+.dot{width:10px;height:10px;border-radius:50%}
+pre{background:#1e293b;color:#e2e8f0;padding:15px;font-family:'Courier New',monospace;font-size:12px;line-height:1.8;min-height:300px;overflow:auto;white-space:pre}
+.cursor{display:inline-block;width:2px;height:14px;background:#fcd34d;vertical-align:middle;animation:blink .9s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.preview-body{min-height:300px;overflow-y:auto;background:#f8fafc;padding:16px;font-family:'Courier New',monospace;font-size:13px;line-height:1.9}
+.out-line{padding:1px 0;color:#1e293b}
+.out-line.cm{color:#64748b;font-style:italic}
+.out-line.ok{color:#d97706;font-weight:600}
+.out-line.prompt{color:#94a3b8}
+.step-bar{grid-column:1/-1;border:1px solid #fde68a;border-radius:12px;background:#fff;display:flex;align-items:center;gap:10px;padding:11px 15px;flex-wrap:wrap}
+.sbadge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#fef3c7;color:#d97706;border:1px solid #fcd34d}
+.slabel{font-size:12px;color:#64748b;flex:1;line-height:1.4}
+.cb{font-size:12px;font-weight:500;padding:6px 14px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#1e293b;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
+.cb:hover{background:#f1f5f9}.cb.go{background:#d97706;color:#fff;border-color:#d97706}.cb.go:hover{background:#b45309}
+.cb:disabled{opacity:.35;pointer-events:none}
+.narr{grid-column:1/-1;border:1px solid #fde68a;border-radius:10px;padding:11px 15px;background:#fffbeb;font-size:13px;color:#78350f;line-height:1.6;min-height:50px}
+.narr strong{color:#92400e;font-weight:600}
+.next-page{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#fffbeb;border:1px solid #fde68a;border-radius:10px}
+.next-page-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#d97706}
+.next-page-title{font-size:13px;font-weight:600;color:#1e293b;margin-top:2px}
+.next-page-btn{background:#d97706;color:#fff;border:none;padding:8px 18px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s;white-space:nowrap;text-decoration:none;display:inline-block}
+.next-page-btn:hover{background:#b45309}
+.k{color:#93c5fd}.p{color:#c4b5fd}.v{color:#6ee7b7}.s{color:#fda4af}.cm2{color:#475569;font-style:italic}.fn{color:#fbbf24}
+@media(max-width:680px){.wrap{grid-template-columns:1fr}.panel:last-of-type{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="page-hdr"><h1>Demonstração ao vivo — Funções e Reutilização de Código</h1><p>Aula 05 · 45 min · Docente digita no Colab, alunos acompanham</p></div>
+  <div class="prog-track"><div class="prog-fill" id="prog"></div></div>
+  <div class="panel">
+    <div class="ph"><span class="pt">Google Colab — aula05.ipynb</span><div class="dots-r"><div class="dot" style="background:#ef4444"></div><div class="dot" style="background:#f59e0b"></div><div class="dot" style="background:#10b981"></div></div></div>
+    <pre><span id="code-out"></span><span class="cursor"></span></pre>
+  </div>
+  <div class="panel">
+    <div class="ph"><span class="pt">Output — resultado da célula</span><div class="dots-r"><div class="dot" style="background:#ef4444"></div><div class="dot" style="background:#f59e0b"></div><div class="dot" style="background:#10b981"></div></div></div>
+    <div class="preview-body" id="preview"></div>
+  </div>
+  <div class="narr" id="narr">Pronto para começar. Clique em <strong>Iniciar digitação</strong>.</div>
+  <div class="step-bar">
+    <span class="sbadge" id="sbadge">Etapa 1 / 8</span>
+    <span class="slabel" id="sdesc">A primeira função</span>
+    <button class="cb" id="bp" onclick="prevS()" disabled>← Anterior</button>
+    <button class="cb go" id="bplay" onclick="playS()">▶ Iniciar digitação</button>
+    <button class="cb" id="bn" onclick="nextS()" disabled>Próxima →</button>
+  </div>
+  <div class="next-page" id="next-page" style="display:none">
+    <div><div class="next-page-label">Demonstração concluída</div><div class="next-page-title">▶ Prática Guiada — Funções e Reutilização de Código</div></div>
+    <a class="next-page-btn" href="a05_pratica_guiada.html">Abrir Prática →</a>
+  </div>
+</div>
+<script>
+const STEPS=[
+{label:'A primeira função',
+narr:'<strong>Docente:</strong> "Vamos criar a primeira função. def, nome, parênteses, dois-pontos, corpo indentado. A docstring documenta o que ela faz. Depois chamamos com o nome e os argumentos."',
+code:`<span class="k">def</span> <span class="fn">saudacao</span>(<span class="p">nome</span>):
+    <span class="s">"""Exibe uma saudação personalizada."""</span>
+    <span class="fn">print</span>(<span class="s">f"Olá, {nome}! Bem-vindo ao Python."</span>)
+
+<span class="cm2"># Chamando a função 3 vezes</span>
+<span class="fn">saudacao</span>(<span class="s">"Ana"</span>)
+<span class="fn">saudacao</span>(<span class="s">"Bruno"</span>)
+<span class="fn">saudacao</span>(<span class="s">"Carla"</span>)`,
+prev:`<div class="out-line ok">Olá, Ana! Bem-vindo ao Python.</div><div class="out-line ok">Olá, Bruno! Bem-vindo ao Python.</div><div class="out-line ok">Olá, Carla! Bem-vindo ao Python.</div>`},
+{label:'return — devolvendo um valor',
+narr:'<strong>Docente:</strong> "A função que só usa print nao devolve nada útil. Com return podemos usar o resultado em cálculos, guardar em variáveis e passar para outras funções."',
+code:`<span class="cm2"># Sem return: só imprime, nao devolve</span>
+<span class="k">def</span> <span class="fn">dobro_print</span>(<span class="p">n</span>):
+    <span class="fn">print</span>(<span class="p">n</span> * <span class="v">2</span>)
+
+<span class="cm2"># Com return: podemos usar o valor!</span>
+<span class="k">def</span> <span class="fn">dobro</span>(<span class="p">n</span>):
+    <span class="k">return</span> <span class="p">n</span> * <span class="v">2</span>
+
+<span class="p">resultado</span> = <span class="fn">dobro</span>(<span class="v">7</span>)
+<span class="fn">print</span>(<span class="s">f"O dobro de 7 é {resultado}"</span>)
+<span class="fn">print</span>(<span class="s">f"O dobro do dobro: {dobro(dobro(3))}"</span>)
+
+<span class="cm2"># Sem return → None</span>
+<span class="fn">print</span>(<span class="fn">dobro_print</span>(<span class="v">5</span>))  <span class="cm2"># imprime 10, depois None`,
+prev:`<div class="out-line ok">O dobro de 7 é 14</div><div class="out-line ok">O dobro do dobro: 12</div><div class="out-line ok">10</div><div class="out-line ok">None</div>`},
+{label:'Parâmetros e valores padrão',
+narr:'<strong>Docente:</strong> "Parâmetros com valor padrão deixam o argumento opcional. Se nao passarmos, Python usa o padrão. Parâmetros obrigatórios sempre vêm antes dos opcionais."',
+code:`<span class="k">def</span> <span class="fn">potencia</span>(<span class="p">base</span>, <span class="p">expoente</span>=<span class="v">2</span>):
+    <span class="s">"""Calcula base elevado ao expoente (padrão: quadrado)."""</span>
+    <span class="k">return</span> <span class="p">base</span> ** <span class="p">expoente</span>
+
+<span class="fn">print</span>(<span class="fn">potencia</span>(<span class="v">5</span>))      <span class="cm2"># 25  (expoente padrão = 2)</span>
+<span class="fn">print</span>(<span class="fn">potencia</span>(<span class="v">5</span>, <span class="v">3</span>))   <span class="cm2"># 125 (expoente = 3)</span>
+<span class="fn">print</span>(<span class="fn">potencia</span>(<span class="v">2</span>, <span class="v">10</span>))  <span class="cm2"># 1024</span>
+
+<span class="cm2"># Argumento nomeado — ordem nao importa</span>
+<span class="fn">print</span>(<span class="fn">potencia</span>(<span class="p">expoente</span>=<span class="v">3</span>, <span class="p">base</span>=<span class="v">4</span>))  <span class="cm2"># 64`,
+prev:`<div class="out-line ok">25</div><div class="out-line ok">125</div><div class="out-line ok">1024</div><div class="out-line ok">64</div>`},
+{label:'Escopo — variáveis locais e globais',
+narr:'<strong>Docente:</strong> "Variáveis criadas dentro da função só existem ali. Isso é escopo local. Vou mostrar o que acontece quando tentamos acessar uma variável local de fora."',
+code:`<span class="p">mensagem</span> = <span class="s">"global"</span>  <span class="cm2"># variável global</span>
+
+<span class="k">def</span> <span class="fn">testar_escopo</span>():
+    <span class="p">local</span> = <span class="s">"local"</span>      <span class="cm2"># só existe aqui</span>
+    <span class="fn">print</span>(<span class="s">f"Dentro: {local}"</span>)
+    <span class="fn">print</span>(<span class="s">f"Global visível: {mensagem}"</span>)
+
+<span class="fn">testar_escopo</span>()
+
+<span class="cm2"># local nao existe aqui — causaria NameError</span>
+<span class="cm2"># print(local)  → NameError: name local is not defined</span>
+<span class="fn">print</span>(<span class="s">f"Fora: {mensagem}"</span>)  <span class="cm2"># global ainda existe`,
+prev:`<div class="out-line ok">Dentro: local</div><div class="out-line ok">Global visível: global</div><div class="out-line ok">Fora: global</div>`},
+{label:'Múltiplos retornos',
+narr:'<strong>Docente:</strong> "return pode devolver vários valores de uma vez — é uma tupla por baixo dos panos. Usamos desempacotamento para receber cada valor em sua variável."',
+code:`<span class="k">def</span> <span class="fn">minmax</span>(<span class="p">numeros</span>):
+    <span class="s">"""Retorna o menor e o maior valor da lista."""</span>
+    <span class="k">return</span> <span class="fn">min</span>(<span class="p">numeros</span>), <span class="fn">max</span>(<span class="p">numeros</span>)
+
+<span class="p">notas</span> = [<span class="v">7.5</span>, <span class="v">9.0</span>, <span class="v">4.5</span>, <span class="v">8.0</span>, <span class="v">6.5</span>]
+
+<span class="cm2"># Desempacotamento direto</span>
+<span class="p">menor</span>, <span class="p">maior</span> = <span class="fn">minmax</span>(<span class="p">notas</span>)
+<span class="fn">print</span>(<span class="s">f"Menor: {menor} | Maior: {maior}"</span>)
+
+<span class="cm2"># Ou guardar a tupla toda</span>
+<span class="p">resultado</span> = <span class="fn">minmax</span>(<span class="p">notas</span>)
+<span class="fn">print</span>(<span class="fn">type</span>(<span class="p">resultado</span>))   <span class="cm2"># tuple`,
+prev:`<div class="out-line ok">Menor: 4.5 | Maior: 9.0</div><div class="out-line ok">&lt;class 'tuple'&gt;</div>`},
+{label:'Funções chamando funções',
+narr:'<strong>Docente:</strong> "Uma função pode chamar outra. Esse é o segredo do código bem organizado: funções pequenas com uma responsabilidade, compondo operações maiores."',
+code:`<span class="k">def</span> <span class="fn">calcular_media</span>(<span class="p">notas</span>):
+    <span class="k">return</span> <span class="fn">sum</span>(<span class="p">notas</span>) / <span class="fn">len</span>(<span class="p">notas</span>)
+
+<span class="k">def</span> <span class="fn">classificar</span>(<span class="p">media</span>):
+    <span class="k">if</span> <span class="p">media</span> >= <span class="v">9</span>: <span class="k">return</span> <span class="s">"Excelente"</span>
+    <span class="k">if</span> <span class="p">media</span> >= <span class="v">7</span>: <span class="k">return</span> <span class="s">"Bom"</span>
+    <span class="k">if</span> <span class="p">media</span> >= <span class="v">5</span>: <span class="k">return</span> <span class="s">"Aprovado"</span>
+    <span class="k">return</span> <span class="s">"Reprovado"</span>
+
+<span class="k">def</span> <span class="fn">avaliar</span>(<span class="p">nome</span>, <span class="p">notas</span>):
+    <span class="p">media</span>    = <span class="fn">calcular_media</span>(<span class="p">notas</span>)   <span class="cm2"># chama outra</span>
+    <span class="p">conceito</span> = <span class="fn">classificar</span>(<span class="p">media</span>)      <span class="cm2"># chama outra</span>
+    <span class="fn">print</span>(<span class="s">f"{nome}: {media:.1f} → {conceito}"</span>)
+
+<span class="fn">avaliar</span>(<span class="s">"Ana"</span>,   [<span class="v">9</span>, <span class="v">8</span>, <span class="v">10</span>])
+<span class="fn">avaliar</span>(<span class="s">"Bruno"</span>, [<span class="v">4</span>, <span class="v">5</span>, <span class="v">3</span>])`,
+prev:`<div class="out-line ok">Ana: 9.0 → Excelente</div><div class="out-line ok">Bruno: 4.0 → Reprovado</div>`},
+{label:'Funções com listas e dicionários',
+narr:'<strong>Docente:</strong> "Funções trabalham perfeitamente com as estruturas da Aula 04. Passar uma lista para uma função é o padrão mais comum em programas reais."',
+code:`<span class="k">def</span> <span class="fn">resumo_turma</span>(<span class="p">turma</span>):
+    <span class="s">"""Recebe lista de dicionários e exibe relatório."""</span>
+    <span class="fn">print</span>(<span class="s">f"=== Turma: {len(turma)} alunos ==="</span>)
+    <span class="p">aprovados</span> = <span class="v">0</span>
+    <span class="k">for</span> <span class="p">aluno</span> <span class="k">in</span> <span class="p">turma</span>:
+        <span class="p">media</span> = <span class="fn">sum</span>(<span class="p">aluno</span>[<span class="s">"notas"</span>]) / <span class="fn">len</span>(<span class="p">aluno</span>[<span class="s">"notas"</span>])
+        <span class="p">ok</span>    = <span class="p">media</span> >= <span class="v">5</span>
+        <span class="k">if</span> <span class="p">ok</span>: <span class="p">aprovados</span> += <span class="v">1</span>
+        <span class="fn">print</span>(<span class="s">f"  {aluno[\'nome\']:8} {media:.1f}"</span>)
+    <span class="fn">print</span>(<span class="s">f"Aprovados: {aprovados}/{len(turma)}"</span>)
+
+<span class="fn">resumo_turma</span>([
+    {<span class="s">"nome"</span>: <span class="s">"Ana"</span>,   <span class="s">"notas"</span>: [<span class="v">8</span>, <span class="v">9</span>, <span class="v">7</span>]},
+    {<span class="s">"nome"</span>: <span class="s">"Bruno"</span>, <span class="s">"notas"</span>: [<span class="v">4</span>, <span class="v">3</span>, <span class="v">5</span>]},
+])`,
+prev:`<div class="out-line ok">=== Turma: 2 alunos ===</div><div class="out-line ok">  Ana      8.0</div><div class="out-line ok">  Bruno    4.0</div><div class="out-line ok">Aprovados: 1/2</div>`},
+{label:'Mini projeto — calculadora modular',
+narr:'<strong>Docente:</strong> "Programa completo com 4 funções de operações + 1 função principal que coordena tudo. Cada função tem uma responsabilidade. O main() lê o input e escolhe o que chamar."',
+code:`<span class="k">def</span> <span class="fn">somar</span>(<span class="p">a</span>, <span class="p">b</span>):      <span class="k">return</span> <span class="p">a</span> + <span class="p">b</span>
+<span class="k">def</span> <span class="fn">subtrair</span>(<span class="p">a</span>, <span class="p">b</span>):  <span class="k">return</span> <span class="p">a</span> - <span class="p">b</span>
+<span class="k">def</span> <span class="fn">multiplicar</span>(<span class="p">a</span>, <span class="p">b</span>): <span class="k">return</span> <span class="p">a</span> * <span class="p">b</span>
+<span class="k">def</span> <span class="fn">dividir</span>(<span class="p">a</span>, <span class="p">b</span>):
+    <span class="k">if</span> <span class="p">b</span> == <span class="v">0</span>: <span class="k">return</span> <span class="s">"Erro: divisao por zero"</span>
+    <span class="k">return</span> <span class="p">a</span> / <span class="p">b</span>
+
+<span class="k">def</span> <span class="fn">calcular</span>(<span class="p">a</span>, <span class="p">op</span>, <span class="p">b</span>):
+    <span class="p">ops</span> = {<span class="s">"+"</span>: <span class="fn">somar</span>, <span class="s">"-"</span>: <span class="fn">subtrair</span>,
+            <span class="s">"*"</span>: <span class="fn">multiplicar</span>, <span class="s">"/"</span>: <span class="fn">dividir</span>}
+    <span class="k">if</span> <span class="p">op</span> <span class="k">not in</span> <span class="p">ops</span>: <span class="k">return</span> <span class="s">"Operador invalido"</span>
+    <span class="k">return</span> <span class="p">ops</span>[<span class="p">op</span>](<span class="p">a</span>, <span class="p">b</span>)
+
+<span class="fn">print</span>(<span class="fn">calcular</span>(<span class="v">10</span>, <span class="s">"+"</span>, <span class="v">5</span>))
+<span class="fn">print</span>(<span class="fn">calcular</span>(<span class="v">10</span>, <span class="s">"/"</span>, <span class="v">0</span>))`,
+prev:`<div class="out-line ok">15</div><div class="out-line ok">Erro: divisao por zero</div>`}
+];
+let cur=0,playing=false,timer=null;
+function render(){
+  document.getElementById('sbadge').textContent=`Etapa ${cur+1} / ${STEPS.length}`;
+  document.getElementById('sdesc').textContent=STEPS[cur].label;
+  document.getElementById('narr').innerHTML=STEPS[cur].narr;
+  document.getElementById('preview').innerHTML=STEPS[cur].prev;
+  document.getElementById('code-out').innerHTML='';
+  document.getElementById('prog').style.width=((cur+1)/STEPS.length*100)+'%';
+  document.getElementById('bp').disabled=cur===0;
+  document.getElementById('bn').disabled=cur===STEPS.length-1;
+  const pb=document.getElementById('bplay');pb.textContent='▶ Iniciar digitação';pb.className='cb go';
+  document.getElementById('next-page').style.display=cur===STEPS.length-1?'flex':'none';
+}
+function playS(){
+  if(playing){clearTimeout(timer);playing=false;document.getElementById('bplay').textContent='▶ Iniciar digitação';return;}
+  playing=true;document.getElementById('bplay').textContent='⏸ Pausar';
+  const code=STEPS[cur].code;let i=0;const out=document.getElementById('code-out');out.innerHTML='';
+  function tick(){
+    if(!playing)return;
+    if(i<code.length){
+      if(code[i]==='<'){const end=code.indexOf('>',i);if(end>-1){out.innerHTML+=code.slice(i,end+1);i=end+1;}else{out.innerHTML+=code[i];i++;}}
+      else{out.innerHTML+=code[i];i++;}
+      timer=setTimeout(tick,i%7===0?16:4);
+    }else{playing=false;document.getElementById('bplay').textContent='✓ Concluído';document.getElementById('bn').disabled=cur===STEPS.length-1;if(cur===STEPS.length-1)document.getElementById('next-page').style.display='flex';}
+  }
+  tick();
+}
+function nextS(){if(cur<STEPS.length-1){cur++;render();}}
+function prevS(){if(cur>0){cur--;render();}}
+render();
+</script>
+</body>
+</html>
