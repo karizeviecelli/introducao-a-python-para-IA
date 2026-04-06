@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo ao Vivo — Listas, Tuplas e Dicionários · Aula 04</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;color:#1e293b;background:#f0fdf4;min-height:100vh;padding:20px}
+.wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.page-hdr{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
+.page-hdr h1{font-size:16px;font-weight:600}.page-hdr p{font-size:12px;color:#94a3b8}
+.prog-track{grid-column:1/-1;height:3px;background:#e2e8f0;border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:#059669;border-radius:2px;transition:width .3s ease;width:0%}
+.panel{border:1px solid #bbf7d0;border-radius:12px;overflow:hidden;background:#fff}
+.ph{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1px solid #bbf7d0;background:#f0fdf4}
+.pt{font-size:12px;font-weight:500;color:#047857}
+.dots-r{display:flex;gap:5px}
+.dot{width:10px;height:10px;border-radius:50%}
+pre{background:#1e293b;color:#e2e8f0;padding:15px;font-family:'Courier New',monospace;font-size:12px;line-height:1.8;min-height:300px;overflow:auto;white-space:pre}
+.cursor{display:inline-block;width:2px;height:14px;background:#6ee7b7;vertical-align:middle;animation:blink .9s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.preview-body{min-height:300px;overflow-y:auto;background:#f8fafc;padding:16px;font-family:'Courier New',monospace;font-size:13px;line-height:1.9}
+.out-line{padding:1px 0;color:#1e293b}
+.out-line.cm{color:#64748b;font-style:italic}
+.out-line.ok{color:#059669;font-weight:600}
+.out-line.err{color:#dc2626}
+.out-line.prompt{color:#94a3b8}
+.step-bar{grid-column:1/-1;border:1px solid #bbf7d0;border-radius:12px;background:#fff;display:flex;align-items:center;gap:10px;padding:11px 15px;flex-wrap:wrap}
+.sbadge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#dcfce7;color:#059669;border:1px solid #86efac}
+.slabel{font-size:12px;color:#64748b;flex:1;line-height:1.4}
+.cb{font-size:12px;font-weight:500;padding:6px 14px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#1e293b;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
+.cb:hover{background:#f1f5f9}.cb.go{background:#059669;color:#fff;border-color:#059669}.cb.go:hover{background:#047857}
+.cb:disabled{opacity:.35;pointer-events:none}
+.narr{grid-column:1/-1;border:1px solid #bbf7d0;border-radius:10px;padding:11px 15px;background:#f0fdf4;font-size:13px;color:#14532d;line-height:1.6;min-height:50px}
+.narr strong{color:#047857;font-weight:600}
+.next-page{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px}
+.next-page-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#059669}
+.next-page-title{font-size:13px;font-weight:600;color:#1e293b;margin-top:2px}
+.next-page-btn{background:#059669;color:#fff;border:none;padding:8px 18px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s;white-space:nowrap;text-decoration:none;display:inline-block}
+.next-page-btn:hover{background:#047857}
+.k{color:#93c5fd}.p{color:#c4b5fd}.v{color:#6ee7b7}.s{color:#fda4af}.cm2{color:#475569;font-style:italic}.fn{color:#fbbf24}
+@media(max-width:680px){.wrap{grid-template-columns:1fr}.panel:last-of-type{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="page-hdr"><h1>Demonstração ao vivo — Listas, Tuplas e Dicionários</h1><p>Aula 04 · 45 min · Docente digita no Colab, alunos acompanham</p></div>
+  <div class="prog-track"><div class="prog-fill" id="prog"></div></div>
+  <div class="panel">
+    <div class="ph"><span class="pt">Google Colab — aula04.ipynb</span><div class="dots-r"><div class="dot" style="background:#ef4444"></div><div class="dot" style="background:#f59e0b"></div><div class="dot" style="background:#10b981"></div></div></div>
+    <pre><span id="code-out"></span><span class="cursor"></span></pre>
+  </div>
+  <div class="panel">
+    <div class="ph"><span class="pt">Output — resultado da célula</span><div class="dots-r"><div class="dot" style="background:#ef4444"></div><div class="dot" style="background:#f59e0b"></div><div class="dot" style="background:#10b981"></div></div></div>
+    <div class="preview-body" id="preview"></div>
+  </div>
+  <div class="narr" id="narr">Pronto para começar. Clique em <strong>Iniciar digitação</strong>.</div>
+  <div class="step-bar">
+    <span class="sbadge" id="sbadge">Etapa 1 / 8</span>
+    <span class="slabel" id="sdesc">Criando e acessando listas</span>
+    <button class="cb" id="bp" onclick="prevS()" disabled>← Anterior</button>
+    <button class="cb go" id="bplay" onclick="playS()">▶ Iniciar digitação</button>
+    <button class="cb" id="bn" onclick="nextS()" disabled>Próxima →</button>
+  </div>
+  <div class="next-page" id="next-page" style="display:none">
+    <div><div class="next-page-label">Demonstração concluída</div><div class="next-page-title">▶ Prática Guiada — Listas, Tuplas e Dicionários</div></div>
+    <a class="next-page-btn" href="a04_pratica_guiada.html">Abrir Prática →</a>
+  </div>
+</div>
+<script>
+const STEPS=[
+{label:'Criando e acessando listas',
+narr:'<strong>Docente:</strong> "Lista é a estrutura mais usada em Python. Colchetes, vírgulas, índice começa em zero. O índice negativo acessa do final — muito útil."',
+code:`<span class="cm2"># Criando listas</span>
+<span class="p">notas</span> = [<span class="v">7.5</span>, <span class="v">8.0</span>, <span class="v">6.5</span>, <span class="v">9.0</span>, <span class="v">5.5</span>]
+<span class="p">nomes</span> = [<span class="s">"Ana"</span>, <span class="s">"Bruno"</span>, <span class="s">"Carla"</span>]
+
+<span class="cm2"># Acessando por índice</span>
+<span class="fn">print</span>(<span class="p">notas</span>[<span class="v">0</span>])    <span class="cm2"># primeiro</span>
+<span class="fn">print</span>(<span class="p">notas</span>[-<span class="v">1</span>])   <span class="cm2"># último</span>
+<span class="fn">print</span>(<span class="p">notas</span>[<span class="v">1</span>:<span class="v">4</span>])  <span class="cm2"># fatia: índice 1,2,3</span>
+<span class="fn">print</span>(<span class="fn">len</span>(<span class="p">notas</span>))  <span class="cm2"># tamanho</span>`,
+prev:`<div class="out-line ok">7.5</div><div class="out-line ok">5.5</div><div class="out-line ok">[8.0, 6.5, 9.0]</div><div class="out-line ok">5</div>`},
+{label:'Modificando listas — append, remove, pop',
+narr:'<strong>Docente:</strong> "Listas sao mutáveis — podemos adicionar, remover e alterar. append adiciona no final, insert em qualquer posição, remove por valor, pop por índice."',
+code:`<span class="p">frutas</span> = [<span class="s">"banana"</span>, <span class="s">"laranja"</span>, <span class="s">"uva"</span>]
+
+<span class="p">frutas</span>.<span class="fn">append</span>(<span class="s">"manga"</span>)     <span class="cm2"># adiciona no final</span>
+<span class="fn">print</span>(<span class="p">frutas</span>)
+
+<span class="p">frutas</span>.<span class="fn">insert</span>(<span class="v">1</span>, <span class="s">"maca"</span>)  <span class="cm2"># insere na posição 1</span>
+<span class="fn">print</span>(<span class="p">frutas</span>)
+
+<span class="p">frutas</span>.<span class="fn">remove</span>(<span class="s">"uva"</span>)       <span class="cm2"># remove por valor</span>
+<span class="fn">print</span>(<span class="p">frutas</span>)
+
+<span class="p">removida</span> = <span class="p">frutas</span>.<span class="fn">pop</span>()     <span class="cm2"># remove o último</span>
+<span class="fn">print</span>(<span class="s">f"Removida: {removida}"</span>)`,
+prev:`<div class="out-line ok">['banana', 'laranja', 'uva', 'manga']</div><div class="out-line ok">['banana', 'maca', 'laranja', 'uva', 'manga']</div><div class="out-line ok">['banana', 'maca', 'laranja', 'manga']</div><div class="out-line ok">Removida: manga</div>`},
+{label:'Listas e for — processando elementos',
+narr:'<strong>Docente:</strong> "Juntar listas com for é o padrão mais comum em Python. Vamos calcular a média das notas e filtrar aprovados — usando tudo que aprendemos nas aulas anteriores."',
+code:`<span class="p">notas</span> = [<span class="v">7.5</span>, <span class="v">4.0</span>, <span class="v">8.5</span>, <span class="v">6.0</span>, <span class="v">9.0</span>, <span class="v">3.5</span>]
+
+<span class="cm2"># Média usando sum() e len()</span>
+<span class="p">media</span> = <span class="fn">sum</span>(<span class="p">notas</span>) / <span class="fn">len</span>(<span class="p">notas</span>)
+<span class="fn">print</span>(<span class="s">f"Média: {media:.1f}"</span>)
+
+<span class="cm2"># Filtrar aprovados com for + if</span>
+<span class="p">aprovados</span> = []
+<span class="k">for</span> <span class="p">nota</span> <span class="k">in</span> <span class="p">notas</span>:
+    <span class="k">if</span> <span class="p">nota</span> >= <span class="v">5.0</span>:
+        <span class="p">aprovados</span>.<span class="fn">append</span>(<span class="p">nota</span>)
+
+<span class="fn">print</span>(<span class="s">f"Aprovados: {aprovados}"</span>)
+<span class="fn">print</span>(<span class="s">f"Total aprovados: {len(aprovados)}"</span>)`,
+prev:`<div class="out-line ok">Média: 6.4</div><div class="out-line ok">Aprovados: [7.5, 8.5, 6.0, 9.0]</div><div class="out-line ok">Total aprovados: 4</div>`},
+{label:'Tuplas — imutáveis e desempacotamento',
+narr:'<strong>Docente:</strong> "Tupla parece lista mas com parênteses. A diferença real é que nao pode ser modificada. O desempacotamento é um dos recursos mais elegantes do Python."',
+code:`<span class="cm2"># Criando tuplas</span>
+<span class="p">coordenada</span> = (<span class="v">-23.5</span>, <span class="v">-46.6</span>)
+<span class="p">cores_rgb</span>  = (<span class="v">255</span>, <span class="v">128</span>, <span class="v">0</span>)
+
+<span class="cm2"># Desempacotamento — elegante!</span>
+<span class="p">lat</span>, <span class="p">lon</span> = <span class="p">coordenada</span>
+<span class="fn">print</span>(<span class="s">f"Lat: {lat}, Lon: {lon}"</span>)
+
+<span class="p">r</span>, <span class="p">g</span>, <span class="p">b</span> = <span class="p">cores_rgb</span>
+<span class="fn">print</span>(<span class="s">f"R={r} G={g} B={b}"</span>)
+
+<span class="cm2"># Tupla é imutável — tentativa de alterar causa erro</span>
+<span class="cm2"># coordenada[0] = 0  → TypeError</span>
+<span class="fn">print</span>(<span class="fn">type</span>(<span class="p">coordenada</span>))`,
+prev:`<div class="out-line ok">Lat: -23.5, Lon: -46.6</div><div class="out-line ok">R=255 G=128 B=0</div><div class="out-line ok">&lt;class 'tuple'&gt;</div>`},
+{label:'Criando e acessando dicionários',
+narr:'<strong>Docente:</strong> "Dicionário guarda pares de chave e valor — como uma ficha de cadastro. Acessamos pelo nome, nao pelo número. Isso deixa o código muito mais legível."',
+code:`<span class="cm2"># Criando dicionário</span>
+<span class="p">aluno</span> = {
+    <span class="s">"nome"</span>    : <span class="s">"Carlos"</span>,
+    <span class="s">"idade"</span>   : <span class="v">22</span>,
+    <span class="s">"nota"</span>    : <span class="v">8.5</span>,
+    <span class="s">"aprovado"</span>: <span class="v">True</span>
+}
+
+<span class="cm2"># Acessando por chave</span>
+<span class="fn">print</span>(<span class="p">aluno</span>[<span class="s">"nome"</span>])
+<span class="fn">print</span>(<span class="p">aluno</span>[<span class="s">"nota"</span>])
+
+<span class="cm2"># Adicionar nova chave</span>
+<span class="p">aluno</span>[<span class="s">"turma"</span>] = <span class="s">"A2"</span>
+<span class="fn">print</span>(<span class="p">aluno</span>)`,
+prev:`<div class="out-line ok">Carlos</div><div class="out-line ok">8.5</div><div class="out-line ok">{'nome': 'Carlos', 'idade': 22, 'nota': 8.5, 'aprovado': True, 'turma': 'A2'}</div>`},
+{label:'.get() e verificando chaves',
+narr:'<strong>Docente:</strong> "Acessar uma chave que nao existe causa KeyError. O .get() é a solução: retorna um valor padrão se a chave nao existir. Sempre prefira .get() quando a chave pode estar ausente."',
+code:`<span class="p">config</span> = {
+    <span class="s">"tema"</span>  : <span class="s">"escuro"</span>,
+    <span class="s">"idioma"</span>: <span class="s">"pt-BR"</span>
+}
+
+<span class="cm2"># Verificar se chave existe</span>
+<span class="fn">print</span>(<span class="s">"tema"</span> <span class="k">in</span> <span class="p">config</span>)      <span class="cm2"># True</span>
+<span class="fn">print</span>(<span class="s">"fonte"</span> <span class="k">in</span> <span class="p">config</span>)     <span class="cm2"># False</span>
+
+<span class="cm2"># .get() — seguro, sem KeyError</span>
+<span class="fn">print</span>(<span class="p">config</span>.<span class="fn">get</span>(<span class="s">"tema"</span>))
+<span class="fn">print</span>(<span class="p">config</span>.<span class="fn">get</span>(<span class="s">"fonte"</span>, <span class="s">"Arial"</span>))  <span class="cm2"># retorna padrao</span>
+
+<span class="cm2"># Acesso direto quando chave ausente → KeyError</span>
+<span class="cm2"># print(config["fonte"])  → KeyError: fonte</span>`,
+prev:`<div class="out-line ok">True</div><div class="out-line ok">False</div><div class="out-line ok">escuro</div><div class="out-line ok">Arial</div>`},
+{label:'Iterando dicionários com .items()',
+narr:'<strong>Docente:</strong> "Para percorrer um dicionário, .items() retorna cada par chave-valor. É o mais usado dos três métodos. .keys() só as chaves, .values() só os valores."',
+code:`<span class="p">produto</span> = {
+    <span class="s">"nome"</span>   : <span class="s">"Notebook"</span>,
+    <span class="s">"preco"</span>  : <span class="v">3500.00</span>,
+    <span class="s">"estoque"</span>: <span class="v">12</span>
+}
+
+<span class="cm2"># Iterar com .items() — chave e valor</span>
+<span class="fn">print</span>(<span class="s">"=== Ficha do Produto ==="</span>)
+<span class="k">for</span> <span class="p">chave</span>, <span class="p">valor</span> <span class="k">in</span> <span class="p">produto</span>.<span class="fn">items</span>():
+    <span class="fn">print</span>(<span class="s">f"  {chave}: {valor}"</span>)
+
+<span class="cm2"># Apenas as chaves</span>
+<span class="fn">print</span>(<span class="fn">list</span>(<span class="p">produto</span>.<span class="fn">keys</span>()))`,
+prev:`<div class="out-line ok">=== Ficha do Produto ===</div><div class="out-line ok">  nome: Notebook</div><div class="out-line ok">  preco: 3500.0</div><div class="out-line ok">  estoque: 12</div><div class="out-line ok">['nome', 'preco', 'estoque']</div>`},
+{label:'Lista de dicionários — cadastro de alunos',
+narr:'<strong>Docente:</strong> "O padrão mais comum em projetos reais: lista de dicionários. Cada item da lista é um dicionário com os dados de uma entidade. É a base de toda API e banco de dados."',
+code:`<span class="cm2"># Lista de dicionários — padrão profissional</span>
+<span class="p">turma</span> = [
+    {<span class="s">"nome"</span>: <span class="s">"Ana"</span>,   <span class="s">"nota"</span>: <span class="v">8.5</span>},
+    {<span class="s">"nome"</span>: <span class="s">"Bruno"</span>, <span class="s">"nota"</span>: <span class="v">4.0</span>},
+    {<span class="s">"nome"</span>: <span class="s">"Carla"</span>, <span class="s">"nota"</span>: <span class="v">9.0</span>},
+]
+
+<span class="k">for</span> <span class="p">aluno</span> <span class="k">in</span> <span class="p">turma</span>:
+    <span class="p">status</span> = <span class="s">"Aprovado"</span> <span class="k">if</span> <span class="p">aluno</span>[<span class="s">"nota"</span>] >= <span class="v">5</span> <span class="k">else</span> <span class="s">"Reprovado"</span>
+    <span class="fn">print</span>(<span class="s">f"{aluno['nome']:10} {aluno['nota']} → {status}"</span>)`,
+prev:`<div class="out-line ok">Ana        8.5 → Aprovado</div><div class="out-line ok">Bruno      4.0 → Reprovado</div><div class="out-line ok">Carla      9.0 → Aprovado</div>`}
+];
+let cur=0,playing=false,timer=null;
+function render(){
+  document.getElementById('sbadge').textContent=`Etapa ${cur+1} / ${STEPS.length}`;
+  document.getElementById('sdesc').textContent=STEPS[cur].label;
+  document.getElementById('narr').innerHTML=STEPS[cur].narr;
+  document.getElementById('preview').innerHTML=STEPS[cur].prev;
+  document.getElementById('code-out').innerHTML='';
+  document.getElementById('prog').style.width=((cur+1)/STEPS.length*100)+'%';
+  document.getElementById('bp').disabled=cur===0;
+  document.getElementById('bn').disabled=cur===STEPS.length-1;
+  const pb=document.getElementById('bplay');pb.textContent='▶ Iniciar digitação';pb.className='cb go';
+  document.getElementById('next-page').style.display=cur===STEPS.length-1?'flex':'none';
+}
+function playS(){
+  if(playing){clearTimeout(timer);playing=false;document.getElementById('bplay').textContent='▶ Iniciar digitação';return;}
+  playing=true;document.getElementById('bplay').textContent='⏸ Pausar';
+  const code=STEPS[cur].code;let i=0;const out=document.getElementById('code-out');out.innerHTML='';
+  function tick(){
+    if(!playing)return;
+    if(i<code.length){
+      if(code[i]==='<'){const end=code.indexOf('>',i);if(end>-1){out.innerHTML+=code.slice(i,end+1);i=end+1;}else{out.innerHTML+=code[i];i++;}}
+      else{out.innerHTML+=code[i];i++;}
+      timer=setTimeout(tick,i%7===0?16:4);
+    }else{playing=false;document.getElementById('bplay').textContent='✓ Concluído';document.getElementById('bn').disabled=cur===STEPS.length-1;if(cur===STEPS.length-1)document.getElementById('next-page').style.display='flex';}
+  }
+  tick();
+}
+function nextS(){if(cur<STEPS.length-1){cur++;render();}}
+function prevS(){if(cur>0){cur--;render();}}
+render();
+</script>
+</body>
+</html>

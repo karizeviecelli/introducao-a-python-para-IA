@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prática Guiada — Listas, Tuplas e Dicionários · Aula 04</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;color:#1e293b;background:#f0fdf4;min-height:100vh;padding:22px}
+.wrap{max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:11px}
+.pg-header{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.pg-title{font-size:17px;font-weight:600}.pg-meta{font-size:12px;color:#64748b;margin-top:2px}
+.pg-time{font-size:12px;font-weight:600;background:#dcfce7;border:1px solid #bbf7d0;padding:4px 12px;border-radius:8px;color:#059669}
+.prog-row{display:flex;align-items:center;gap:9px}
+.pb{flex:1;height:7px;background:#e2e8f0;border-radius:4px;overflow:hidden}
+.pf{height:100%;background:#059669;border-radius:4px;transition:width .4s ease;width:0%}
+.pt{font-size:12px;font-weight:600;color:#64748b;min-width:60px;text-align:right}
+.sc{border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;background:#fff;transition:border-color .2s}
+.sc.done-c{border-color:#86efac}.sc.open-c{border-color:#6ee7b7}
+.sh{display:flex;align-items:flex-start;gap:11px;padding:12px 13px;cursor:pointer;user-select:none;transition:background .15s}
+.sh:hover{background:#f8fafc}.sc.open-c .sh{background:#f0fdf4}
+.chk{width:21px;height:21px;border-radius:6px;border:1.5px solid #cbd5e1;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:all .18s;cursor:pointer;background:#fff}
+.chk:hover{border-color:#059669;background:#dcfce7}.chk.done{background:#22c55e;border-color:#22c55e}
+.chk svg{display:none}.chk.done svg{display:block}
+.si{flex:1}.sn2{font-size:11px;font-weight:600;color:#94a3b8;margin-bottom:2px;text-transform:uppercase;letter-spacing:.04em}
+.st{font-size:13px;font-weight:600;color:#1e293b;line-height:1.3}.stm{font-size:11px;color:#94a3b8;margin-top:2px}
+.cv{color:#94a3b8;font-size:11px;margin-top:4px;transition:transform .22s;flex-shrink:0}
+.sc.open-c .cv{transform:rotate(180deg)}
+.sb{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.sc.open-c .sb{max-height:1600px}
+.sbi{padding:0 13px 14px;border-top:1px solid #f1f5f9}
+.il{display:flex;flex-direction:column;gap:6px;margin:11px 0}
+.ii{display:flex;gap:9px;font-size:13px;color:#475569;line-height:1.55;align-items:flex-start}
+.in{width:19px;height:19px;min-width:19px;border-radius:5px;background:#dcfce7;color:#059669;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;margin-top:1px}
+code{font-family:'Courier New',monospace;font-size:12px;background:#f1f5f9;padding:1px 5px;border-radius:3px;border:1px solid #e2e8f0}
+.cb2{background:#1e293b;border-radius:8px;padding:12px 15px;font-family:'Courier New',monospace;font-size:12px;line-height:1.8;color:#94a3b8;margin:9px 0;overflow-x:auto;white-space:pre}
+.k{color:#93c5fd}.p{color:#c4b5fd}.v{color:#6ee7b7}.s{color:#fda4af}.c{color:#475569;font-style:italic}.fn{color:#fbbf24}
+.tip{background:#f0fdf4;border-left:3px solid #059669;padding:8px 12px;font-size:12px;color:#14532d;line-height:1.5;margin-top:8px}
+.tip strong{color:#047857;font-weight:600}
+.mb{display:inline-flex;align-items:center;gap:5px;background:#f8fafc;border:1px solid #cbd5e1;color:#64748b;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .18s;margin-top:10px}
+.mb:hover{background:#f0fdf4;color:#15803d;border-color:#86efac}
+.mb.done-btn{background:#f0fdf4;color:#15803d;border-color:#86efac;pointer-events:none}
+.sbox{background:#f0fdf4;border:1px solid #86efac;border-radius:14px;padding:20px;text-align:center;display:none}
+.sbox.show{display:block}
+.sbox h3{font-size:16px;font-weight:600;color:#059669;margin-bottom:6px}
+.sbox p{font-size:13px;color:#047857;line-height:1.6}
+.next-page{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;margin-top:4px}
+.next-page-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#059669}
+.next-page-title{font-size:13px;font-weight:600;color:#1e293b;margin-top:2px}
+.next-page-btn{background:#059669;color:#fff;border:none;padding:8px 18px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s;white-space:nowrap;text-decoration:none;display:inline-block}
+.next-page-btn:hover{background:#047857}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="pg-header">
+    <div><div class="pg-title">Prática guiada — Listas, Tuplas e Dicionários</div><div class="pg-meta">Siga os passos no Colab. Marque cada um quando terminar.</div></div>
+    <span class="pg-time">60 min disponíveis</span>
+  </div>
+  <div class="prog-row"><div class="pb"><div class="pf" id="pf"></div></div><div class="pt" id="pt">0 / 6</div></div>
+  <div id="steps"></div>
+  <div class="sbox" id="sbox">
+    <h3>📦 Estruturas de dados dominadas!</h3>
+    <p>Listas, tuplas e dicionários prontos.<br>Hora do desafio autônomo!</p>
+  </div>
+  <div class="next-page" id="next-page" style="display:none">
+    <div><div class="next-page-label">Prática concluída</div><div class="next-page-title">🏆 Desafio Autônomo — Listas, Tuplas e Dicionários</div></div>
+    <a class="next-page-btn" href="a04_desafio.html">Abrir Desafio →</a>
+  </div>
+</div>
+<script>
+const STEPS=[
+{title:'Listas — criar, acessar e modificar',time:'8 min',
+instrs:['Crie uma lista com 5 nomes de colegas e exiba o primeiro, o último e os 3 do meio','Adicione um nome no final com <code>append()</code> e outro na posição 2 com <code>insert()</code>','Remova um nome da lista com <code>remove()</code>','Ordene a lista com <code>sort()</code> e exiba o resultado'],
+code:`<span class="p">colegas</span> = [<span class="s">"Ana"</span>, <span class="s">"Bruno"</span>, <span class="s">"Carla"</span>, <span class="s">"Diego"</span>, <span class="s">"Ester"</span>]\n\n<span class="fn">print</span>(<span class="p">colegas</span>[<span class="v">0</span>])     <span class="c"># primeiro</span>\n<span class="fn">print</span>(<span class="p">colegas</span>[-<span class="v">1</span>])    <span class="c"># último</span>\n<span class="fn">print</span>(<span class="p">colegas</span>[<span class="v">1</span>:<span class="v">4</span>])   <span class="c"># fatia do meio</span>\n\n<span class="p">colegas</span>.<span class="fn">append</span>(<span class="s">"Felipe"</span>)\n<span class="p">colegas</span>.<span class="fn">sort</span>()\n<span class="fn">print</span>(<span class="p">colegas</span>)`,
+tip:'<strong>sort() ordena no lugar</strong> e nao retorna nada (retorna None). Se quiser manter a original e ter uma cópia ordenada, use <code>sorted(lista)</code> que retorna uma nova lista.'},
+{title:'Listas com for — calcular estatísticas',time:'10 min',
+instrs:['Crie uma lista com 6 temperaturas de uma semana (valores reais de onde você mora)','Use <code>for</code> para calcular a soma e depois a média','Encontre a temperatura máxima e mínima sem usar <code>max()</code> e <code>min()</code> (use acumulador!)','Por fim, confirme usando as funções built-in <code>max()</code>, <code>min()</code> e <code>sum()</code>'],
+code:`<span class="p">temps</span> = [<span class="v">28.5</span>, <span class="v">31.2</span>, <span class="v">25.0</span>, <span class="v">33.1</span>, <span class="v">27.8</span>, <span class="v">29.4</span>]\n\n<span class="p">soma</span> = <span class="v">0</span>\n<span class="p">maior</span> = <span class="p">temps</span>[<span class="v">0</span>]  <span class="c"># começa com o primeiro</span>\n\n<span class="k">for</span> <span class="p">t</span> <span class="k">in</span> <span class="p">temps</span>:\n    <span class="p">soma</span> += <span class="p">t</span>\n    <span class="k">if</span> <span class="p">t</span> > <span class="p">maior</span>:\n        <span class="p">maior</span> = <span class="p">t</span>\n\n<span class="fn">print</span>(<span class="s">f"Média: {soma/len(temps):.1f}"</span>)\n<span class="fn">print</span>(<span class="s">f"Maior: {maior}"</span>)`,
+tip:'<strong>Para encontrar o máximo manualmente:</strong> inicialize com o primeiro elemento da lista, nao com 0. Se a lista tiver só valores negativos, começar com 0 daria a resposta errada.'},
+{title:'Tuplas — imutabilidade e desempacotamento',time:'8 min',
+instrs:['Crie uma tupla com as suas coordenadas de cidade (latitude e longitude — pesquise online)','Use desempacotamento para separar em variáveis <code>lat</code> e <code>lon</code>','Tente modificar a tupla e observe o TypeError','Crie uma função que retorna uma tupla com nome e nota de um aluno, e desempacote o retorno'],
+code:`<span class="c"># Coordenadas de Curitiba</span>\n<span class="p">curitiba</span> = (<span class="v">-25.4284</span>, <span class="v">-49.2733</span>)\n\n<span class="c"># Desempacotamento</span>\n<span class="p">lat</span>, <span class="p">lon</span> = <span class="p">curitiba</span>\n<span class="fn">print</span>(<span class="s">f"Latitude: {lat}"</span>)\n<span class="fn">print</span>(<span class="s">f"Longitude: {lon}"</span>)\n\n<span class="c"># Funcao que retorna tupla</span>\n<span class="k">def</span> <span class="fn">info_aluno</span>(<span class="p">nome</span>, <span class="p">nota</span>):\n    <span class="k">return</span> <span class="p">nome</span>, <span class="p">nota</span>  <span class="c"># retorna tupla</span>\n\n<span class="p">n</span>, <span class="p">nota</span> = <span class="fn">info_aluno</span>(<span class="s">"Ana"</span>, <span class="v">9.0</span>)\n<span class="fn">print</span>(<span class="s">f"{n}: {nota}"</span>)`,
+tip:'<strong>Funções que retornam múltiplos valores</strong> na verdade retornam uma tupla. <code>return a, b</code> é equivalente a <code>return (a, b)</code>. O desempacotamento ao chamar torna o código limpo.'},
+{title:'Dicionários — cadastro de produto',time:'10 min',
+instrs:['Crie um dicionário para um produto com: nome, preco, estoque e categoria','Exiba cada campo com f-string de forma formatada','Adicione um campo <code>desconto</code> e calcule o preço final (<code>preco * (1 - desconto)</code>)','Use <code>.get()</code> para acessar um campo que nao existe, com valor padrão'],
+code:`<span class="p">produto</span> = {\n    <span class="s">"nome"</span>     : <span class="s">"Teclado Mecânico"</span>,\n    <span class="s">"preco"</span>    : <span class="v">350.00</span>,\n    <span class="s">"estoque"</span>  : <span class="v">8</span>,\n    <span class="s">"categoria"</span>: <span class="s">"Periféricos"</span>\n}\n\n<span class="p">produto</span>[<span class="s">"desconto"</span>] = <span class="v">0.10</span>  <span class="c"># 10%</span>\n<span class="p">preco_final</span> = <span class="p">produto</span>[<span class="s">"preco"</span>] * (<span class="v">1</span> - <span class="p">produto</span>[<span class="s">"desconto"</span>])\n\n<span class="fn">print</span>(<span class="s">f"Produto: {produto['nome']}"</span>)\n<span class="fn">print</span>(<span class="s">f"Preco com desconto: R$ {preco_final:.2f}"</span>)\n<span class="fn">print</span>(<span class="p">produto</span>.<span class="fn">get</span>(<span class="s">"garantia"</span>, <span class="s">"sem garantia"</span>))`,
+tip:'<strong>Atenção com aspas dentro de f-strings:</strong> ao usar <code>produto["nome"]</code> dentro de <code>f"..."</code>, use aspas simples para a chave: <code>produto[\'nome\']</code>. Aspas duplas dentro de duplas causam erro.'},
+{title:'Iterando dicionário — relatório de estoque',time:'10 min',
+instrs:['Crie um dicionário onde as chaves sao nomes de produtos e os valores sao quantidades em estoque','Use <code>.items()</code> para percorrer e imprimir cada produto e sua quantidade','Identifique quais produtos estao com estoque baixo (menos de 5 unidades)','Calcule o total de itens em estoque somando todos os valores'],
+code:`<span class="p">estoque</span> = {\n    <span class="s">"notebook"</span>  : <span class="v">3</span>,\n    <span class="s">"mouse"</span>     : <span class="v">15</span>,\n    <span class="s">"teclado"</span>   : <span class="v">7</span>,\n    <span class="s">"monitor"</span>   : <span class="v">2</span>,\n    <span class="s">"headset"</span>   : <span class="v">9</span>\n}\n\n<span class="p">total</span> = <span class="v">0</span>\n<span class="fn">print</span>(<span class="s">"=== Alertas de Estoque ==="</span>)\n<span class="k">for</span> <span class="p">produto</span>, <span class="p">qtd</span> <span class="k">in</span> <span class="p">estoque</span>.<span class="fn">items</span>():\n    <span class="p">total</span> += <span class="p">qtd</span>\n    <span class="k">if</span> <span class="p">qtd</span> < <span class="v">5</span>:\n        <span class="fn">print</span>(<span class="s">f"  BAIXO: {produto} ({qtd} un.)"</span>)\n<span class="fn">print</span>(<span class="s">f"Total em estoque: {total}"</span>)`,
+tip:'<strong>Dicionário como tabela de dados:</strong> quando as chaves representam entidades e os valores representam uma propriedade, o dicionário vira uma tabela de uma coluna. Para múltiplas propriedades, use lista de dicionários.'},
+{title:'Lista de dicionários — turma completa',time:'14 min',
+instrs:['Crie uma lista com 4 dicionários, cada um com nome, nota e turma de um aluno','Percorra a lista com <code>for</code> e exiba nome e status (aprovado/reprovado)','Calcule a média geral da turma somando todas as notas','Bônus: crie um novo dicionário com nome como chave e status como valor usando o loop'],
+code:`<span class="p">turma</span> = [\n    {<span class="s">"nome"</span>: <span class="s">"Ana"</span>,   <span class="s">"nota"</span>: <span class="v">8.5</span>, <span class="s">"turma"</span>: <span class="s">"A"</span>},\n    {<span class="s">"nome"</span>: <span class="s">"Bruno"</span>, <span class="s">"nota"</span>: <span class="v">4.0</span>, <span class="s">"turma"</span>: <span class="s">"A"</span>},\n    {<span class="s">"nome"</span>: <span class="s">"Carla"</span>, <span class="s">"nota"</span>: <span class="v">9.0</span>, <span class="s">"turma"</span>: <span class="s">"B"</span>},\n    {<span class="s">"nome"</span>: <span class="s">"Diego"</span>, <span class="s">"nota"</span>: <span class="v">6.5</span>, <span class="s">"turma"</span>: <span class="s">"B"</span>},\n]\n\n<span class="p">soma</span> = <span class="v">0</span>\n<span class="k">for</span> <span class="p">aluno</span> <span class="k">in</span> <span class="p">turma</span>:\n    <span class="p">status</span> = <span class="s">"OK"</span> <span class="k">if</span> <span class="p">aluno</span>[<span class="s">"nota"</span>] >= <span class="v">5</span> <span class="k">else</span> <span class="s">"Rep"</span>\n    <span class="fn">print</span>(<span class="s">f"{aluno['nome']:8} {aluno['nota']} {status}"</span>)\n    <span class="p">soma</span> += <span class="p">aluno</span>[<span class="s">"nota"</span>]\n<span class="fn">print</span>(<span class="s">f"Média: {soma/len(turma):.1f}"</span>)`,
+tip:'<strong>Lista de dicionários</strong> é o padrão mais importante deste módulo. Toda resposta de API, todo registro de banco de dados e todo CSV carregado no Python vira lista de dicionários. Dominar esse padrão é fundamental.'}
+];
+let done=new Set();
+function build(){
+  const list=document.getElementById('steps');STEPS.forEach((s,i)=>{
+    const card=document.createElement('div');card.className='sc'+(i===0?' open-c':'');card.id='sc-'+i;
+    card.innerHTML=`<div class="sh" onclick="tog(${i})"><div class="chk" id="chk-${i}" onclick="event.stopPropagation();mk(${i})"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="si"><div class="sn2">Passo ${i+1} de ${STEPS.length}</div><div class="st">${s.title}</div><div class="stm">${s.time}</div></div><span class="cv">${i===0?'▲':'▼'}</span></div><div class="sb"><div class="sbi"><div class="il">${s.instrs.map((t,j)=>`<div class="ii"><div class="in">${j+1}</div><span>${t}</span></div>`).join('')}</div>${s.code?`<div class="cb2">${s.code}</div>`:''}<div class="tip">${s.tip}</div><button class="mb" id="mb-${i}" onclick="mk(${i})"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5l3.5 3.5 5.5-5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Marcar como concluído</button></div></div>`;
+    list.appendChild(card);
+  });
+}
+function tog(i){const c=document.getElementById('sc-'+i);const o=c.classList.contains('open-c');document.querySelectorAll('.sc').forEach(x=>{x.classList.remove('open-c');x.querySelector('.cv').textContent='▼';});if(!o){c.classList.add('open-c');c.querySelector('.cv').textContent='▲';}}
+function mk(i){if(done.has(i))return;done.add(i);document.getElementById('chk-'+i).classList.add('done');document.getElementById('sc-'+i).classList.add('done-c');const mb=document.getElementById('mb-'+i);mb.classList.add('done-btn');mb.innerHTML='<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5l3.5 3.5 5.5-5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Concluído!';upd();if(i<STEPS.length-1){document.querySelectorAll('.sc').forEach(x=>{x.classList.remove('open-c');x.querySelector('.cv').textContent='▼';});const nx=document.getElementById('sc-'+(i+1));nx.classList.add('open-c');nx.querySelector('.cv').textContent='▲';setTimeout(()=>nx.scrollIntoView({behavior:'smooth',block:'nearest'}),100);}if(done.size===STEPS.length){document.getElementById('sbox').classList.add('show');document.getElementById('next-page').style.display='flex';setTimeout(()=>document.getElementById('next-page').scrollIntoView({behavior:'smooth',block:'nearest'}),300);}}
+function upd(){document.getElementById('pf').style.width=Math.round((done.size/STEPS.length)*100)+'%';document.getElementById('pt').textContent=done.size+' / '+STEPS.length;}
+build();upd();
+</script>
+</body>
+</html>
