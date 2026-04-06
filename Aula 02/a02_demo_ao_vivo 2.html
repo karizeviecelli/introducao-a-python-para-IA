@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo ao Vivo — Condições e Decisões · Aula 02</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;color:#1e293b;background:#ecfeff;min-height:100vh;padding:20px}
+.wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.page-hdr{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
+.page-hdr h1{font-size:16px;font-weight:600}.page-hdr p{font-size:12px;color:#94a3b8}
+.prog-track{grid-column:1/-1;height:3px;background:#e2e8f0;border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:#0891b2;border-radius:2px;transition:width .3s ease;width:0%}
+.panel{border:1px solid #a5f3fc;border-radius:12px;overflow:hidden;background:#fff}
+.ph{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1px solid #a5f3fc;background:#ecfeff}
+.pt{font-size:12px;font-weight:500;color:#0e7490}
+.dots-r{display:flex;gap:5px}
+.dot{width:10px;height:10px;border-radius:50%}
+pre{background:#1e293b;color:#e2e8f0;padding:15px;font-family:'Courier New',monospace;font-size:12px;line-height:1.8;min-height:300px;overflow:auto;white-space:pre}
+.cursor{display:inline-block;width:2px;height:14px;background:#67e8f9;vertical-align:middle;animation:blink .9s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.preview-body{min-height:300px;overflow-y:auto;background:#f8fafc;padding:16px;font-family:'Courier New',monospace;font-size:13px;line-height:1.9}
+.out-line{padding:1px 0;color:#1e293b}
+.out-line.cm{color:#64748b;font-style:italic}
+.out-line.ok{color:#0891b2;font-weight:600}
+.out-line.err{color:#dc2626}
+.out-line.prompt{color:#94a3b8}
+.step-bar{grid-column:1/-1;border:1px solid #a5f3fc;border-radius:12px;background:#fff;display:flex;align-items:center;gap:10px;padding:11px 15px;flex-wrap:wrap}
+.sbadge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#ecfeff;color:#0891b2;border:1px solid #67e8f9}
+.slabel{font-size:12px;color:#64748b;flex:1;line-height:1.4}
+.cb{font-size:12px;font-weight:500;padding:6px 14px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#1e293b;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
+.cb:hover{background:#f1f5f9}.cb.go{background:#0891b2;color:#fff;border-color:#0891b2}.cb.go:hover{background:#0e7490}
+.cb:disabled{opacity:.35;pointer-events:none}
+.narr{grid-column:1/-1;border:1px solid #a5f3fc;border-radius:10px;padding:11px 15px;background:#ecfeff;font-size:13px;color:#164e63;line-height:1.6;min-height:50px}
+.narr strong{color:#0e7490;font-weight:600}
+.k{color:#93c5fd}.p{color:#c4b5fd}.v{color:#6ee7b7}.s{color:#fda4af}.cm2{color:#475569;font-style:italic}.fn{color:#fbbf24}
+@media(max-width:680px){.wrap{grid-template-columns:1fr}.panel:last-of-type{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="page-hdr"><h1>Demonstração ao vivo — Condições e Decisões</h1><p>Aula 02 · 45 min · Docente digita no Colab, alunos acompanham</p></div>
+  <div class="prog-track"><div class="prog-fill" id="prog"></div></div>
+  <div class="panel">
+    <div class="ph"><span class="pt">Google Colab — aula02.ipynb</span><div class="dots-r"><div class="dot" style="background:#ef4444"></div><div class="dot" style="background:#f59e0b"></div><div class="dot" style="background:#10b981"></div></div></div>
+    <pre><span id="code-out"></span><span class="cursor"></span></pre>
+  </div>
+  <div class="panel">
+    <div class="ph"><span class="pt">Output — resultado da célula</span><div class="dots-r"><div class="dot" style="background:#ef4444"></div><div class="dot" style="background:#f59e0b"></div><div class="dot" style="background:#10b981"></div></div></div>
+    <div class="preview-body" id="preview"></div>
+  </div>
+  <div class="narr" id="narr">Pronto para começar. Clique em <strong>Iniciar digitação</strong>.</div>
+  <div class="step-bar">
+    <span class="sbadge" id="sbadge">Etapa 1 / 8</span>
+    <span class="slabel" id="sdesc">O if mais simples possível</span>
+    <button class="cb" id="bp" onclick="prevS()" disabled>← Anterior</button>
+    <button class="cb go" id="bplay" onclick="playS()">▶ Iniciar digitação</button>
+    <button class="cb" id="bn" onclick="nextS()" disabled>Próxima →</button>
+  </div>
+</div>
+<script>
+const STEPS=[
+{label:'O if mais simples possível',
+narr:'<strong>Docente:</strong> "Vamos começar do zero. Um if com uma única condição. Percebam os dois-pontos no final da linha do if, e a indentação na linha seguinte. Sem isso, o Python reclama."',
+code:`<span class="cm2"># if mais básico</span>
+<span class="p">temperatura</span> = <span class="v">38.5</span>
+
+<span class="k">if</span> <span class="p">temperatura</span> > <span class="v">37.5</span>:
+    <span class="fn">print</span>(<span class="s">"Febre detectada!"</span>)
+
+<span class="fn">print</span>(<span class="s">"Programa terminou."</span>)`,
+prev:`<div class="out-line ok">Febre detectada!</div><div class="out-line ok">Programa terminou.</div>`},
+{label:'if com else — dois caminhos',
+narr:'<strong>Docente:</strong> "Agora adicionamos o else. Se a condição for False, o else executa. Só um dos dois blocos vai rodar — nunca os dois. Vamos trocar a temperatura para ver os dois comportamentos."',
+code:`<span class="p">temperatura</span> = <span class="v">36.8</span>
+
+<span class="k">if</span> <span class="p">temperatura</span> > <span class="v">37.5</span>:
+    <span class="fn">print</span>(<span class="s">"Febre detectada!"</span>)
+<span class="k">else</span>:
+    <span class="fn">print</span>(<span class="s">"Temperatura normal."</span>)
+
+<span class="cm2"># Troquem para 38.5 e vejam o outro caminho</span>`,
+prev:`<div class="out-line ok">Temperatura normal.</div>`},
+{label:'elif — múltiplas condições',
+narr:'<strong>Docente:</strong> "O elif testa mais condições. Python testa de cima para baixo e para no primeiro True. Vamos construir um classificador de notas com 4 conceitos."',
+code:`<span class="p">nota</span> = <span class="fn">float</span>(<span class="fn">input</span>(<span class="s">"Digite a nota (0-10): "</span>))
+
+<span class="k">if</span> <span class="p">nota</span> >= <span class="v">9</span>:
+    <span class="fn">print</span>(<span class="s">"Conceito A — Excelente!"</span>)
+<span class="k">elif</span> <span class="p">nota</span> >= <span class="v">7</span>:
+    <span class="fn">print</span>(<span class="s">"Conceito B — Bom!"</span>)
+<span class="k">elif</span> <span class="p">nota</span> >= <span class="v">5</span>:
+    <span class="fn">print</span>(<span class="s">"Conceito C — Aprovado"</span>)
+<span class="k">else</span>:
+    <span class="fn">print</span>(<span class="s">"Reprovado"</span>)`,
+prev:`<div class="out-line prompt">Digite a nota (0-10): <span style="color:#0891b2">8</span></div><div class="out-line ok">Conceito B — Bom!</div>`},
+{label:'Operadores de comparação',
+narr:'<strong>Docente:</strong> "Vamos ver todos os operadores um a um. Reparem que a condição sempre retorna True ou False — um bool. Podemos guardar esse resultado em variável e inspecionar."',
+code:`<span class="p">x</span> = <span class="v">10</span>
+
+<span class="fn">print</span>(<span class="p">x</span> == <span class="v">10</span>)  <span class="cm2"># True  → igual</span>
+<span class="fn">print</span>(<span class="p">x</span> != <span class="v">5</span>)   <span class="cm2"># True  → diferente</span>
+<span class="fn">print</span>(<span class="p">x</span> >  <span class="v">8</span>)   <span class="cm2"># True  → maior</span>
+<span class="fn">print</span>(<span class="p">x</span> <  <span class="v">8</span>)   <span class="cm2"># False → menor</span>
+<span class="fn">print</span>(<span class="p">x</span> >= <span class="v">10</span>)  <span class="cm2"># True  → maior ou igual</span>
+<span class="fn">print</span>(<span class="p">x</span> <= <span class="v">9</span>)   <span class="cm2"># False → menor ou igual</span>
+
+<span class="cm2"># Guardando o resultado em variável</span>
+<span class="p">maior_de_idade</span> = <span class="p">x</span> >= <span class="v">18</span>
+<span class="fn">print</span>(<span class="fn">type</span>(<span class="p">maior_de_idade</span>))`,
+prev:`<div class="out-line ok">True</div><div class="out-line ok">True</div><div class="out-line ok">True</div><div class="out-line ok">False</div><div class="out-line ok">True</div><div class="out-line ok">False</div><div class="out-line ok">&lt;class 'bool'&gt;</div>`},
+{label:'and, or, not — combinando condições',
+narr:'<strong>Docente:</strong> "E se precisarmos de duas condições ao mesmo tempo? Usamos and. Se basta uma das duas, usamos or. Not inverte. Vamos criar um verificador de acesso."',
+code:`<span class="p">idade</span>        = <span class="v">20</span>
+<span class="p">tem_ingresso</span> = <span class="v">True</span>
+
+<span class="cm2"># and: as duas precisam ser True</span>
+<span class="k">if</span> <span class="p">idade</span> >= <span class="v">18</span> <span class="k">and</span> <span class="p">tem_ingresso</span>:
+    <span class="fn">print</span>(<span class="s">"Acesso liberado!"</span>)
+<span class="k">else</span>:
+    <span class="fn">print</span>(<span class="s">"Acesso negado."</span>)
+
+<span class="cm2"># or: basta uma ser True</span>
+<span class="p">vip</span> = <span class="v">False</span>
+<span class="k">if</span> <span class="p">tem_ingresso</span> <span class="k">or</span> <span class="p">vip</span>:
+    <span class="fn">print</span>(<span class="s">"Pode entrar"</span>)`,
+prev:`<div class="out-line ok">Acesso liberado!</div><div class="out-line ok">Pode entrar</div>`},
+{label:'Erro clássico — = vs ==',
+narr:'<strong>Docente:</strong> "Vou mostrar o erro mais comum ao aprender if. Quem consegue achar o problema antes de eu explicar?"',
+code:`<span class="cm2"># Erro clássico: = em vez de ==</span>
+<span class="p">cor</span> = <span class="s">"azul"</span>
+
+<span class="cm2"># ❌ Isso causa SyntaxError:</span>
+<span class="cm2"># if cor = "azul":</span>
+<span class="cm2">#     print("É azul!")</span>
+
+<span class="cm2"># ✅ Correto: usar ==</span>
+<span class="k">if</span> <span class="p">cor</span> == <span class="s">"azul"</span>:
+    <span class="fn">print</span>(<span class="s">"É azul!"</span>)
+
+<span class="cm2"># Atenção: maiúscula importa!</span>
+<span class="k">if</span> <span class="p">cor</span> == <span class="s">"Azul"</span>:
+    <span class="fn">print</span>(<span class="s">"Nunca vai imprimir isso"</span>)`,
+prev:`<div class="out-line ok">É azul!</div><div class="out-line cm"># "Azul" ≠ "azul" → bloco ignorado</div>`},
+{label:'if aninhado — decisão dentro de decisão',
+narr:'<strong>Docente:</strong> "Podemos colocar um if dentro de outro. Cada nível de indentação adiciona 4 espaços. Mas cuidado: muitos níveis deixam o código difícil de ler."',
+code:`<span class="p">usuario</span> = <span class="s">"admin"</span>
+<span class="p">senha</span>   = <span class="s">"1234"</span>
+
+<span class="k">if</span> <span class="p">usuario</span> == <span class="s">"admin"</span>:
+    <span class="fn">print</span>(<span class="s">"Usuário encontrado!"</span>)
+    <span class="k">if</span> <span class="p">senha</span> == <span class="s">"1234"</span>:
+        <span class="fn">print</span>(<span class="s">"Senha correta. Bem-vindo!"</span>)
+    <span class="k">else</span>:
+        <span class="fn">print</span>(<span class="s">"Senha incorreta."</span>)
+<span class="k">else</span>:
+    <span class="fn">print</span>(<span class="s">"Usuário não encontrado."</span>)`,
+prev:`<div class="out-line ok">Usuário encontrado!</div><div class="out-line ok">Senha correta. Bem-vindo!</div>`},
+{label:'Programa completo — classificador de IMC',
+narr:'<strong>Docente:</strong> "Vamos fechar com o programa mais completo até agora: lê peso e altura, calcula IMC, e classifica em 4 faixas com if, elif e else."',
+code:`<span class="fn">print</span>(<span class="s">"=== Calculadora de IMC ==="</span>)
+
+<span class="p">peso</span>   = <span class="fn">float</span>(<span class="fn">input</span>(<span class="s">"Peso (kg): "</span>))
+<span class="p">altura</span> = <span class="fn">float</span>(<span class="fn">input</span>(<span class="s">"Altura (m): "</span>))
+<span class="p">imc</span>    = <span class="p">peso</span> / <span class="p">altura</span> ** <span class="v">2</span>
+
+<span class="k">if</span> <span class="p">imc</span> < <span class="v">18.5</span>:
+    <span class="p">resultado</span> = <span class="s">"Abaixo do peso"</span>
+<span class="k">elif</span> <span class="p">imc</span> < <span class="v">25</span>:
+    <span class="p">resultado</span> = <span class="s">"Peso normal"</span>
+<span class="k">elif</span> <span class="p">imc</span> < <span class="v">30</span>:
+    <span class="p">resultado</span> = <span class="s">"Sobrepeso"</span>
+<span class="k">else</span>:
+    <span class="p">resultado</span> = <span class="s">"Obesidade"</span>
+
+<span class="fn">print</span>(<span class="s">f"IMC: {imc:.1f} → {resultado}"</span>)`,
+prev:`<div class="out-line ok">=== Calculadora de IMC ===</div><div class="out-line prompt">Peso (kg): <span style="color:#0891b2">70</span></div><div class="out-line prompt">Altura (m): <span style="color:#0891b2">1.75</span></div><div class="out-line ok">IMC: 22.9 → Peso normal</div>`}
+];
+let cur=0,playing=false,timer=null;
+function render(){
+  document.getElementById('sbadge').textContent=`Etapa ${cur+1} / ${STEPS.length}`;
+  document.getElementById('sdesc').textContent=STEPS[cur].label;
+  document.getElementById('narr').innerHTML=STEPS[cur].narr;
+  document.getElementById('preview').innerHTML=STEPS[cur].prev;
+  document.getElementById('code-out').innerHTML='';
+  document.getElementById('prog').style.width=((cur+1)/STEPS.length*100)+'%';
+  document.getElementById('bp').disabled=cur===0;
+  document.getElementById('bn').disabled=cur===STEPS.length-1;
+  const pb=document.getElementById('bplay');pb.textContent='▶ Iniciar digitação';pb.className='cb go';
+}
+function playS(){
+  if(playing){clearTimeout(timer);playing=false;document.getElementById('bplay').textContent='▶ Iniciar digitação';return;}
+  playing=true;document.getElementById('bplay').textContent='⏸ Pausar';
+  const code=STEPS[cur].code;let i=0;const out=document.getElementById('code-out');out.innerHTML='';
+  function tick(){
+    if(!playing)return;
+    if(i<code.length){
+      if(code[i]==='<'){const end=code.indexOf('>',i);if(end>-1){out.innerHTML+=code.slice(i,end+1);i=end+1;}else{out.innerHTML+=code[i];i++;}}
+      else{out.innerHTML+=code[i];i++;}
+      timer=setTimeout(tick,i%7===0?16:4);
+    }else{playing=false;document.getElementById('bplay').textContent='✓ Concluído';document.getElementById('bn').disabled=cur===STEPS.length-1;}
+  }
+  tick();
+}
+function nextS(){if(cur<STEPS.length-1){cur++;render();}}
+function prevS(){if(cur>0){cur--;render();}}
+render();
+</script>
+</body>
+</html>
