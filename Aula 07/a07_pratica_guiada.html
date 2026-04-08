@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prática Guiada — Pandas: Lendo e Explorando Dados · Aula 07</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;color:#1e293b;background:#f0fdfa;min-height:100vh;padding:22px}
+.wrap{max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:11px}
+.pg-header{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.pg-title{font-size:17px;font-weight:600}.pg-meta{font-size:12px;color:#64748b;margin-top:2px}
+.pg-time{font-size:12px;font-weight:600;background:#ccfbf1;border:1px solid #99f6e4;padding:4px 12px;border-radius:8px;color:#0d9488}
+.prog-row{display:flex;align-items:center;gap:9px}
+.pb{flex:1;height:7px;background:#e2e8f0;border-radius:4px;overflow:hidden}
+.pf{height:100%;background:#0d9488;border-radius:4px;transition:width .4s ease;width:0%}
+.pt{font-size:12px;font-weight:600;color:#64748b;min-width:60px;text-align:right}
+.sc{border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;background:#fff;transition:border-color .2s}
+.sc.done-c{border-color:#86efac}.sc.open-c{border-color:#5eead4}
+.sh{display:flex;align-items:flex-start;gap:11px;padding:12px 13px;cursor:pointer;user-select:none;transition:background .15s}
+.sh:hover{background:#f8fafc}.sc.open-c .sh{background:#f0fdfa}
+.chk{width:21px;height:21px;border-radius:6px;border:1.5px solid #cbd5e1;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:all .18s;cursor:pointer;background:#fff}
+.chk:hover{border-color:#0d9488;background:#ccfbf1}.chk.done{background:#22c55e;border-color:#22c55e}
+.chk svg{display:none}.chk.done svg{display:block}
+.si{flex:1}.sn2{font-size:11px;font-weight:600;color:#94a3b8;margin-bottom:2px;text-transform:uppercase;letter-spacing:.04em}
+.st{font-size:13px;font-weight:600;color:#1e293b;line-height:1.3}.stm{font-size:11px;color:#94a3b8;margin-top:2px}
+.cv{color:#94a3b8;font-size:11px;margin-top:4px;transition:transform .22s;flex-shrink:0}
+.sc.open-c .cv{transform:rotate(180deg)}
+.sb{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.sc.open-c .sb{max-height:1800px}
+.sbi{padding:0 13px 14px;border-top:1px solid #f1f5f9}
+.il{display:flex;flex-direction:column;gap:6px;margin:11px 0}
+.ii{display:flex;gap:9px;font-size:13px;color:#475569;line-height:1.55;align-items:flex-start}
+.in{width:19px;height:19px;min-width:19px;border-radius:5px;background:#ccfbf1;color:#0d9488;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;margin-top:1px}
+code{font-family:'Courier New',monospace;font-size:12px;background:#f1f5f9;padding:1px 5px;border-radius:3px;border:1px solid #e2e8f0}
+.cb2{background:#1e293b;border-radius:8px;padding:12px 15px;font-family:'Courier New',monospace;font-size:12px;line-height:1.8;color:#94a3b8;margin:9px 0;overflow-x:auto;white-space:pre}
+.k{color:#93c5fd}.p{color:#c4b5fd}.v{color:#6ee7b7}.s{color:#fda4af}.c{color:#475569;font-style:italic}.fn{color:#fbbf24}
+.tip{background:#f0fdfa;border-left:3px solid #0d9488;padding:8px 12px;font-size:12px;color:#134e4a;line-height:1.5;margin-top:8px}
+.tip strong{color:#0d9488;font-weight:600}
+.mb{display:inline-flex;align-items:center;gap:5px;background:#f8fafc;border:1px solid #cbd5e1;color:#64748b;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .18s;margin-top:10px}
+.mb:hover{background:#f0fdf4;color:#15803d;border-color:#86efac}
+.mb.done-btn{background:#f0fdf4;color:#15803d;border-color:#86efac;pointer-events:none}
+.sbox{background:#f0fdfa;border:1px solid #5eead4;border-radius:14px;padding:20px;text-align:center;display:none}
+.sbox.show{display:block}
+.sbox h3{font-size:16px;font-weight:600;color:#0d9488;margin-bottom:6px}
+.sbox p{font-size:13px;color:#0f766e;line-height:1.6}
+.next-page{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#f0fdfa;border:1px solid #99f6e4;border-radius:10px;margin-top:4px}
+.next-page-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#0d9488}
+.next-page-title{font-size:13px;font-weight:600;color:#1e293b;margin-top:2px}
+.next-page-btn{background:#0d9488;color:#fff;border:none;padding:8px 18px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s;white-space:nowrap;text-decoration:none;display:inline-block}
+.next-page-btn:hover{background:#0f766e}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="pg-header">
+    <div><div class="pg-title">Prática guiada — Pandas: Lendo e Explorando Dados</div><div class="pg-meta">Siga os passos no Colab. Marque cada um quando terminar.</div></div>
+    <span class="pg-time">60 min disponíveis</span>
+  </div>
+  <div class="prog-row"><div class="pb"><div class="pf" id="pf"></div></div><div class="pt" id="pt">0 / 6</div></div>
+  <div id="steps"></div>
+  <div class="sbox" id="sbox">
+    <h3>🐼 Pandas dominado!</h3>
+    <p>DataFrames, exploração, filtros e groupby prontos.<br>Hora do desafio autônomo!</p>
+  </div>
+  <div class="next-page" id="next-page" style="display:none">
+    <div><div class="next-page-label">Prática concluída</div><div class="next-page-title">🏆 Desafio Autônomo — Pandas: Lendo e Explorando Dados</div></div>
+    <a class="next-page-btn" href="a07_desafio.html">Abrir Desafio →</a>
+  </div>
+</div>
+<script>
+const STEPS=[
+{title:'Criar DataFrame e exploração inicial',time:'8 min',
+instrs:['Importe pandas como pd e crie um DataFrame com pelo menos 6 alunos — colunas: nome, turma, nota, faltas','Execute head(3), tail(2) e shape para inspecionar','Rode info() e observe os tipos de cada coluna','Rode describe() e interprete o que os quartis dizem sobre as notas'],
+code:`<span class="k">import</span> <span class="p">pandas</span> <span class="k">as</span> <span class="p">pd</span>\n\n<span class="p">df</span> = <span class="p">pd</span>.<span class="fn">DataFrame</span>({\n    <span class="s">"nome"</span>  : [<span class="s">"Ana"</span>,<span class="s">"Bruno"</span>,<span class="s">"Carla"</span>,<span class="s">"Diego"</span>,<span class="s">"Ester"</span>,<span class="s">"Felipe"</span>],\n    <span class="s">"turma"</span> : [<span class="s">"A"</span>,<span class="s">"A"</span>,<span class="s">"B"</span>,<span class="s">"B"</span>,<span class="s">"A"</span>,<span class="s">"B"</span>],\n    <span class="s">"nota"</span>  : [<span class="v">8.5</span>,<span class="v">4.0</span>,<span class="v">9.0</span>,<span class="v">6.5</span>,<span class="v">7.0</span>,<span class="v">3.5</span>],\n    <span class="s">"faltas"</span>: [<span class="v">2</span>,<span class="v">8</span>,<span class="v">0</span>,<span class="v">3</span>,<span class="v">1</span>,<span class="v">10</span>]\n})\n<span class="p">df</span>.<span class="fn">info</span>()\n<span class="p">df</span>.<span class="fn">describe</span>()`,
+tip:'<strong>Regra dos primeiros 5 minutos:</strong> ao receber qualquer dataset, rode sempre head(), info() e describe() nessa ordem. Em 2 minutos você sabe: estrutura, tipos, nulos e distribuição numérica.'},
+{title:'Selecionar colunas e filtrar linhas',time:'10 min',
+instrs:['Selecione apenas as colunas nome e nota — perceba que retorna um DataFrame','Selecione apenas a coluna nota com colchete simples — perceba que retorna uma Series','Filtre apenas os alunos com nota >= 5 (aprovados)','Filtre alunos da turma A com nota >= 7 usando & — lembre dos parênteses em cada condição'],
+code:`<span class="c"># Series vs DataFrame</span>\n<span class="fn">print</span>(<span class="fn">type</span>(<span class="p">df</span>[<span class="s">"nota"</span>]))          <span class="c"># Series</span>\n<span class="fn">print</span>(<span class="fn">type</span>(<span class="p">df</span>[[<span class="s">"nota"</span>]]))        <span class="c"># DataFrame\n\n<span class="c"># Filtros</span>\n<span class="p">aprov</span> = <span class="p">df</span>[<span class="p">df</span>[<span class="s">"nota"</span>] >= <span class="v">5</span>]\n<span class="p">turma_a_bons</span> = <span class="p">df</span>[(<span class="p">df</span>[<span class="s">"turma"</span>]==<span class="s">"A"</span>) & (<span class="p">df</span>[<span class="s">"nota"</span>]>=<span class="v">7</span>)]`,
+tip:'<strong>Parênteses em cada condição sao obrigatórios com & e |.</strong> df[df["a"]>1 & df["b"]<5] vai gerar erro ou resultado errado. Sempre: df[(df["a"]>1) & (df["b"]<5)].'},
+{title:'Criar colunas derivadas com apply',time:'10 min',
+instrs:['Crie uma coluna "status" usando apply + lambda: "Aprovado" se nota >= 5, "Reprovado" caso contrário','Crie uma coluna "nota_norm" normalizando as notas para [0,1] com min-max em uma linha vetorizada','Crie uma coluna "situacao_faltas" usando apply: "Regular" se faltas <= 4, "Irregular" caso contrário','Mostre o DataFrame com as 3 novas colunas'],
+code:`<span class="p">df</span>[<span class="s">"status"</span>] = <span class="p">df</span>[<span class="s">"nota"</span>].<span class="fn">apply</span>(\n    <span class="k">lambda</span> <span class="p">x</span>: <span class="s">"Aprovado"</span> <span class="k">if</span> <span class="p">x</span> >= <span class="v">5</span> <span class="k">else</span> <span class="s">"Reprovado"</span>\n)\n\n<span class="c"># Vetorizado — sem apply</span>\n<span class="p">df</span>[<span class="s">"nota_norm"</span>] = (\n    (<span class="p">df</span>[<span class="s">"nota"</span>] - <span class="p">df</span>[<span class="s">"nota"</span>].<span class="fn">min</span>()) /\n    (<span class="p">df</span>[<span class="s">"nota"</span>].<span class="fn">max</span>() - <span class="p">df</span>[<span class="s">"nota"</span>].<span class="fn">min</span>())\n).round(<span class="v">2</span>)`,
+tip:'<strong>Prefira operações vetorizadas ao apply</strong> quando possível. df["nota"] * 10 é mais rápido que df["nota"].apply(lambda x: x*10). Use apply apenas para lógica condicional complexa que nao tem equivalente vetorizado.'},
+{title:'groupby — estatísticas por grupo',time:'10 min',
+instrs:['Calcule a média de nota por turma com groupby','Use .agg(["mean","max","count"]) para obter três estatísticas de uma vez','Conte quantos aprovados e reprovados existem com value_counts() na coluna status','Bônus: use groupby + value_counts para ver aprovados por turma'],
+code:`<span class="c"># Media por turma</span>\n<span class="fn">print</span>(<span class="p">df</span>.<span class="fn">groupby</span>(<span class="s">"turma"</span>)[<span class="s">"nota"</span>].<span class="fn">mean</span>())\n\n<span class="c"># Múltiplas agregações</span>\n<span class="fn">print</span>(<span class="p">df</span>.<span class="fn">groupby</span>(<span class="s">"turma"</span>)[<span class="s">"nota"</span>].<span class="fn">agg</span>([<span class="s">"mean"</span>,<span class="s">"max"</span>,<span class="s">"count"</span>]))\n\n<span class="c"># Contagem de categorias</span>\n<span class="fn">print</span>(<span class="p">df</span>[<span class="s">"status"</span>].<span class="fn">value_counts</span>())`,
+tip:'<strong>reset_index()</strong> transforma o resultado do groupby em um DataFrame normal. Útil para salvar ou exibir: df.groupby("turma")["nota"].mean().reset_index() retorna um DataFrame com colunas turma e nota.'},
+{title:'Ordenar e localizar extremos',time:'8 min',
+instrs:['Ordene o DataFrame pela nota em ordem decrescente com sort_values','Encontre o aluno com maior nota usando idxmax() e acesse a linha com loc','Encontre o aluno com mais faltas usando idxmax() na coluna faltas','Use nlargest(3, "nota") para pegar os 3 melhores alunos'],
+code:`<span class="c"># Ordenar</span>\n<span class="fn">print</span>(<span class="p">df</span>.<span class="fn">sort_values</span>(<span class="s">"nota"</span>, <span class="p">ascending</span>=<span class="v">False</span>))\n\n<span class="c"># Melhor aluno</span>\n<span class="p">idx_melhor</span> = <span class="p">df</span>[<span class="s">"nota"</span>].<span class="fn">idxmax</span>()\n<span class="fn">print</span>(<span class="p">df</span>.<span class="fn">loc</span>[<span class="p">idx_melhor</span>])\n\n<span class="c"># Top 3</span>\n<span class="fn">print</span>(<span class="p">df</span>.<span class="fn">nlargest</span>(<span class="v">3</span>, <span class="s">"nota"</span>)[[<span class="s">"nome"</span>,<span class="s">"nota"</span>]])`,
+tip:'<strong>idxmax()</strong> retorna o índice da linha com o maior valor — análogo ao argmax() do NumPy. Com esse índice, df.loc[idx] acessa a linha inteira. Muito útil para encontrar o melhor/pior caso em dados reais.'},
+{title:'Tratar valores ausentes e salvar',time:'14 min',
+instrs:['Adicione np.nan em 2 posições do DataFrame usando df.loc[idx, "coluna"] = np.nan','Use isnull().sum() para contar os nulos por coluna','Preencha os NaN de nota com a média da coluna e os NaN de faltas com 0','Salve o DataFrame tratado em CSV com to_csv() e leia de volta com read_csv()'],
+code:`<span class="k">import</span> <span class="p">numpy</span> <span class="k">as</span> <span class="p">np</span>\n\n<span class="p">df</span>.<span class="fn">loc</span>[<span class="v">1</span>, <span class="s">"nota"</span>]   = <span class="p">np</span>.<span class="fn">nan</span>\n<span class="p">df</span>.<span class="fn">loc</span>[<span class="v">4</span>, <span class="s">"faltas"</span>] = <span class="p">np</span>.<span class="fn">nan</span>\n\n<span class="fn">print</span>(<span class="p">df</span>.<span class="fn">isnull</span>().<span class="fn">sum</span>())\n<span class="p">df</span>[<span class="s">"nota"</span>].<span class="fn">fillna</span>(<span class="p">df</span>[<span class="s">"nota"</span>].<span class="fn">mean</span>(), <span class="p">inplace</span>=<span class="v">True</span>)\n<span class="p">df</span>[<span class="s">"faltas"</span>].<span class="fn">fillna</span>(<span class="v">0</span>, <span class="p">inplace</span>=<span class="v">True</span>)\n\n<span class="p">df</span>.<span class="fn">to_csv</span>(<span class="s">"alunos.csv"</span>, <span class="p">index</span>=<span class="v">False</span>)\n<span class="p">df2</span> = <span class="p">pd</span>.<span class="fn">read_csv</span>(<span class="s">"alunos.csv"</span>)\n<span class="fn">print</span>(<span class="p">df2</span>.<span class="fn">head</span>())`,
+tip:'<strong>index=False</strong> no to_csv() evita salvar a coluna de índice (0,1,2...) como uma coluna extra no arquivo. Sem isso, ao ler de volta o CSV teria uma coluna "Unnamed: 0" desnecessária.'}
+];
+let done=new Set();
+function build(){
+  const list=document.getElementById('steps');STEPS.forEach((s,i)=>{
+    const card=document.createElement('div');card.className='sc'+(i===0?' open-c':'');card.id='sc-'+i;
+    card.innerHTML=`<div class="sh" onclick="tog(${i})"><div class="chk" id="chk-${i}" onclick="event.stopPropagation();mk(${i})"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="si"><div class="sn2">Passo ${i+1} de ${STEPS.length}</div><div class="st">${s.title}</div><div class="stm">${s.time}</div></div><span class="cv">${i===0?'▲':'▼'}</span></div><div class="sb"><div class="sbi"><div class="il">${s.instrs.map((t,j)=>`<div class="ii"><div class="in">${j+1}</div><span>${t}</span></div>`).join('')}</div>${s.code?`<div class="cb2">${s.code}</div>`:''}<div class="tip">${s.tip}</div><button class="mb" id="mb-${i}" onclick="mk(${i})"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5l3.5 3.5 5.5-5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Marcar como concluído</button></div></div>`;
+    list.appendChild(card);
+  });
+}
+function tog(i){const c=document.getElementById('sc-'+i);const o=c.classList.contains('open-c');document.querySelectorAll('.sc').forEach(x=>{x.classList.remove('open-c');x.querySelector('.cv').textContent='▼';});if(!o){c.classList.add('open-c');c.querySelector('.cv').textContent='▲';}}
+function mk(i){if(done.has(i))return;done.add(i);document.getElementById('chk-'+i).classList.add('done');document.getElementById('sc-'+i).classList.add('done-c');const mb=document.getElementById('mb-'+i);mb.classList.add('done-btn');mb.innerHTML='<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5l3.5 3.5 5.5-5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Concluído!';upd();if(i<STEPS.length-1){document.querySelectorAll('.sc').forEach(x=>{x.classList.remove('open-c');x.querySelector('.cv').textContent='▼';});const nx=document.getElementById('sc-'+(i+1));nx.classList.add('open-c');nx.querySelector('.cv').textContent='▲';setTimeout(()=>nx.scrollIntoView({behavior:'smooth',block:'nearest'}),100);}if(done.size===STEPS.length){document.getElementById('sbox').classList.add('show');document.getElementById('next-page').style.display='flex';setTimeout(()=>document.getElementById('next-page').scrollIntoView({behavior:'smooth',block:'nearest'}),300);}}
+function upd(){document.getElementById('pf').style.width=Math.round((done.size/STEPS.length)*100)+'%';document.getElementById('pt').textContent=done.size+' / '+STEPS.length;}
+build();upd();
+</script>
+</body>
+</html>

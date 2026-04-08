@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo ao Vivo — Pandas: Lendo e Explorando Dados · Aula 07</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;color:#1e293b;background:#f0fdfa;min-height:100vh;padding:20px}
+.wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.page-hdr{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
+.page-hdr h1{font-size:16px;font-weight:600}.page-hdr p{font-size:12px;color:#94a3b8}
+.prog-track{grid-column:1/-1;height:3px;background:#e2e8f0;border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:#0d9488;border-radius:2px;transition:width .3s ease;width:0%}
+.panel{border:1px solid #99f6e4;border-radius:12px;overflow:hidden;background:#fff}
+.ph{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1px solid #99f6e4;background:#f0fdfa}
+.pt{font-size:12px;font-weight:500;color:#134e4a}
+.dots-r{display:flex;gap:5px}.dot{width:10px;height:10px;border-radius:50%}
+pre{background:#1e293b;color:#e2e8f0;padding:15px;font-family:'Courier New',monospace;font-size:12px;line-height:1.8;min-height:300px;overflow:auto;white-space:pre}
+.cursor{display:inline-block;width:2px;height:14px;background:#5eead4;vertical-align:middle;animation:blink .9s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.preview-body{min-height:300px;overflow-y:auto;background:#f8fafc;padding:16px;font-family:'Courier New',monospace;font-size:12px;line-height:1.8}
+.out-line{padding:1px 0;color:#1e293b}
+.out-line.ok{color:#0d9488;font-weight:600}
+.out-line.cm{color:#64748b;font-style:italic}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:11.5px}
+th{background:#ccfbf1;color:#134e4a;font-weight:600;padding:5px 9px;text-align:left;border-bottom:2px solid #99f6e4}
+td{padding:5px 9px;border-bottom:1px solid #f1f5f9;color:#475569}
+tr:hover td{background:#f0fdfa}
+.step-bar{grid-column:1/-1;border:1px solid #99f6e4;border-radius:12px;background:#fff;display:flex;align-items:center;gap:10px;padding:11px 15px;flex-wrap:wrap}
+.sbadge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#ccfbf1;color:#0d9488;border:1px solid #5eead4}
+.slabel{font-size:12px;color:#64748b;flex:1;line-height:1.4}
+.cb{font-size:12px;font-weight:500;padding:6px 14px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#1e293b;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
+.cb:hover{background:#f1f5f9}.cb.go{background:#0d9488;color:#fff;border-color:#0d9488}.cb.go:hover{background:#0f766e}
+.cb:disabled{opacity:.35;pointer-events:none}
+.narr{grid-column:1/-1;border:1px solid #99f6e4;border-radius:10px;padding:11px 15px;background:#f0fdfa;font-size:13px;color:#134e4a;line-height:1.6;min-height:50px}
+.narr strong{color:#0f766e;font-weight:600}
+.next-page{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#f0fdfa;border:1px solid #99f6e4;border-radius:10px}
+.next-page-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#0d9488}
+.next-page-title{font-size:13px;font-weight:600;color:#1e293b;margin-top:2px}
+.next-page-btn{background:#0d9488;color:#fff;border:none;padding:8px 18px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s;white-space:nowrap;text-decoration:none;display:inline-block}
+.next-page-btn:hover{background:#0f766e}
+.k{color:#93c5fd}.p{color:#c4b5fd}.v{color:#6ee7b7}.s{color:#fda4af}.cm2{color:#475569;font-style:italic}.fn{color:#fbbf24}
+@media(max-width:680px){.wrap{grid-template-columns:1fr}.panel:last-of-type{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="page-hdr"><h1>Demonstração ao vivo — Pandas: Lendo e Explorando Dados</h1><p>Aula 07 · 45 min · Docente digita no Colab, alunos acompanham</p></div>
+  <div class="prog-track"><div class="prog-fill" id="prog"></div></div>
+  <div class="panel">
+    <div class="ph"><span class="pt">Google Colab — aula07.ipynb</span><div class="dots-r"><div class="dot" style="background:#ef4444"></div><div class="dot" style="background:#f59e0b"></div><div class="dot" style="background:#10b981"></div></div></div>
+    <pre><span id="code-out"></span><span class="cursor"></span></pre>
+  </div>
+  <div class="panel">
+    <div class="ph"><span class="pt">Output — resultado da célula</span><div class="dots-r"><div class="dot" style="background:#ef4444"></div><div class="dot" style="background:#f59e0b"></div><div class="dot" style="background:#10b981"></div></div></div>
+    <div class="preview-body" id="preview"></div>
+  </div>
+  <div class="narr" id="narr">Pronto para começar. Clique em <strong>Iniciar digitação</strong>.</div>
+  <div class="step-bar">
+    <span class="sbadge" id="sbadge">Etapa 1 / 8</span>
+    <span class="slabel" id="sdesc">Criando o primeiro DataFrame</span>
+    <button class="cb" id="bp" onclick="prevS()" disabled>← Anterior</button>
+    <button class="cb go" id="bplay" onclick="playS()">▶ Iniciar digitação</button>
+    <button class="cb" id="bn" onclick="nextS()" disabled>Próxima →</button>
+  </div>
+  <div class="next-page" id="next-page" style="display:none">
+    <div><div class="next-page-label">Demonstração concluída</div><div class="next-page-title">▶ Prática Guiada — Pandas: Lendo e Explorando Dados</div></div>
+    <a class="next-page-btn" href="a07_pratica_guiada.html">Abrir Prática →</a>
+  </div>
+</div>
+<script>
+const STEPS=[
+{label:'Criando o primeiro DataFrame',
+narr:'<strong>Docente:</strong> "Vamos criar um DataFrame a partir de um dicionário — exatamente como os da Aula 04, mas agora com superpoderes. Cada chave vira uma coluna, cada lista vira os valores."',
+code:`<span class="k">import</span> <span class="p">pandas</span> <span class="k">as</span> <span class="p">pd</span>
+<span class="k">import</span> <span class="p">numpy</span> <span class="k">as</span> <span class="p">np</span>
+
+<span class="p">df</span> = <span class="p">pd</span>.<span class="fn">DataFrame</span>({
+    <span class="s">"nome"</span>  : [<span class="s">"Ana"</span>, <span class="s">"Bruno"</span>, <span class="s">"Carla"</span>, <span class="s">"Diego"</span>, <span class="s">"Ester"</span>],
+    <span class="s">"turma"</span> : [<span class="s">"A"</span>, <span class="s">"A"</span>, <span class="s">"B"</span>, <span class="s">"B"</span>, <span class="s">"A"</span>],
+    <span class="s">"nota"</span>  : [<span class="v">8.5</span>, <span class="v">4.0</span>, <span class="v">9.0</span>, <span class="v">6.5</span>, <span class="v">7.0</span>],
+    <span class="s">"faltas"</span>: [<span class="v">2</span>, <span class="v">8</span>, <span class="v">0</span>, <span class="v">3</span>, <span class="v">1</span>]
+})
+
+<span class="fn">print</span>(<span class="p">df</span>)
+<span class="fn">print</span>(<span class="p">df</span>.<span class="fn">shape</span>)`,
+prev:`<div class="tbl-wrap"><table><thead><tr><th></th><th>nome</th><th>turma</th><th>nota</th><th>faltas</th></tr></thead><tbody><tr><td>0</td><td>Ana</td><td>A</td><td>8.5</td><td>2</td></tr><tr><td>1</td><td>Bruno</td><td>A</td><td>4.0</td><td>8</td></tr><tr><td>2</td><td>Carla</td><td>B</td><td>9.0</td><td>0</td></tr><tr><td>3</td><td>Diego</td><td>B</td><td>6.5</td><td>3</td></tr><tr><td>4</td><td>Ester</td><td>A</td><td>7.0</td><td>1</td></tr></tbody></table></div><div class="out-line ok">(5, 4)</div>`},
+{label:'head, info e describe',
+narr:'<strong>Docente:</strong> "Esses três comandos sao os primeiros que rodamos em qualquer dataset. head() mostra as primeiras linhas, info() mostra os tipos e nulos, describe() mostra as estatísticas."',
+code:`<span class="cm2"># Exploração inicial — sempre esses 3 primeiros</span>
+<span class="p">df</span>.<span class="fn">head</span>(<span class="v">3</span>)       <span class="cm2"># ver as 3 primeiras linhas
+
+<span class="p">df</span>.<span class="fn">info</span>()        <span class="cm2"># tipos e nulos
+
+<span class="p">df</span>.<span class="fn">describe</span>()    <span class="cm2"># estatísticas numéricas`,
+prev:`<div class="tbl-wrap"><table><thead><tr><th></th><th>nome</th><th>turma</th><th>nota</th><th>faltas</th></tr></thead><tbody><tr><td>0</td><td>Ana</td><td>A</td><td>8.5</td><td>2</td></tr><tr><td>1</td><td>Bruno</td><td>A</td><td>4.0</td><td>8</td></tr><tr><td>2</td><td>Carla</td><td>B</td><td>9.0</td><td>0</td></tr></tbody></table></div><div class="out-line cm">&lt;class 'pandas.core.frame.DataFrame'&gt;</div><div class="out-line cm">RangeIndex: 5 entries, 0 to 4</div><div class="out-line cm">dtypes: float64(1), int64(1), object(2)</div><div class="tbl-wrap" style="margin-top:6px"><table><thead><tr><th></th><th>nota</th><th>faltas</th></tr></thead><tbody><tr><td>count</td><td>5.0</td><td>5.0</td></tr><tr><td>mean</td><td>7.0</td><td>2.8</td></tr><tr><td>std</td><td>1.87</td><td>3.11</td></tr><tr><td>min</td><td>4.0</td><td>0.0</td></tr><tr><td>max</td><td>9.0</td><td>8.0</td></tr></tbody></table></div>`},
+{label:'Selecionando colunas',
+narr:'<strong>Docente:</strong> "Colchete simples retorna Series — uma coluna. Colchete duplo retorna DataFrame. A diferença parece pequena mas importa muito quando passamos dados para modelos."',
+code:`<span class="cm2"># Uma coluna → Series</span>
+<span class="fn">print</span>(<span class="p">df</span>[<span class="s">"nota"</span>])
+<span class="fn">print</span>(<span class="fn">type</span>(<span class="p">df</span>[<span class="s">"nota"</span>]))
+
+<span class="cm2"># Múltiplas colunas → DataFrame</span>
+<span class="fn">print</span>(<span class="p">df</span>[[<span class="s">"nome"</span>, <span class="s">"nota"</span>]])
+
+<span class="cm2"># Listar colunas disponíveis</span>
+<span class="fn">print</span>(<span class="p">df</span>.<span class="fn">columns</span>.<span class="fn">tolist</span>())`,
+prev:`<div class="out-line ok">0    8.5</div><div class="out-line ok">1    4.0</div><div class="out-line ok">2    9.0</div><div class="out-line ok">3    6.5</div><div class="out-line ok">4    7.0</div><div class="out-line ok">Name: nota, dtype: float64</div><div class="out-line cm">&lt;class 'pandas.core.series.Series'&gt;</div><div class="out-line ok">['nome', 'turma', 'nota', 'faltas']</div>`},
+{label:'Filtrando linhas com condição',
+narr:'<strong>Docente:</strong> "Filtrar é indexação booleana do NumPy aplicada ao DataFrame. A sintaxe é a mesma — a condição entre colchetes. Com múltiplas condições, usamos & e |, e cada condição precisa de parênteses."',
+code:`<span class="cm2"># Filtrar aprovados (nota >= 5)</span>
+<span class="fn">print</span>(<span class="p">df</span>[<span class="p">df</span>[<span class="s">"nota"</span>] >= <span class="v">5</span>])
+
+<span class="cm2"># Múltiplas condições — parênteses obrigatórios</span>
+<span class="p">turma_a_aprov</span> = <span class="p">df</span>[
+    (<span class="p">df</span>[<span class="s">"nota"</span>] >= <span class="v">5</span>) & (<span class="p">df</span>[<span class="s">"turma"</span>] == <span class="s">"A"</span>)
+]
+<span class="fn">print</span>(<span class="p">turma_a_aprov</span>)`,
+prev:`<div class="tbl-wrap"><table><thead><tr><th></th><th>nome</th><th>turma</th><th>nota</th><th>faltas</th></tr></thead><tbody><tr><td>0</td><td>Ana</td><td>A</td><td>8.5</td><td>2</td></tr><tr><td>2</td><td>Carla</td><td>B</td><td>9.0</td><td>0</td></tr><tr><td>3</td><td>Diego</td><td>B</td><td>6.5</td><td>3</td></tr><tr><td>4</td><td>Ester</td><td>A</td><td>7.0</td><td>1</td></tr></tbody></table></div><div class="out-line cm">Turma A aprovados: Ana, Ester</div>`},
+{label:'Criando colunas novas',
+narr:'<strong>Docente:</strong> "Criar uma coluna é simples: df[nova] = expressão. A expressão pode usar outras colunas — é vetorizada automaticamente. apply + lambda serve para lógica condicional."',
+code:`<span class="cm2"># Coluna calculada</span>
+<span class="p">df</span>[<span class="s">"nota_pct"</span>] = <span class="p">df</span>[<span class="s">"nota"</span>] * <span class="v">10</span>
+
+<span class="cm2"># Coluna condicional com apply</span>
+<span class="p">df</span>[<span class="s">"status"</span>] = <span class="p">df</span>[<span class="s">"nota"</span>].<span class="fn">apply</span>(
+    <span class="k">lambda</span> <span class="p">x</span>: <span class="s">"Aprovado"</span> <span class="k">if</span> <span class="p">x</span> >= <span class="v">5</span> <span class="k">else</span> <span class="s">"Reprovado"</span>
+)
+
+<span class="fn">print</span>(<span class="p">df</span>[[<span class="s">"nome"</span>, <span class="s">"nota"</span>, <span class="s">"status"</span>]])`,
+prev:`<div class="tbl-wrap"><table><thead><tr><th></th><th>nome</th><th>nota</th><th>status</th></tr></thead><tbody><tr><td>0</td><td>Ana</td><td>8.5</td><td>Aprovado</td></tr><tr><td>1</td><td>Bruno</td><td>4.0</td><td>Reprovado</td></tr><tr><td>2</td><td>Carla</td><td>9.0</td><td>Aprovado</td></tr><tr><td>3</td><td>Diego</td><td>6.5</td><td>Aprovado</td></tr><tr><td>4</td><td>Ester</td><td>7.0</td><td>Aprovado</td></tr></tbody></table></div>`},
+{label:'groupby — médias por grupo',
+narr:'<strong>Docente:</strong> "groupby é uma das operações mais poderosas do Pandas. Dividimos os dados por uma coluna e aplicamos uma função em cada grupo. Em duas linhas fazemos o que em Python puro levaria 10."',
+code:`<span class="cm2"># Média de notas por turma</span>
+<span class="fn">print</span>(<span class="p">df</span>.<span class="fn">groupby</span>(<span class="s">"turma"</span>)[<span class="s">"nota"</span>].<span class="fn">mean</span>())
+
+<span class="cm2"># Múltiplas estatísticas de uma vez</span>
+<span class="fn">print</span>(<span class="p">df</span>.<span class="fn">groupby</span>(<span class="s">"turma"</span>)[<span class="s">"nota"</span>].<span class="fn">agg</span>([<span class="s">"mean"</span>, <span class="s">"max"</span>, <span class="s">"count"</span>]))
+
+<span class="cm2"># Contar por categoria</span>
+<span class="fn">print</span>(<span class="p">df</span>[<span class="s">"status"</span>].<span class="fn">value_counts</span>())`,
+prev:`<div class="out-line ok">turma</div><div class="out-line ok">A    6.50</div><div class="out-line ok">B    7.75</div><div class="out-line ok">Name: nota, dtype: float64</div><div class="tbl-wrap" style="margin-top:6px"><table><thead><tr><th>turma</th><th>mean</th><th>max</th><th>count</th></tr></thead><tbody><tr><td>A</td><td>6.50</td><td>8.5</td><td>3</td></tr><tr><td>B</td><td>7.75</td><td>9.0</td><td>2</td></tr></tbody></table></div><div class="out-line ok">Aprovado     4</div><div class="out-line ok">Reprovado    1</div>`},
+{label:'Valores ausentes — NaN',
+narr:'<strong>Docente:</strong> "Dados reais têm buracos. Pandas representa ausências como NaN. Precisamos detectar, decidir o que fazer — preencher com média, zero ou remover — e só então analisar."',
+code:`<span class="cm2"># Simular dados com valores ausentes</span>
+<span class="p">df2</span> = <span class="p">pd</span>.<span class="fn">DataFrame</span>({
+    <span class="s">"produto"</span>: [<span class="s">"A"</span>, <span class="s">"B"</span>, <span class="s">"C"</span>, <span class="s">"D"</span>],
+    <span class="s">"preco"</span>  : [<span class="v">10.0</span>, <span class="p">np</span>.<span class="fn">nan</span>, <span class="v">30.0</span>, <span class="p">np</span>.<span class="fn">nan</span>],
+    <span class="s">"estoque"</span>: [<span class="v">5</span>, <span class="v">3</span>, <span class="p">np</span>.<span class="fn">nan</span>, <span class="v">7</span>]
+})
+
+<span class="fn">print</span>(<span class="p">df2</span>.<span class="fn">isnull</span>().<span class="fn">sum</span>())     <span class="cm2"># contar nulos
+<span class="p">df2</span>[<span class="s">"preco"</span>].<span class="fn">fillna</span>(<span class="p">df2</span>[<span class="s">"preco"</span>].<span class="fn">mean</span>(), <span class="p">inplace</span>=<span class="v">True</span>)
+<span class="fn">print</span>(<span class="p">df2</span>)`,
+prev:`<div class="out-line ok">produto    0</div><div class="out-line ok">preco      2</div><div class="out-line ok">estoque    1</div><div class="out-line cm">dtype: int64</div><div class="tbl-wrap" style="margin-top:6px"><table><thead><tr><th></th><th>produto</th><th>preco</th><th>estoque</th></tr></thead><tbody><tr><td>0</td><td>A</td><td>10.0</td><td>5.0</td></tr><tr><td>1</td><td>B</td><td>20.0</td><td>3.0</td></tr><tr><td>2</td><td>C</td><td>30.0</td><td>NaN</td></tr><tr><td>3</td><td>D</td><td>20.0</td><td>7.0</td></tr></tbody></table></div>`},
+{label:'Projeto completo — análise de vendas',
+narr:'<strong>Docente:</strong> "Juntamos tudo: criar DataFrame, filtrar, criar colunas, groupby e ordenar. Esse é o fluxo real de análise exploratória de dados."',
+code:`<span class="p">vendas</span> = <span class="p">pd</span>.<span class="fn">DataFrame</span>({
+    <span class="s">"produto"</span>  : [<span class="s">"Notebook"</span>,<span class="s">"Mouse"</span>,<span class="s">"Notebook"</span>,<span class="s">"Teclado"</span>,<span class="s">"Mouse"</span>],
+    <span class="s">"regiao"</span>   : [<span class="s">"Sul"</span>,<span class="s">"Norte"</span>,<span class="s">"Norte"</span>,<span class="s">"Sul"</span>,<span class="s">"Sul"</span>],
+    <span class="s">"quantidade"</span>: [<span class="v">2</span>, <span class="v">5</span>, <span class="v">1</span>, <span class="v">3</span>, <span class="v">4</span>],
+    <span class="s">"preco"</span>    : [<span class="v">3500</span>, <span class="v">80</span>, <span class="v">3500</span>, <span class="v">250</span>, <span class="v">80</span>]
+})
+
+<span class="p">vendas</span>[<span class="s">"total"</span>] = <span class="p">vendas</span>[<span class="s">"quantidade"</span>] * <span class="p">vendas</span>[<span class="s">"preco"</span>]
+
+<span class="p">por_produto</span> = <span class="p">vendas</span>.<span class="fn">groupby</span>(<span class="s">"produto"</span>)[<span class="s">"total"</span>].<span class="fn">sum</span>()
+<span class="fn">print</span>(<span class="p">por_produto</span>.<span class="fn">sort_values</span>(<span class="p">ascending</span>=<span class="v">False</span>))`,
+prev:`<div class="out-line ok">produto</div><div class="out-line ok">Notebook    10500</div><div class="out-line ok">Mouse         720</div><div class="out-line ok">Teclado       750</div><div class="out-line ok">Name: total, dtype: int64</div>`}
+];
+let cur=0,playing=false,timer=null;
+function render(){
+  document.getElementById('sbadge').textContent=`Etapa ${cur+1} / ${STEPS.length}`;
+  document.getElementById('sdesc').textContent=STEPS[cur].label;
+  document.getElementById('narr').innerHTML=STEPS[cur].narr;
+  document.getElementById('preview').innerHTML=STEPS[cur].prev;
+  document.getElementById('code-out').innerHTML='';
+  document.getElementById('prog').style.width=((cur+1)/STEPS.length*100)+'%';
+  document.getElementById('bp').disabled=cur===0;
+  document.getElementById('bn').disabled=cur===STEPS.length-1;
+  const pb=document.getElementById('bplay');pb.textContent='▶ Iniciar digitação';pb.className='cb go';
+  document.getElementById('next-page').style.display=cur===STEPS.length-1?'flex':'none';
+}
+function playS(){
+  if(playing){clearTimeout(timer);playing=false;document.getElementById('bplay').textContent='▶ Iniciar digitação';return;}
+  playing=true;document.getElementById('bplay').textContent='⏸ Pausar';
+  const code=STEPS[cur].code;let i=0;const out=document.getElementById('code-out');out.innerHTML='';
+  function tick(){
+    if(!playing)return;
+    if(i<code.length){
+      if(code[i]==='<'){const end=code.indexOf('>',i);if(end>-1){out.innerHTML+=code.slice(i,end+1);i=end+1;}else{out.innerHTML+=code[i];i++;}}
+      else{out.innerHTML+=code[i];i++;}
+      timer=setTimeout(tick,i%7===0?16:4);
+    }else{playing=false;document.getElementById('bplay').textContent='✓ Concluído';document.getElementById('bn').disabled=cur===STEPS.length-1;if(cur===STEPS.length-1)document.getElementById('next-page').style.display='flex';}
+  }
+  tick();
+}
+function nextS(){if(cur<STEPS.length-1){cur++;render();}}
+function prevS(){if(cur>0){cur--;render();}}
+render();
+</script>
+</body>
+</html>

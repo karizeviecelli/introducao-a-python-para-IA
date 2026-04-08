@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Desafio — Pandas: Lendo e Explorando Dados · Aula 07</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;color:#1e293b;background:#f0fdfa;min-height:100vh;padding:22px}
+.wrap{max-width:920px;margin:0 auto;display:flex;flex-direction:column;gap:11px}
+.brief{border:1px solid #99f6e4;border-radius:12px;overflow:hidden;background:#fff}
+.bt{background:#ccfbf1;padding:17px 19px;border-bottom:1px solid #99f6e4}
+.badge{font-size:11px;font-weight:600;background:#0d9488;color:#fff;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:7px}
+.btitle{font-size:19px;font-weight:600;color:#134e4a;margin-bottom:3px}
+.bsub{font-size:13px;color:#0d9488}
+.bb{padding:15px 19px}
+.ctx{background:#f0fdfa;border-radius:8px;padding:11px 13px;font-size:13px;color:#475569;line-height:1.6;margin-bottom:13px;border-left:3px solid #0d9488}
+.ctx strong{color:#1e293b;font-weight:600;display:block;margin-bottom:3px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:600px){.two{grid-template-columns:1fr}}
+.colt{font-size:11px;font-weight:600;color:#64748b;margin-bottom:7px;text-transform:uppercase;letter-spacing:.05em}
+.req-wrap{display:flex;flex-direction:column;gap:5px}
+.ri{display:flex;gap:9px;align-items:flex-start}
+.rc{width:19px;height:19px;min-width:19px;border-radius:5px;border:1.5px solid #cbd5e1;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-top:2px;background:#fff;transition:all .15s;flex-shrink:0}
+.rc:hover{border-color:#0d9488;background:#ccfbf1}.rc.on{background:#22c55e;border-color:#22c55e}
+.rc svg{display:none}.rc.on svg{display:block}
+.rt{font-size:12.5px;color:#475569;line-height:1.5}.rt.done{color:#94a3b8;text-decoration:line-through}
+code{font-family:'Courier New',monospace;font-size:11.5px;background:#f1f5f9;padding:1px 5px;border-radius:3px;border:1px solid #e2e8f0}
+.crit-list{display:flex;flex-direction:column;gap:5px}
+.ci{display:flex;align-items:flex-start;gap:7px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:7px;padding:7px 10px;font-size:12px;color:#475569}
+.cd{width:5px;height:5px;min-width:5px;border-radius:50%;background:#0d9488;flex-shrink:0;margin-top:5px}
+.cd.g{background:#22c55e}
+.pw{border:1px solid #e2e8f0;border-radius:12px;padding:13px 15px;background:#fff}
+.pl{font-size:12px;color:#64748b;margin-bottom:7px;display:flex;justify-content:space-between}
+.pl strong{color:#1e293b;font-weight:600}
+.pbg{height:7px;background:#e2e8f0;border-radius:4px;overflow:hidden;margin-bottom:9px}
+.pfill{height:100%;background:#0d9488;border-radius:4px;transition:width .4s ease;width:0%}
+.pm{font-size:12px;color:#64748b;font-style:italic}
+.tr{display:flex;align-items:center;gap:9px;border:1px solid #99f6e4;border-radius:12px;padding:11px 15px;background:#fff;flex-wrap:wrap}
+.tnum{font-size:26px;font-weight:500;font-family:'Courier New',monospace;color:#0d9488;min-width:80px;transition:color .3s}
+.tnum.warn{color:#d97706}.tnum.danger{color:#dc2626}
+.tinfo{flex:1;min-width:130px}.tinfo p{font-size:12px;color:#64748b;margin-top:1px}
+.tinfo strong{font-size:13px;color:#1e293b;font-weight:600}
+.tbtn{font-size:12px;padding:6px 14px;border-radius:7px;border:none;background:#0d9488;color:#fff;cursor:pointer;font-family:inherit;transition:background .15s;white-space:nowrap}
+.tbtn:hover{background:#0f766e}.tbtn.sec{background:#f1f5f9;color:#475569;border:1px solid #e2e8f0}
+.tbtn.sec:hover{background:#e2e8f0}.tbtn:disabled{opacity:.4;pointer-events:none}
+.ent{border:1px solid #86efac;border-radius:12px;padding:13px 15px;background:#f0fdf4}
+.et{font-size:11px;font-weight:600;color:#15803d;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+.ep{font-size:13px;color:#475569;line-height:1.9}
+.sbox{display:none;background:#f0fdfa;border:2px solid #5eead4;border-radius:14px;padding:22px;text-align:center}
+.sbox.show{display:block;animation:pop .4s ease}
+@keyframes pop{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
+.sbox h3{font-size:18px;font-weight:700;color:#0d9488;margin-bottom:7px}
+.sbox p{font-size:13px;color:#0f766e;line-height:1.6}
+.next-page{display:none;align-items:center;justify-content:space-between;padding:12px 16px;background:#f0fdfa;border:1px solid #99f6e4;border-radius:10px}
+.next-page.show{display:flex}
+.next-page-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#0d9488}
+.next-page-title{font-size:13px;font-weight:600;color:#1e293b;margin-top:2px}
+.next-page-btn{background:#0d9488;color:#fff;border:none;padding:8px 18px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s;white-space:nowrap;text-decoration:none;display:inline-block}
+.next-page-btn:hover{background:#0f766e}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brief">
+    <div class="bt">
+      <div class="badge">Desafio autônomo · 60 minutos</div>
+      <div class="btitle">Análise de Dados de E-commerce — relatório de vendas</div>
+      <div class="bsub">read_csv, filtros, groupby, colunas derivadas e tratamento de nulos.</div>
+    </div>
+    <div class="bb">
+      <div class="ctx">
+        <strong>Contexto do desafio</strong>
+        Uma loja de e-commerce quer entender o desempenho de vendas do último trimestre. Você recebeu um dataset com pedidos — cada linha é um pedido com produto, categoria, quantidade, preco unitário, regiao e status. Seu objetivo: carregar e explorar os dados, calcular o faturamento por categoria e regiao, identificar os produtos mais vendidos e tratar os nulos presentes.
+      </div>
+      <div class="two">
+        <div>
+          <div class="colt">Requisitos — marque ao concluir</div>
+          <div class="req-wrap" id="req-list"></div>
+        </div>
+        <div>
+          <div class="colt">Critérios de avaliação</div>
+          <div class="crit-list">
+            <div class="ci"><div class="cd"></div>DataFrame criado com pelo menos 5 colunas e 10 linhas</div>
+            <div class="ci"><div class="cd"></div>info() e describe() executados e interpretados</div>
+            <div class="ci"><div class="cd"></div>Coluna "faturamento" criada (quantidade * preco)</div>
+            <div class="ci"><div class="cd"></div>groupby usado para agrupar por categoria e regiao</div>
+            <div class="ci"><div class="cd"></div>Nulos tratados antes do relatório final</div>
+            <div class="ci"><div class="cd g"></div>Bônus: filtrar apenas pedidos com status "entregue"</div>
+            <div class="ci"><div class="cd g"></div>Bônus: salvar resultado do groupby em CSV</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pw">
+    <div class="pl"><strong>Progresso</strong><span id="ptxt">0 de 7 concluídos</span></div>
+    <div class="pbg"><div class="pfill" id="pfill"></div></div>
+    <div class="pm" id="pmsg">Comece criando o DataFrame com os dados do e-commerce.</div>
+  </div>
+  <div class="tr">
+    <div class="tnum" id="tnum">60:00</div>
+    <div class="tinfo"><strong>Cronômetro</strong><p id="tmsg">Inicie quando o docente autorizar</p></div>
+    <button class="tbtn" id="tbtn" onclick="timerClick()">Iniciar</button>
+    <button class="tbtn sec" onclick="timerReset()">Zerar</button>
+  </div>
+  <div class="ent">
+    <div class="et">Estrutura do dataset — copie para o Colab</div>
+    <div class="ep">
+      <code>import pandas as pd, numpy as np</code><br><br>
+      <code>pedidos = pd.DataFrame({</code><br>
+      <code>&nbsp;&nbsp;"produto"   : ["Notebook","Mouse","Teclado","Monitor","Notebook","Mouse","Headset","Teclado","Monitor","Headset"],</code><br>
+      <code>&nbsp;&nbsp;"categoria" : ["Info","Periferico","Periferico","Info","Info","Periferico","Periferico","Periferico","Info","Periferico"],</code><br>
+      <code>&nbsp;&nbsp;"regiao"    : ["Sul","Norte","Sul","Leste","Norte","Sul","Leste","Norte","Sul","Norte"],</code><br>
+      <code>&nbsp;&nbsp;"quantidade": [2, 5, 3, 1, 1, 4, 2, np.nan, 2, 3],</code><br>
+      <code>&nbsp;&nbsp;"preco"     : [3500, 80, 250, 1200, 3500, 80, np.nan, 250, 1200, 150],</code><br>
+      <code>&nbsp;&nbsp;"status"    : ["entregue","entregue","cancelado","entregue","entregue","entregue","entregue","entregue","cancelado","entregue"]</code><br>
+      <code>})</code><br><br>
+      <strong>Tarefas:</strong><br>
+      1. Explore com head(), info() e describe()<br>
+      2. Trate os NaN (quantidade → mediana, preco → média por produto)<br>
+      3. Crie coluna "faturamento" = quantidade * preco<br>
+      4. Faturamento total por categoria com groupby<br>
+      5. Top 3 produtos por faturamento com nlargest
+    </div>
+  </div>
+  <div class="sbox" id="success">
+    <h3>📊 Relatório entregue!</h3>
+    <p>Exploração, filtros, groupby e tratamento de nulos — dominados.<br>Na Aula 08 visualizamos esses dados com Matplotlib!</p>
+  </div>
+  <div class="next-page" id="next-page">
+    <div><div class="next-page-label">Desafio concluído</div><div class="next-page-title">📋 Painel de Feedback — Aula 07</div></div>
+    <a class="next-page-btn" href="a07_feedback.html">Abrir Feedback →</a>
+  </div>
+</div>
+<script>
+const REQS=[
+{t:'Criar o DataFrame <code>pedidos</code> com os dados fornecidos'},
+{t:'Executar <code>info()</code> e <code>describe()</code> e identificar os nulos'},
+{t:'Tratar NaN de quantidade e preco antes de calcular'},
+{t:'Criar coluna <code>faturamento</code> = quantidade * preco'},
+{t:'Calcular faturamento total por categoria com <code>groupby</code>'},
+{t:'Calcular faturamento total por regiao com <code>groupby</code>'},
+{t:'Exibir top 3 produtos por faturamento com <code>nlargest</code>'},
+];
+const MSGS=[
+'Crie o DataFrame com pd.DataFrame({...}) e os dados fornecidos.',
+'DataFrame criado! Execute info() e describe() e identifique os nulos.',
+'Nulos identificados! Trate com fillna antes de calcular.',
+'Nulos tratados! Crie a coluna faturamento = quantidade * preco.',
+'Faturamento criado! Agrupe por categoria com groupby.',
+'Categoria pronta! Agrupe por regiao.',
+'Ótimo! Termine com o top 3 de produtos e mostre o relatório ao docente.',
+'Perfeito! Análise completa entregue.',
+];
+let done=new Set(),ticking=false,tSec=60*60,tInterval=null;
+function buildReqs(){
+  const el=document.getElementById('req-list');REQS.forEach((r,i)=>{
+    const d=document.createElement('div');d.className='ri';d.style.marginBottom='5px';
+    d.innerHTML=`<div class="rc" id="rc-${i}" onclick="chk(${i})"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M1.5 5.5l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="rt" id="rt-${i}">${r.t}</div>`;
+    el.appendChild(d);
+  });
+}
+function chk(i){
+  if(done.has(i)){done.delete(i);document.getElementById('rc-'+i).classList.remove('on');document.getElementById('rt-'+i).classList.remove('done');}
+  else{done.add(i);document.getElementById('rc-'+i).classList.add('on');document.getElementById('rt-'+i).classList.add('done');}
+  const n=done.size;
+  document.getElementById('pfill').style.width=Math.round((n/REQS.length)*100)+'%';
+  document.getElementById('ptxt').textContent=n+' de '+REQS.length+' concluídos';
+  document.getElementById('pmsg').textContent=MSGS[Math.min(n,MSGS.length-1)];
+  if(n===REQS.length){document.getElementById('success').classList.add('show');document.getElementById('next-page').classList.add('show');}
+  else{document.getElementById('success').classList.remove('show');document.getElementById('next-page').classList.remove('show');}
+}
+function timerClick(){
+  if(!ticking){
+    ticking=true;document.getElementById('tbtn').textContent='Pausar';document.getElementById('tbtn').style.background='#475569';
+    document.getElementById('tmsg').textContent='Em andamento';
+    tInterval=setInterval(()=>{
+      tSec--;const m=Math.floor(tSec/60),s=tSec%60;
+      const el=document.getElementById('tnum');
+      el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+      el.className='tnum'+(tSec<=120?' danger':tSec<=600?' warn':'');
+      if(tSec===1800)document.getElementById('tmsg').textContent='30 min — finalize os groupby!';
+      if(tSec===600)document.getElementById('tmsg').textContent='10 min — monte o relatório!';
+      if(tSec===120)document.getElementById('tmsg').textContent='2 min — chame o docente!';
+      if(tSec<=0){clearInterval(tInterval);ticking=false;document.getElementById('tbtn').disabled=true;}
+    },1000);
+  }else{
+    ticking=false;clearInterval(tInterval);
+    document.getElementById('tbtn').textContent='Continuar';document.getElementById('tbtn').style.background='#0d9488';
+  }
+}
+function timerReset(){
+  clearInterval(tInterval);ticking=false;tSec=60*60;
+  document.getElementById('tnum').textContent='60:00';document.getElementById('tnum').className='tnum';
+  document.getElementById('tbtn').textContent='Iniciar';document.getElementById('tbtn').style.background='#0d9488';
+  document.getElementById('tbtn').disabled=false;
+  document.getElementById('tmsg').textContent='Inicie quando o docente autorizar';
+}
+buildReqs();
+</script>
+</body>
+</html>
