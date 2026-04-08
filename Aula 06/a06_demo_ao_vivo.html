@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo ao Vivo — Introdução ao NumPy · Aula 06</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;color:#1e293b;background:#eff6ff;min-height:100vh;padding:20px}
+.wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.page-hdr{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
+.page-hdr h1{font-size:16px;font-weight:600}.page-hdr p{font-size:12px;color:#94a3b8}
+.prog-track{grid-column:1/-1;height:3px;background:#e2e8f0;border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:#1e40af;border-radius:2px;transition:width .3s ease;width:0%}
+.panel{border:1px solid #bfdbfe;border-radius:12px;overflow:hidden;background:#fff}
+.ph{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1px solid #bfdbfe;background:#eff6ff}
+.pt{font-size:12px;font-weight:500;color:#1e3a8a}
+.dots-r{display:flex;gap:5px}
+.dot{width:10px;height:10px;border-radius:50%}
+pre{background:#1e293b;color:#e2e8f0;padding:15px;font-family:'Courier New',monospace;font-size:12px;line-height:1.8;min-height:300px;overflow:auto;white-space:pre}
+.cursor{display:inline-block;width:2px;height:14px;background:#93c5fd;vertical-align:middle;animation:blink .9s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.preview-body{min-height:300px;overflow-y:auto;background:#f8fafc;padding:16px;font-family:'Courier New',monospace;font-size:13px;line-height:1.9}
+.out-line{padding:1px 0;color:#1e293b}
+.out-line.cm{color:#64748b;font-style:italic}
+.out-line.ok{color:#1e40af;font-weight:600}
+.out-line.prompt{color:#94a3b8}
+.step-bar{grid-column:1/-1;border:1px solid #bfdbfe;border-radius:12px;background:#fff;display:flex;align-items:center;gap:10px;padding:11px 15px;flex-wrap:wrap}
+.sbadge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#dbeafe;color:#1e40af;border:1px solid #93c5fd}
+.slabel{font-size:12px;color:#64748b;flex:1;line-height:1.4}
+.cb{font-size:12px;font-weight:500;padding:6px 14px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#1e293b;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
+.cb:hover{background:#f1f5f9}.cb.go{background:#1e40af;color:#fff;border-color:#1e40af}.cb.go:hover{background:#1e3a8a}
+.cb:disabled{opacity:.35;pointer-events:none}
+.narr{grid-column:1/-1;border:1px solid #bfdbfe;border-radius:10px;padding:11px 15px;background:#eff6ff;font-size:13px;color:#1e3a5f;line-height:1.6;min-height:50px}
+.narr strong{color:#1e3a8a;font-weight:600}
+.next-page{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px}
+.next-page-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#1e40af}
+.next-page-title{font-size:13px;font-weight:600;color:#1e293b;margin-top:2px}
+.next-page-btn{background:#1e40af;color:#fff;border:none;padding:8px 18px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s;white-space:nowrap;text-decoration:none;display:inline-block}
+.next-page-btn:hover{background:#1e3a8a}
+.k{color:#93c5fd}.p{color:#c4b5fd}.v{color:#6ee7b7}.s{color:#fda4af}.cm2{color:#475569;font-style:italic}.fn{color:#fbbf24}
+@media(max-width:680px){.wrap{grid-template-columns:1fr}.panel:last-of-type{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="page-hdr"><h1>Demonstração ao vivo — Introdução ao NumPy</h1><p>Aula 06 · 45 min · Docente digita no Colab, alunos acompanham</p></div>
+  <div class="prog-track"><div class="prog-fill" id="prog"></div></div>
+  <div class="panel">
+    <div class="ph"><span class="pt">Google Colab — aula06.ipynb</span><div class="dots-r"><div class="dot" style="background:#ef4444"></div><div class="dot" style="background:#f59e0b"></div><div class="dot" style="background:#10b981"></div></div></div>
+    <pre><span id="code-out"></span><span class="cursor"></span></pre>
+  </div>
+  <div class="panel">
+    <div class="ph"><span class="pt">Output — resultado da célula</span><div class="dots-r"><div class="dot" style="background:#ef4444"></div><div class="dot" style="background:#f59e0b"></div><div class="dot" style="background:#10b981"></div></div></div>
+    <div class="preview-body" id="preview"></div>
+  </div>
+  <div class="narr" id="narr">Pronto para começar. Clique em <strong>Iniciar digitação</strong>.</div>
+  <div class="step-bar">
+    <span class="sbadge" id="sbadge">Etapa 1 / 8</span>
+    <span class="slabel" id="sdesc">Importando NumPy e criando o primeiro array</span>
+    <button class="cb" id="bp" onclick="prevS()" disabled>← Anterior</button>
+    <button class="cb go" id="bplay" onclick="playS()">▶ Iniciar digitação</button>
+    <button class="cb" id="bn" onclick="nextS()" disabled>Próxima →</button>
+  </div>
+  <div class="next-page" id="next-page" style="display:none">
+    <div><div class="next-page-label">Demonstração concluída</div><div class="next-page-title">▶ Prática Guiada — Introdução ao NumPy</div></div>
+    <a class="next-page-btn" href="a06_pratica_guiada.html">Abrir Prática →</a>
+  </div>
+</div>
+<script>
+const STEPS=[
+{label:'Importando NumPy e criando o primeiro array',
+narr:'<strong>Docente:</strong> "A convenção universal é importar NumPy como np. Vamos criar o primeiro array e comparar com uma lista Python — mesmos dados, mas estrutura completamente diferente."',
+code:`<span class="k">import</span> <span class="p">numpy</span> <span class="k">as</span> <span class="p">np</span>
+
+<span class="cm2"># Lista Python vs Array NumPy</span>
+<span class="p">lista</span> = [<span class="v">1.0</span>, <span class="v">2.0</span>, <span class="v">3.0</span>, <span class="v">4.0</span>, <span class="v">5.0</span>]
+<span class="p">arr</span>   = <span class="p">np</span>.<span class="fn">array</span>([<span class="v">1.0</span>, <span class="v">2.0</span>, <span class="v">3.0</span>, <span class="v">4.0</span>, <span class="v">5.0</span>])
+
+<span class="fn">print</span>(<span class="fn">type</span>(<span class="p">lista</span>))   <span class="cm2"># list</span>
+<span class="fn">print</span>(<span class="fn">type</span>(<span class="p">arr</span>))    <span class="cm2"># numpy.ndarray</span>
+<span class="fn">print</span>(<span class="p">arr</span>.<span class="fn">shape</span>)   <span class="cm2"># (5,)</span>
+<span class="fn">print</span>(<span class="p">arr</span>.<span class="fn">dtype</span>)   <span class="cm2"># float64`,
+prev:`<div class="out-line ok">&lt;class 'list'&gt;</div><div class="out-line ok">&lt;class 'numpy.ndarray'&gt;</div><div class="out-line ok">(5,)</div><div class="out-line ok">float64</div>`},
+{label:'Formas de criar arrays',
+narr:'<strong>Docente:</strong> "NumPy tem atalhos para criar arrays comuns. zeros e ones para inicializar, arange como o range do Python, linspace para espaçamento uniforme — muito usado em gráficos."',
+code:`<span class="cm2"># Arrays especiais</span>
+<span class="fn">print</span>(<span class="p">np</span>.<span class="fn">zeros</span>(<span class="v">4</span>))
+<span class="fn">print</span>(<span class="p">np</span>.<span class="fn">ones</span>(<span class="v">4</span>))
+<span class="fn">print</span>(<span class="p">np</span>.<span class="fn">arange</span>(<span class="v">0</span>, <span class="v">10</span>, <span class="v">2</span>))
+<span class="fn">print</span>(<span class="p">np</span>.<span class="fn">linspace</span>(<span class="v">0</span>, <span class="v">1</span>, <span class="v">5</span>))
+
+<span class="cm2"># Reprodutibilidade com seed</span>
+<span class="p">np</span>.<span class="fn">random</span>.<span class="fn">seed</span>(<span class="v">42</span>)
+<span class="fn">print</span>(<span class="p">np</span>.<span class="fn">random</span>.<span class="fn">rand</span>(<span class="v">4</span>))`,
+prev:`<div class="out-line ok">[0. 0. 0. 0.]</div><div class="out-line ok">[1. 1. 1. 1.]</div><div class="out-line ok">[0 2 4 6 8]</div><div class="out-line ok">[0.   0.25 0.5  0.75 1.  ]</div><div class="out-line ok">[0.374 0.951 0.732 0.599]</div>`},
+{label:'Vetorização — a grande diferença',
+narr:'<strong>Docente:</strong> "Aqui está o ponto central. Lista Python com * 2 duplica a lista. Array NumPy com * 2 multiplica cada elemento. É a diferença entre estrutura de dados e array matemático."',
+code:`<span class="p">lista</span> = [<span class="v">1</span>, <span class="v">2</span>, <span class="v">3</span>]
+<span class="p">arr</span>   = <span class="p">np</span>.<span class="fn">array</span>([<span class="v">1</span>, <span class="v">2</span>, <span class="v">3</span>])
+
+<span class="cm2"># Comportamentos COMPLETAMENTE diferentes</span>
+<span class="fn">print</span>(<span class="p">lista</span> * <span class="v">2</span>)    <span class="cm2"># [1,2,3,1,2,3] duplica!</span>
+<span class="fn">print</span>(<span class="p">arr</span>  * <span class="v">2</span>)    <span class="cm2"># [2 4 6] multiplica!</span>
+
+<span class="cm2"># Operações elemento a elemento</span>
+<span class="p">a</span> = <span class="p">np</span>.<span class="fn">array</span>([<span class="v">10</span>, <span class="v">20</span>, <span class="v">30</span>])
+<span class="p">b</span> = <span class="p">np</span>.<span class="fn">array</span>([<span class="v">1</span>,  <span class="v">2</span>,  <span class="v">3</span>])
+<span class="fn">print</span>(<span class="p">a</span> + <span class="p">b</span>)        <span class="cm2"># [11 22 33]</span>
+<span class="fn">print</span>(<span class="p">a</span> / <span class="p">b</span>)        <span class="cm2"># [10. 10. 10.]</span>`,
+prev:`<div class="out-line ok">[1, 2, 3, 1, 2, 3]</div><div class="out-line ok">[2 4 6]</div><div class="out-line ok">[11 22 33]</div><div class="out-line ok">[10. 10. 10.]</div>`},
+{label:'Shape, dtype e ndim',
+narr:'<strong>Docente:</strong> "Shape é a forma do array — quantas linhas e colunas. dtype é o tipo dos dados. ndim é o número de dimensões. Esses três atributos são os primeiros que verificamos ao receber um array."',
+code:`<span class="p">v</span> = <span class="p">np</span>.<span class="fn">array</span>([<span class="v">1</span>, <span class="v">2</span>, <span class="v">3</span>, <span class="v">4</span>])
+<span class="p">m</span> = <span class="p">np</span>.<span class="fn">array</span>([[<span class="v">1</span>,<span class="v">2</span>,<span class="v">3</span>],[<span class="v">4</span>,<span class="v">5</span>,<span class="v">6</span>]])
+
+<span class="fn">print</span>(<span class="s">"Vetor:"</span>, <span class="p">v</span>.<span class="fn">shape</span>, <span class="p">v</span>.<span class="fn">ndim</span>, <span class="p">v</span>.<span class="fn">dtype</span>)
+<span class="fn">print</span>(<span class="s">"Matriz:"</span>, <span class="p">m</span>.<span class="fn">shape</span>, <span class="p">m</span>.<span class="fn">ndim</span>, <span class="p">m</span>.<span class="fn">dtype</span>)
+
+<span class="cm2"># Acessar elemento de matriz: [linha, coluna]</span>
+<span class="fn">print</span>(<span class="p">m</span>[<span class="v">0</span>, <span class="v">2</span>])   <span class="cm2"># linha 0, coluna 2 → 3</span>
+<span class="fn">print</span>(<span class="p">m</span>[<span class="v">1</span>, :])   <span class="cm2"># toda linha 1 → [4 5 6]</span>
+<span class="fn">print</span>(<span class="p">m</span>[:, <span class="v">0</span>])   <span class="cm2"># toda coluna 0 → [1 4]</span>`,
+prev:`<div class="out-line ok">Vetor: (4,) 1 int64</div><div class="out-line ok">Matriz: (2, 3) 2 int64</div><div class="out-line ok">3</div><div class="out-line ok">[4 5 6]</div><div class="out-line ok">[1 4]</div>`},
+{label:'Funções estatísticas',
+narr:'<strong>Docente:</strong> "NumPy tem todas as operações estatísticas básicas como métodos. O que escrevíamos em 5 linhas com for na Aula 03, agora é uma chamada. E é muito mais rápido."',
+code:`<span class="p">notas</span> = <span class="p">np</span>.<span class="fn">array</span>([<span class="v">7.5</span>, <span class="v">8.0</span>, <span class="v">6.5</span>, <span class="v">9.0</span>, <span class="v">5.5</span>, <span class="v">8.5</span>])
+
+<span class="fn">print</span>(<span class="s">f"Media:   {notas.mean():.2f}"</span>)
+<span class="fn">print</span>(<span class="s">f"Desvio:  {notas.std():.2f}"</span>)
+<span class="fn">print</span>(<span class="s">f"Min/Max: {notas.min()} / {notas.max()}"</span>)
+<span class="fn">print</span>(<span class="s">f"Soma:    {notas.sum()}"</span>)
+
+<span class="cm2"># argmax/argmin retornam o ÍNDICE</span>
+<span class="p">idx_maior</span> = <span class="p">np</span>.<span class="fn">argmax</span>(<span class="p">notas</span>)
+<span class="fn">print</span>(<span class="s">f"Melhor nota: {notas[idx_maior]} (posicao {idx_maior})"</span>)`,
+prev:`<div class="out-line ok">Media:   7.58</div><div class="out-line ok">Desvio:  1.13</div><div class="out-line ok">Min/Max: 5.5 / 9.0</div><div class="out-line ok">Soma:    45.0</div><div class="out-line ok">Melhor nota: 9.0 (posicao 3)</div>`},
+{label:'Indexação booleana — filtrar dados',
+narr:'<strong>Docente:</strong> "Indexação booleana é o superpoder do NumPy. Passamos uma condição dentro dos colchetes e ela filtra os elementos. Sem for, sem append — uma linha."',
+code:`<span class="p">notas</span> = <span class="p">np</span>.<span class="fn">array</span>([<span class="v">4.5</span>, <span class="v">7.8</span>, <span class="v">3.2</span>, <span class="v">9.1</span>, <span class="v">6.0</span>, <span class="v">4.9</span>])
+
+<span class="cm2"># Cria array de True/False</span>
+<span class="fn">print</span>(<span class="p">notas</span> >= <span class="v">5.0</span>)
+
+<span class="cm2"># Filtra com a máscara booleana</span>
+<span class="p">aprovados</span> = <span class="p">notas</span>[<span class="p">notas</span> >= <span class="v">5.0</span>]
+<span class="fn">print</span>(<span class="s">f"Aprovados: {aprovados}"</span>)
+
+<span class="cm2"># Contar aprovados</span>
+<span class="fn">print</span>(<span class="s">f"Qtd aprovados: {(notas >= 5.0).sum()}"</span>)
+
+<span class="cm2"># Normalização min-max — padrão em ML</span>
+<span class="p">norm</span> = (<span class="p">notas</span> - <span class="p">notas</span>.<span class="fn">min</span>()) / (<span class="p">notas</span>.<span class="fn">max</span>() - <span class="p">notas</span>.<span class="fn">min</span>())
+<span class="fn">print</span>(<span class="fn">np</span>.<span class="fn">round</span>(<span class="p">norm</span>, <span class="v">2</span>))`,
+prev:`<div class="out-line ok">[False  True False  True  True False]</div><div class="out-line ok">Aprovados: [7.8 9.1 6. ]</div><div class="out-line ok">Qtd aprovados: 3</div><div class="out-line ok">[0.22 0.8  0.   1.   0.47 0.28]</div>`},
+{label:'reshape — reorganizando dimensões',
+narr:'<strong>Docente:</strong> "reshape muda a forma do array sem alterar os dados. Em ML usamos constantemente para preparar dados para modelos — uma imagem 28x28 precisa virar um vetor de 784 antes da rede neural."',
+code:`<span class="p">v</span> = <span class="p">np</span>.<span class="fn">arange</span>(<span class="v">12</span>)   <span class="cm2"># [0,1,2,...,11]</span>
+<span class="fn">print</span>(<span class="p">v</span>.<span class="fn">shape</span>)         <span class="cm2"># (12,)</span>
+
+<span class="cm2"># Reshape: -1 calcula automaticamente</span>
+<span class="p">m3x4</span> = <span class="p">v</span>.<span class="fn">reshape</span>(<span class="v">3</span>, <span class="v">4</span>)
+<span class="fn">print</span>(<span class="p">m3x4</span>)
+
+<span class="p">m2x6</span> = <span class="p">v</span>.<span class="fn">reshape</span>(<span class="v">2</span>, -<span class="v">1</span>)   <span class="cm2"># -1 = calcule</span>
+<span class="fn">print</span>(<span class="p">m2x6</span>.<span class="fn">shape</span>)             <span class="cm2"># (2, 6)
+
+<span class="cm2"># flatten: qualquer shape → 1D</span>
+<span class="fn">print</span>(<span class="p">m3x4</span>.<span class="fn">flatten</span>())`,
+prev:`<div class="out-line ok">(12,)</div><div class="out-line ok">[[ 0  1  2  3]</div><div class="out-line ok"> [ 4  5  6  7]</div><div class="out-line ok"> [ 8  9 10 11]]</div><div class="out-line ok">(2, 6)</div><div class="out-line ok">[ 0  1  2  3  4  5  6  7  8  9 10 11]</div>`},
+{label:'Mini projeto — análise de notas de turma',
+narr:'<strong>Docente:</strong> "Vamos juntar tudo em um mini projeto real. Simulamos notas de uma turma com random, calculamos estatísticas, identificamos aprovados e normalizamos para comparar turmas diferentes."',
+code:`<span class="p">np</span>.<span class="fn">random</span>.<span class="fn">seed</span>(<span class="v">42</span>)
+<span class="p">notas</span> = <span class="p">np</span>.<span class="fn">random</span>.<span class="fn">uniform</span>(<span class="v">2</span>, <span class="v">10</span>, <span class="v">30</span>)  <span class="cm2"># 30 alunos</span>
+<span class="p">notas</span> = <span class="p">np</span>.<span class="fn">round</span>(<span class="p">notas</span>, <span class="v">1</span>)
+
+<span class="fn">print</span>(<span class="s">f"Media: {notas.mean():.2f}"</span>)
+<span class="fn">print</span>(<span class="s">f"Desvio padrao: {notas.std():.2f}"</span>)
+
+<span class="p">aprovados</span> = (notas >= <span class="v">5.0</span>).<span class="fn">sum</span>()
+<span class="fn">print</span>(<span class="s">f"Aprovados: {aprovados}/30 ({aprovados/30:.0%})"</span>)
+
+<span class="cm2"># Normalizar para comparar turmas</span>
+<span class="p">norm</span> = (<span class="p">notas</span> - <span class="p">notas</span>.<span class="fn">mean</span>()) / <span class="p">notas</span>.<span class="fn">std</span>()
+<span class="fn">print</span>(<span class="s">f"Score Z medio: {norm.mean():.2f}"</span>)`,
+prev:`<div class="out-line ok">Media: 6.21</div><div class="out-line ok">Desvio padrao: 2.27</div><div class="out-line ok">Aprovados: 21/30 (70%)</div><div class="out-line ok">Score Z medio: 0.00</div>`}
+];
+let cur=0,playing=false,timer=null;
+function render(){
+  document.getElementById('sbadge').textContent=`Etapa ${cur+1} / ${STEPS.length}`;
+  document.getElementById('sdesc').textContent=STEPS[cur].label;
+  document.getElementById('narr').innerHTML=STEPS[cur].narr;
+  document.getElementById('preview').innerHTML=STEPS[cur].prev;
+  document.getElementById('code-out').innerHTML='';
+  document.getElementById('prog').style.width=((cur+1)/STEPS.length*100)+'%';
+  document.getElementById('bp').disabled=cur===0;
+  document.getElementById('bn').disabled=cur===STEPS.length-1;
+  const pb=document.getElementById('bplay');pb.textContent='▶ Iniciar digitação';pb.className='cb go';
+  document.getElementById('next-page').style.display=cur===STEPS.length-1?'flex':'none';
+}
+function playS(){
+  if(playing){clearTimeout(timer);playing=false;document.getElementById('bplay').textContent='▶ Iniciar digitação';return;}
+  playing=true;document.getElementById('bplay').textContent='⏸ Pausar';
+  const code=STEPS[cur].code;let i=0;const out=document.getElementById('code-out');out.innerHTML='';
+  function tick(){
+    if(!playing)return;
+    if(i<code.length){
+      if(code[i]==='<'){const end=code.indexOf('>',i);if(end>-1){out.innerHTML+=code.slice(i,end+1);i=end+1;}else{out.innerHTML+=code[i];i++;}}
+      else{out.innerHTML+=code[i];i++;}
+      timer=setTimeout(tick,i%7===0?16:4);
+    }else{playing=false;document.getElementById('bplay').textContent='✓ Concluído';document.getElementById('bn').disabled=cur===STEPS.length-1;if(cur===STEPS.length-1)document.getElementById('next-page').style.display='flex';}
+  }
+  tick();
+}
+function nextS(){if(cur<STEPS.length-1){cur++;render();}}
+function prevS(){if(cur>0){cur--;render();}}
+render();
+</script>
+</body>
+</html>
