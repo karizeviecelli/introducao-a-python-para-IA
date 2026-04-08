@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Desafio — O que é programar? · Aula 01</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;color:#1e293b;background:#eef2ff;min-height:100vh;padding:22px}
+.wrap{max-width:920px;margin:0 auto;display:flex;flex-direction:column;gap:11px}
+.brief{border:1px solid #a5b4fc;border-radius:12px;overflow:hidden;background:#fff}
+.bt{background:#e0e7ff;padding:17px 19px;border-bottom:1px solid #a5b4fc}
+.badge{font-size:11px;font-weight:600;background:#4f46e5;color:#fff;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:7px}
+.btitle{font-size:19px;font-weight:600;color:#1e1b4b;margin-bottom:3px}
+.bsub{font-size:13px;color:#4f46e5}
+.bb{padding:15px 19px}
+.ctx{background:#eef2ff;border-radius:8px;padding:11px 13px;font-size:13px;color:#475569;line-height:1.6;margin-bottom:13px;border-left:3px solid #4f46e5}
+.ctx strong{color:#1e293b;font-weight:600;display:block;margin-bottom:3px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:600px){.two{grid-template-columns:1fr}}
+.colt{font-size:11px;font-weight:600;color:#64748b;margin-bottom:7px;text-transform:uppercase;letter-spacing:.05em}
+.req-wrap{display:flex;flex-direction:column;gap:5px}
+.ri{display:flex;gap:9px;align-items:flex-start}
+.rc{width:19px;height:19px;min-width:19px;border-radius:5px;border:1.5px solid #cbd5e1;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-top:2px;background:#fff;transition:all .15s;flex-shrink:0}
+.rc:hover{border-color:#4f46e5;background:#e0e7ff}.rc.on{background:#22c55e;border-color:#22c55e}
+.rc svg{display:none}.rc.on svg{display:block}
+.rt{font-size:12.5px;color:#475569;line-height:1.5}.rt.done{color:#94a3b8;text-decoration:line-through}
+code{font-family:'Courier New',monospace;font-size:11.5px;background:#f1f5f9;padding:1px 5px;border-radius:3px;border:1px solid #e2e8f0}
+.crit-list{display:flex;flex-direction:column;gap:5px}
+.ci{display:flex;align-items:flex-start;gap:7px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:7px;padding:7px 10px;font-size:12px;color:#475569}
+.cd{width:5px;height:5px;min-width:5px;border-radius:50%;background:#4f46e5;flex-shrink:0;margin-top:5px}
+.cd.g{background:#22c55e}
+.pw{border:1px solid #e2e8f0;border-radius:12px;padding:13px 15px;background:#fff}
+.pl{font-size:12px;color:#64748b;margin-bottom:7px;display:flex;justify-content:space-between}
+.pl strong{color:#1e293b;font-weight:600}
+.pbg{height:7px;background:#e2e8f0;border-radius:4px;overflow:hidden;margin-bottom:9px}
+.pfill{height:100%;background:#4f46e5;border-radius:4px;transition:width .4s ease;width:0%}
+.pm{font-size:12px;color:#64748b;font-style:italic}
+.tr{display:flex;align-items:center;gap:9px;border:1px solid #a5b4fc;border-radius:12px;padding:11px 15px;background:#fff;flex-wrap:wrap}
+.tnum{font-size:26px;font-weight:500;font-family:'Courier New',monospace;color:#4f46e5;min-width:80px;transition:color .3s}
+.tnum.warn{color:#d97706}.tnum.danger{color:#dc2626}
+.tinfo{flex:1;min-width:130px}.tinfo p{font-size:12px;color:#64748b;margin-top:1px}
+.tinfo strong{font-size:13px;color:#1e293b;font-weight:600}
+.tbtn{font-size:12px;padding:6px 14px;border-radius:7px;border:none;background:#4f46e5;color:#fff;cursor:pointer;font-family:inherit;transition:background .15s;white-space:nowrap}
+.tbtn:hover{background:#4338ca}.tbtn.sec{background:#f1f5f9;color:#475569;border:1px solid #e2e8f0}
+.tbtn.sec:hover{background:#e2e8f0}.tbtn:disabled{opacity:.4;pointer-events:none}
+.ent{border:1px solid #86efac;border-radius:12px;padding:13px 15px;background:#f0fdf4}
+.et{font-size:11px;font-weight:600;color:#15803d;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+.ep{font-size:13px;color:#475569;line-height:1.7}.ep a{color:#4f46e5}
+.sbox{display:none;background:#eef2ff;border:2px solid #a5b4fc;border-radius:14px;padding:22px;text-align:center}
+.sbox.show{display:block;animation:pop .4s ease}
+@keyframes pop{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
+.sbox h3{font-size:18px;font-weight:700;color:#4f46e5;margin-bottom:7px}
+.sbox p{font-size:13px;color:#3730a3;line-height:1.6}
+.next-page{display:none;align-items:center;justify-content:space-between;padding:12px 16px;background:#eef2ff;border:1px solid #c7d2fe;border-radius:10px}
+.next-page.show{display:flex}
+.next-page-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#4f46e5}
+.next-page-title{font-size:13px;font-weight:600;color:#1e293b;margin-top:2px}
+.next-page-btn{background:#4f46e5;color:#fff;border:none;padding:8px 18px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s;white-space:nowrap;text-decoration:none;display:inline-block}
+.next-page-btn:hover{background:#4338ca}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brief">
+    <div class="bt">
+      <div class="badge">Desafio autônomo · 60 minutos</div>
+      <div class="btitle">Caixa Registradora — programa de vendas simples</div>
+      <div class="bsub">Variáveis, operações, input(), print() e f-strings. Python puro, sem bibliotecas.</div>
+    </div>
+    <div class="bb">
+      <div class="ctx">
+        <strong>Contexto do desafio</strong>
+        Você foi contratado por uma pequena lanchonete para criar um programa de caixa registradora básica. O programa deve perguntar o nome do cliente, a quantidade e o preço de até 3 itens, calcular o subtotal de cada item, o total da compra, aplicar um desconto de 10% se o total passar de R$ 50,00, e exibir um cupom fiscal formatado no terminal.
+      </div>
+      <div class="two">
+        <div>
+          <div class="colt">Requisitos — marque ao concluir</div>
+          <div class="req-wrap" id="req-list"></div>
+        </div>
+        <div>
+          <div class="colt">Critérios de avaliação</div>
+          <div class="crit-list">
+            <div class="ci"><div class="cd"></div>Variáveis com nomes descritivos em português</div>
+            <div class="ci"><div class="cd"></div><code>input()</code> com conversão correta (<code>int</code> ou <code>float</code>)</div>
+            <div class="ci"><div class="cd"></div>Cálculos usando variáveis, não números fixos</div>
+            <div class="ci"><div class="cd"></div>f-strings com formatação <code>:.2f</code> para valores monetários</div>
+            <div class="ci"><div class="cd"></div>Saída organizada e legível (cupom fiscal)</div>
+            <div class="ci"><div class="cd g"></div>Bônus: separador visual com <code>print("="*30)</code></div>
+            <div class="ci"><div class="cd g"></div>Bônus: exibir se houve desconto ou não</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pw">
+    <div class="pl"><strong>Progresso</strong><span id="ptxt">0 de 7 concluídos</span></div>
+    <div class="pbg"><div class="pfill" id="pfill"></div></div>
+    <div class="pm" id="pmsg">Comece pedindo o nome do cliente e os dados do primeiro item.</div>
+  </div>
+  <div class="tr">
+    <div class="tnum" id="tnum">60:00</div>
+    <div class="tinfo"><strong>Cronômetro</strong><p id="tmsg">Inicie quando o docente autorizar</p></div>
+    <button class="tbtn" id="tbtn" onclick="timerClick()">Iniciar</button>
+    <button class="tbtn sec" onclick="timerReset()">Zerar</button>
+  </div>
+  <div class="ent">
+    <div class="et">Entrega e dica de estrutura</div>
+    <div class="ep">
+      Arquivo <code>aula01_desafio.ipynb</code> no Colab com todas as células executando sem erro. Mostre ao docente digitando um pedido completo ao vivo.<br><br>
+      <strong>Sugestão de estrutura:</strong><br>
+      1. Pedir nome do cliente<br>
+      2. Pedir quantidade e preço do item 1 → calcular subtotal1<br>
+      3. Repetir para item 2 e item 3<br>
+      4. Calcular total = subtotal1 + subtotal2 + subtotal3<br>
+      5. Verificar se total &gt; 50 (por enquanto, calcule desconto sempre — o <code>if</code> será na Aula 02)<br>
+      6. Exibir o cupom com todos os dados formatados
+    </div>
+  </div>
+  <div class="sbox" id="success">
+    <h3>🎉 Caixa registradora entregue!</h3>
+    <p>Você criou seu primeiro programa útil do zero.<br>Na Aula 02 aprenderemos condições — e aí o desconto vai funcionar de verdade!</p>
+  </div>
+  <div class="next-page" id="next-page">
+    <div><div class="next-page-label">Desafio concluído</div><div class="next-page-title">📋 Painel de Feedback — Aula 01</div></div>
+    <a class="next-page-btn" href="a01_feedback.html">Abrir Feedback →</a>
+  </div>
+</div>
+<script>
+const REQS=[
+{t:'Perguntar o nome do cliente com <code>input()</code>'},
+{t:'Perguntar quantidade (int) e preço (float) do item 1 e calcular subtotal1'},
+{t:'Repetir para item 2 e item 3 — total de 3 itens'},
+{t:'Calcular o total somando os 3 subtotais'},
+{t:'Calcular desconto de 10%: <code>desconto = total * 0.10</code>'},
+{t:'Calcular total final: <code>total_final = total - desconto</code>'},
+{t:'Exibir cupom fiscal com todos os dados formatados com <code>:.2f</code>'},
+];
+const MSGS=[
+'Comece pedindo o nome do cliente.',
+'Nome coletado! Agora peça quantidade e preço do item 1.',
+'Item 1 pronto! Continue para o item 2.',
+'Item 2 pronto! Continue para o item 3.',
+'Todos os itens prontos! Calcule o total.',
+'Total calculado! Agora aplique o desconto de 10%.',
+'Desconto ok! Calcule o total final e monte o cupom.',
+'Tudo pronto! Formate o cupom e mostre ao docente.',
+];
+let done=new Set(),ticking=false,tSec=60*60,tInterval=null;
+function buildReqs(){
+  const el=document.getElementById('req-list');REQS.forEach((r,i)=>{
+    const d=document.createElement('div');d.className='ri';d.style.marginBottom='5px';
+    d.innerHTML=`<div class="rc" id="rc-${i}" onclick="chk(${i})"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M1.5 5.5l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="rt" id="rt-${i}">${r.t}</div>`;
+    el.appendChild(d);
+  });
+}
+function chk(i){
+  if(done.has(i)){done.delete(i);document.getElementById('rc-'+i).classList.remove('on');document.getElementById('rt-'+i).classList.remove('done');}
+  else{done.add(i);document.getElementById('rc-'+i).classList.add('on');document.getElementById('rt-'+i).classList.add('done');}
+  const n=done.size;
+  document.getElementById('pfill').style.width=Math.round((n/REQS.length)*100)+'%';
+  document.getElementById('ptxt').textContent=n+' de '+REQS.length+' concluídos';
+  document.getElementById('pmsg').textContent=MSGS[Math.min(n,MSGS.length-1)];
+  if(n===REQS.length){document.getElementById('success').classList.add('show');document.getElementById('next-page').classList.add('show');}
+  else{document.getElementById('success').classList.remove('show');document.getElementById('next-page').classList.remove('show');}
+}
+function timerClick(){
+  if(!ticking){
+    ticking=true;document.getElementById('tbtn').textContent='Pausar';document.getElementById('tbtn').style.background='#475569';
+    document.getElementById('tmsg').textContent='Em andamento';
+    tInterval=setInterval(()=>{
+      tSec--;const m=Math.floor(tSec/60),s=tSec%60;
+      const el=document.getElementById('tnum');
+      el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+      el.className='tnum'+(tSec<=120?' danger':tSec<=600?' warn':'');
+      if(tSec===1800)document.getElementById('tmsg').textContent='30 min — finalize os cálculos!';
+      if(tSec===600)document.getElementById('tmsg').textContent='10 min — monte o cupom!';
+      if(tSec===120)document.getElementById('tmsg').textContent='2 min — chame o docente!';
+      if(tSec<=0){clearInterval(tInterval);ticking=false;document.getElementById('tbtn').disabled=true;}
+    },1000);
+  }else{
+    ticking=false;clearInterval(tInterval);
+    document.getElementById('tbtn').textContent='Continuar';document.getElementById('tbtn').style.background='#4f46e5';
+  }
+}
+function timerReset(){
+  clearInterval(tInterval);ticking=false;tSec=60*60;
+  document.getElementById('tnum').textContent='60:00';document.getElementById('tnum').className='tnum';
+  document.getElementById('tbtn').textContent='Iniciar';document.getElementById('tbtn').style.background='#4f46e5';
+  document.getElementById('tbtn').disabled=false;
+  document.getElementById('tmsg').textContent='Inicie quando o docente autorizar';
+}
+buildReqs();
+</script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prática Guiada — O que é programar? · Aula 01</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;color:#1e293b;background:#eef2ff;min-height:100vh;padding:22px}
+.wrap{max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:11px}
+.pg-header{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.pg-title{font-size:17px;font-weight:600}.pg-meta{font-size:12px;color:#64748b;margin-top:2px}
+.pg-time{font-size:12px;font-weight:600;background:#e0e7ff;border:1px solid #c7d2fe;padding:4px 12px;border-radius:8px;color:#4f46e5}
+.prog-row{display:flex;align-items:center;gap:9px}
+.pb{flex:1;height:7px;background:#e2e8f0;border-radius:4px;overflow:hidden}
+.pf{height:100%;background:#4f46e5;border-radius:4px;transition:width .4s ease;width:0%}
+.pt{font-size:12px;font-weight:600;color:#64748b;min-width:60px;text-align:right}
+.sc{border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;background:#fff;transition:border-color .2s}
+.sc.done-c{border-color:#86efac}.sc.open-c{border-color:#a5b4fc}
+.sh{display:flex;align-items:flex-start;gap:11px;padding:12px 13px;cursor:pointer;user-select:none;transition:background .15s}
+.sh:hover{background:#f8fafc}.sc.open-c .sh{background:#eef2ff}
+.chk{width:21px;height:21px;border-radius:6px;border:1.5px solid #cbd5e1;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:all .18s;cursor:pointer;background:#fff}
+.chk:hover{border-color:#4f46e5;background:#e0e7ff}.chk.done{background:#22c55e;border-color:#22c55e}
+.chk svg{display:none}.chk.done svg{display:block}
+.si{flex:1}.sn2{font-size:11px;font-weight:600;color:#94a3b8;margin-bottom:2px;text-transform:uppercase;letter-spacing:.04em}
+.st{font-size:13px;font-weight:600;color:#1e293b;line-height:1.3}.stm{font-size:11px;color:#94a3b8;margin-top:2px}
+.cv{color:#94a3b8;font-size:11px;margin-top:4px;transition:transform .22s;flex-shrink:0}
+.sc.open-c .cv{transform:rotate(180deg)}
+.sb{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.sc.open-c .sb{max-height:1600px}
+.sbi{padding:0 13px 14px;border-top:1px solid #f1f5f9}
+.il{display:flex;flex-direction:column;gap:6px;margin:11px 0}
+.ii{display:flex;gap:9px;font-size:13px;color:#475569;line-height:1.55;align-items:flex-start}
+.in{width:19px;height:19px;min-width:19px;border-radius:5px;background:#e0e7ff;color:#4f46e5;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;margin-top:1px}
+code{font-family:'Courier New',monospace;font-size:12px;background:#f1f5f9;padding:1px 5px;border-radius:3px;border:1px solid #e2e8f0}
+.cb2{background:#1e293b;border-radius:8px;padding:12px 15px;font-family:'Courier New',monospace;font-size:12px;line-height:1.8;color:#94a3b8;margin:9px 0;overflow-x:auto;white-space:pre}
+.k{color:#93c5fd}.p{color:#c4b5fd}.v{color:#6ee7b7}.s{color:#fda4af}.c{color:#475569;font-style:italic}.fn{color:#fbbf24}
+.tip{background:#eef2ff;border-left:3px solid #4f46e5;padding:8px 12px;font-size:12px;color:#312e81;line-height:1.5;margin-top:8px}
+.tip strong{color:#3730a3;font-weight:600}
+.mb{display:inline-flex;align-items:center;gap:5px;background:#f8fafc;border:1px solid #cbd5e1;color:#64748b;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .18s;margin-top:10px}
+.mb:hover{background:#f0fdf4;color:#15803d;border-color:#86efac}
+.mb.done-btn{background:#f0fdf4;color:#15803d;border-color:#86efac;pointer-events:none}
+.sbox{background:#eef2ff;border:1px solid #a5b4fc;border-radius:14px;padding:20px;text-align:center;display:none}
+.sbox.show{display:block}
+.sbox h3{font-size:16px;font-weight:600;color:#4f46e5;margin-bottom:6px}
+.sbox p{font-size:13px;color:#3730a3;line-height:1.6}
+.next-page{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#eef2ff;border:1px solid #c7d2fe;border-radius:10px;margin-top:4px}
+.next-page-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#4f46e5}
+.next-page-title{font-size:13px;font-weight:600;color:#1e293b;margin-top:2px}
+.next-page-btn{background:#4f46e5;color:#fff;border:none;padding:8px 18px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s;white-space:nowrap;text-decoration:none;display:inline-block}
+.next-page-btn:hover{background:#4338ca}
+a{color:#4f46e5}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="pg-header">
+    <div><div class="pg-title">Prática guiada — O que é programar? Primeiros passos</div><div class="pg-meta">Siga os passos no Colab. Marque cada um quando terminar.</div></div>
+    <span class="pg-time">60 min disponíveis</span>
+  </div>
+  <div class="prog-row"><div class="pb"><div class="pf" id="pf"></div></div><div class="pt" id="pt">0 / 6</div></div>
+  <div id="steps"></div>
+  <div class="sbox" id="sbox">
+    <h3>🐍 Primeiros passos concluídos!</h3>
+    <p>Variáveis, tipos, print(), input() e operações: base completa.<br>Hora do desafio autônomo!</p>
+  </div>
+  <div class="next-page" id="next-page" style="display:none">
+    <div><div class="next-page-label">Prática concluída</div><div class="next-page-title">🏆 Desafio Autônomo — Variáveis, Tipos e Primeiros Programas</div></div>
+    <a class="next-page-btn" href="a01_desafio.html">Abrir Desafio →</a>
+  </div>
+</div>
+<script>
+const STEPS=[
+{title:'Abrir o Google Colab e criar o notebook',time:'5 min',
+instrs:['Acesse <a href="https://colab.research.google.com" target="_blank">colab.research.google.com</a> com sua conta Google','Clique em <strong>Novo notebook</strong> e renomeie para <code>aula01.ipynb</code>','Na primeira célula, escreva <code>print("Meu primeiro programa!")</code>','Pressione <strong>Shift+Enter</strong> para executar e veja o resultado aparecer'],
+code:'',
+tip:'<strong>Shift+Enter</strong> executa a célula e avança. <strong>Ctrl+Enter</strong> executa e permanece. Use o botão + Código para criar uma nova célula. Use + Texto para anotações.'},
+{title:'Criar variáveis e usar print()',time:'10 min',
+instrs:['Crie uma nova célula e declare variáveis com seu próprio nome, idade e cidade','Use <code>print()</code> para exibir cada variável separadamente','Use <code>type()</code> para descobrir o tipo de cada uma: <code>print(type(nome))</code>','Tente mudar o valor de uma variável e imprimir novamente — veja que funciona'],
+code:`<span class="c"># Complete com seus próprios dados:</span>\n<span class="p">nome</span>   = <span class="s">"..."</span>     <span class="c"># coloque seu nome</span>\n<span class="p">idade</span>  = <span class="v">0</span>         <span class="c"># coloque sua idade</span>\n<span class="p">cidade</span> = <span class="s">"..."</span>     <span class="c"># coloque sua cidade</span>\n\n<span class="fn">print</span>(<span class="p">nome</span>)\n<span class="fn">print</span>(<span class="fn">type</span>(<span class="p">idade</span>))  <span class="c"># qual tipo aparece?</span>`,
+tip:'<strong>Dica:</strong> o nome da variável deve começar com letra minúscula e não pode ter espaços ou acentos. <code>meu_nome</code> é válido. <code>meu nome</code> e <code>1nome</code> são inválidos.'},
+{title:'f-strings — juntar texto e variáveis',time:'8 min',
+instrs:['Usando as variáveis do passo anterior, monte uma mensagem de apresentação com f-string','O formato é: <code>f"texto {variavel} mais texto"</code>','Faça o programa exibir: <em>"Olá! Me chamo [nome], tenho [idade] anos e moro em [cidade]."</em>','Tente incluir um cálculo dentro da f-string: <code>f"Daqui a 5 anos terei {idade + 5} anos."</code>'],
+code:`<span class="p">nome</span>   = <span class="s">"Ana"</span>\n<span class="p">idade</span>  = <span class="v">22</span>\n<span class="p">cidade</span> = <span class="s">"Curitiba"</span>\n\n<span class="fn">print</span>(<span class="s">f"Olá! Me chamo {</span><span class="p">nome</span><span class="s">}, tenho {</span><span class="p">idade</span><span class="s">} anos."</span>)\n<span class="fn">print</span>(<span class="s">f"Moro em {</span><span class="p">cidade</span><span class="s">}."</span>)\n<span class="fn">print</span>(<span class="s">f"Daqui a 5 anos terei {</span><span class="p">idade</span><span class="s"> + 5} anos."</span>)`,
+tip:'<strong>Formatação numérica:</strong> <code>{valor:.2f}</code> exibe com 2 casas decimais. <code>{valor:.1f}</code> exibe com 1. Muito útil para mostrar resultados de cálculos de forma limpa.'},
+{title:'Calculadora de IMC',time:'12 min',
+instrs:['Crie variáveis <code>peso</code> (float) e <code>altura</code> (float) com valores de exemplo','Calcule o IMC com a fórmula: <code>imc = peso / altura ** 2</code>','Exiba o resultado com 1 casa decimal usando f-string: <code>{imc:.1f}</code>','Adicione uma linha informando se o valor está acima ou abaixo de 25 (não precisa de if ainda — escreva em texto mesmo)'],
+code:`<span class="p">peso</span>   = <span class="v">70.0</span>   <span class="c"># kg</span>\n<span class="p">altura</span> = <span class="v">1.75</span>   <span class="c"># metros</span>\n\n<span class="p">imc</span> = <span class="p">peso</span> / <span class="p">altura</span> ** <span class="v">2</span>\n\n<span class="fn">print</span>(<span class="s">f"Peso:   {</span><span class="p">peso</span><span class="s">} kg"</span>)\n<span class="fn">print</span>(<span class="s">f"Altura: {</span><span class="p">altura</span><span class="s">} m"</span>)\n<span class="fn">print</span>(<span class="s">f"IMC:    {</span><span class="p">imc</span><span class="s">:.1f}"</span>)`,
+tip:'<strong>Operadores:</strong> <code>**</code> é potência (altura ** 2 = altura²). A divisão <code>/</code> sempre retorna float. Para testar, troque os valores de peso e altura e execute novamente.'},
+{title:'Conversor com input() — programa interativo',time:'12 min',
+instrs:['Use <code>input()</code> para perguntar ao usuário a temperatura em Celsius','Converta para float com <code>float(input(...))</code>','Aplique a fórmula: <code>fahrenheit = celsius * 9/5 + 32</code>','Exiba o resultado com f-string e 1 casa decimal — teste com 0°C (deve dar 32°F) e 100°C (deve dar 212°F)'],
+code:`<span class="fn">print</span>(<span class="s">"=== Conversor de Temperatura ==="</span>)\n\n<span class="p">celsius</span>    = <span class="fn">float</span>(<span class="fn">input</span>(<span class="s">"Temperatura em Celsius: "</span>))\n<span class="p">fahrenheit</span> = <span class="p">celsius</span> * <span class="v">9</span>/<span class="v">5</span> + <span class="v">32</span>\n\n<span class="fn">print</span>(<span class="s">f"{</span><span class="p">celsius</span><span class="s">:.1f}°C = {</span><span class="p">fahrenheit</span><span class="s">:.1f}°F"</span>)`,
+tip:'<strong>Por que float() e não int():</strong> temperatura pode ter vírgula (37.5°C). Use <code>float()</code> quando o número pode ser decimal. Se usar <code>int()</code>, o Python vai rejeitar valores como 36.5.'},
+{title:'Programa de apresentação completo',time:'13 min',
+instrs:['Crie um programa que pergunta: nome, ano de nascimento e cidade natal','Calcule a idade atual: <code>2026 - ano_nasc</code>','Exiba uma mensagem de boas-vindas personalizada com todos os dados','Bônus: exiba também o ano em que a pessoa completará 100 anos: <code>ano_nasc + 100</code>'],
+code:`<span class="fn">print</span>(<span class="s">"=== Programa de Apresentação ==="</span>)\n\n<span class="p">nome</span>     = <span class="fn">input</span>(<span class="s">"Seu nome: "</span>)\n<span class="p">ano_nasc</span> = <span class="fn">int</span>(<span class="fn">input</span>(<span class="s">"Ano de nascimento: "</span>))\n<span class="p">cidade</span>   = <span class="fn">input</span>(<span class="s">"Cidade natal: "</span>)\n\n<span class="p">idade</span>       = <span class="v">2026</span> - <span class="p">ano_nasc</span>\n<span class="p">ano_100</span>     = <span class="p">ano_nasc</span> + <span class="v">100</span>\n\n<span class="fn">print</span>(<span class="s">f"\\nOlá, {</span><span class="p">nome</span><span class="s">}!"</span>)\n<span class="fn">print</span>(<span class="s">f"Você tem {</span><span class="p">idade</span><span class="s">} anos e nasceu em {</span><span class="p">cidade</span><span class="s">}."</span>)\n<span class="fn">print</span>(<span class="s">f"Em {</span><span class="p">ano_100</span><span class="s">} você completará 100 anos!"</span>)`,
+tip:'<strong>\\n</strong> dentro de uma string cria uma linha em branco — útil para separar visualmente partes da saída. Experimente adicionar mais \\n para ver o efeito.'}
+];
+let done=new Set();
+function build(){
+  const list=document.getElementById('steps');STEPS.forEach((s,i)=>{
+    const card=document.createElement('div');card.className='sc'+(i===0?' open-c':'');card.id='sc-'+i;
+    card.innerHTML=`<div class="sh" onclick="tog(${i})"><div class="chk" id="chk-${i}" onclick="event.stopPropagation();mk(${i})"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="si"><div class="sn2">Passo ${i+1} de ${STEPS.length}</div><div class="st">${s.title}</div><div class="stm">${s.time}</div></div><span class="cv">${i===0?'▲':'▼'}</span></div><div class="sb"><div class="sbi"><div class="il">${s.instrs.map((t,j)=>`<div class="ii"><div class="in">${j+1}</div><span>${t}</span></div>`).join('')}</div>${s.code?`<div class="cb2">${s.code}</div>`:''}<div class="tip">${s.tip}</div><button class="mb" id="mb-${i}" onclick="mk(${i})"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5l3.5 3.5 5.5-5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Marcar como concluído</button></div></div>`;
+    list.appendChild(card);
+  });
+}
+function tog(i){const c=document.getElementById('sc-'+i);const o=c.classList.contains('open-c');document.querySelectorAll('.sc').forEach(x=>{x.classList.remove('open-c');x.querySelector('.cv').textContent='▼';});if(!o){c.classList.add('open-c');c.querySelector('.cv').textContent='▲';}}
+function mk(i){if(done.has(i))return;done.add(i);document.getElementById('chk-'+i).classList.add('done');document.getElementById('sc-'+i).classList.add('done-c');const mb=document.getElementById('mb-'+i);mb.classList.add('done-btn');mb.innerHTML='<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5l3.5 3.5 5.5-5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Concluído!';upd();if(i<STEPS.length-1){document.querySelectorAll('.sc').forEach(x=>{x.classList.remove('open-c');x.querySelector('.cv').textContent='▼';});const nx=document.getElementById('sc-'+(i+1));nx.classList.add('open-c');nx.querySelector('.cv').textContent='▲';setTimeout(()=>nx.scrollIntoView({behavior:'smooth',block:'nearest'}),100);}if(done.size===STEPS.length){document.getElementById('sbox').classList.add('show');document.getElementById('next-page').style.display='flex';setTimeout(()=>document.getElementById('next-page').scrollIntoView({behavior:'smooth',block:'nearest'}),300);}}
+function upd(){document.getElementById('pf').style.width=Math.round((done.size/STEPS.length)*100)+'%';document.getElementById('pt').textContent=done.size+' / '+STEPS.length;}
+build();upd();
+</script>
+</body>
+</html>
