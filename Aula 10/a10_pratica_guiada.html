@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prática Guiada — Comparando Modelos e Métricas Avançadas · Aula 10</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;color:#1e293b;background:#f8fafc;min-height:100vh;padding:22px}
+.wrap{max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:11px}
+.pg-header{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.pg-title{font-size:17px;font-weight:600}.pg-meta{font-size:12px;color:#64748b;margin-top:2px}
+.pg-time{font-size:12px;font-weight:600;background:#f1f5f9;border:1px solid #cbd5e1;padding:4px 12px;border-radius:8px;color:#334155}
+.prog-row{display:flex;align-items:center;gap:9px}
+.pb{flex:1;height:7px;background:#e2e8f0;border-radius:4px;overflow:hidden}
+.pf{height:100%;background:#334155;border-radius:4px;transition:width .4s ease;width:0%}
+.pt{font-size:12px;font-weight:600;color:#64748b;min-width:60px;text-align:right}
+.sc{border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;background:#fff;transition:border-color .2s}
+.sc.done-c{border-color:#86efac}.sc.open-c{border-color:#94a3b8}
+.sh{display:flex;align-items:flex-start;gap:11px;padding:12px 13px;cursor:pointer;user-select:none;transition:background .15s}
+.sh:hover{background:#f8fafc}.sc.open-c .sh{background:#f8fafc}
+.chk{width:21px;height:21px;border-radius:6px;border:1.5px solid #cbd5e1;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:all .18s;cursor:pointer;background:#fff}
+.chk:hover{border-color:#334155;background:#f1f5f9}.chk.done{background:#22c55e;border-color:#22c55e}
+.chk svg{display:none}.chk.done svg{display:block}
+.si{flex:1}.sn2{font-size:11px;font-weight:600;color:#94a3b8;margin-bottom:2px;text-transform:uppercase;letter-spacing:.04em}
+.st{font-size:13px;font-weight:600;color:#1e293b;line-height:1.3}.stm{font-size:11px;color:#94a3b8;margin-top:2px}
+.cv{color:#94a3b8;font-size:11px;margin-top:4px;transition:transform .22s;flex-shrink:0}
+.sc.open-c .cv{transform:rotate(180deg)}
+.sb{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.sc.open-c .sb{max-height:1800px}
+.sbi{padding:0 13px 14px;border-top:1px solid #f1f5f9}
+.il{display:flex;flex-direction:column;gap:6px;margin:11px 0}
+.ii{display:flex;gap:9px;font-size:13px;color:#475569;line-height:1.55;align-items:flex-start}
+.in{width:19px;height:19px;min-width:19px;border-radius:5px;background:#f1f5f9;color:#334155;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;margin-top:1px}
+code{font-family:'Courier New',monospace;font-size:12px;background:#f1f5f9;padding:1px 5px;border-radius:3px;border:1px solid #e2e8f0}
+.cb2{background:#1e293b;border-radius:8px;padding:12px 15px;font-family:'Courier New',monospace;font-size:12px;line-height:1.8;color:#94a3b8;margin:9px 0;overflow-x:auto;white-space:pre}
+.k{color:#93c5fd}.p{color:#c4b5fd}.v{color:#6ee7b7}.s{color:#fda4af}.c{color:#475569;font-style:italic}.fn{color:#fbbf24}
+.tip{background:#f8fafc;border-left:3px solid #334155;padding:8px 12px;font-size:12px;color:#0f172a;line-height:1.5;margin-top:8px}
+.tip strong{color:#334155;font-weight:600}
+.mb{display:inline-flex;align-items:center;gap:5px;background:#f8fafc;border:1px solid #cbd5e1;color:#64748b;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .18s;margin-top:10px}
+.mb:hover{background:#f0fdf4;color:#15803d;border-color:#86efac}
+.mb.done-btn{background:#f0fdf4;color:#15803d;border-color:#86efac;pointer-events:none}
+.sbox{background:#f8fafc;border:1px solid #94a3b8;border-radius:14px;padding:20px;text-align:center;display:none}
+.sbox.show{display:block}
+.sbox h3{font-size:16px;font-weight:600;color:#334155;margin-bottom:6px}
+.sbox p{font-size:13px;color:#1e293b;line-height:1.6}
+.next-page{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;margin-top:4px}
+.next-page-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#334155}
+.next-page-title{font-size:13px;font-weight:600;color:#1e293b;margin-top:2px}
+.next-page-btn{background:#334155;color:#fff;border:none;padding:8px 18px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s;white-space:nowrap;text-decoration:none;display:inline-block}
+.next-page-btn:hover{background:#1e293b}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="pg-header">
+    <div><div class="pg-title">Prática guiada — Comparando Modelos e Métricas Avançadas</div><div class="pg-meta">Siga os passos no Colab. Marque cada um quando terminar.</div></div>
+    <span class="pg-time">60 min disponíveis</span>
+  </div>
+  <div class="prog-row"><div class="pb"><div class="pf" id="pf"></div></div><div class="pt" id="pt">0 / 6</div></div>
+  <div id="steps"></div>
+  <div class="sbox" id="sbox">
+    <h3>🏆 Pipeline completo!</h3>
+    <p>Cross-validation, comparação de modelos e Pipeline prontos!<br>Hora do desafio final!</p>
+  </div>
+  <div class="next-page" id="next-page" style="display:none">
+    <div><div class="next-page-label">Prática concluída</div><div class="next-page-title">🏆 Desafio Autônomo — Comparando Modelos e Métricas Avançadas</div></div>
+    <a class="next-page-btn" href="a10_desafio.html">Abrir Desafio →</a>
+  </div>
+</div>
+<script>
+const STEPS=[
+{title:'Cross-validation com KNN',time:'8 min',
+instrs:['Carregue o Iris com load_iris(return_X_y=True)','Use cross_val_score com cv=5 no KNN com K=5','Imprima os 5 scores individuais, a média e o desvio padrão','Compare com o score do train_test_split da Aula 09 — são parecidos?'],
+code:`<span class="k">from</span> <span class="p">sklearn.datasets</span>     <span class="k">import</span> <span class="fn">load_iris</span>\n<span class="k">from</span> <span class="p">sklearn.model_selection</span> <span class="k">import</span> <span class="fn">cross_val_score</span>\n<span class="k">from</span> <span class="p">sklearn.neighbors</span>    <span class="k">import</span> <span class="fn">KNeighborsClassifier</span>\n<span class="k">import</span> <span class="p">numpy</span> <span class="k">as</span> <span class="p">np</span>\n\n<span class="p">X</span>, <span class="p">y</span> = <span class="fn">load_iris</span>(<span class="p">return_X_y</span>=<span class="v">True</span>)\n<span class="p">s</span> = <span class="fn">cross_val_score</span>(<span class="fn">KNeighborsClassifier</span>(<span class="v">5</span>), <span class="p">X</span>, <span class="p">y</span>, <span class="p">cv</span>=<span class="v">5</span>)\n<span class="fn">print</span>(<span class="s">f"Scores: {s.round(3)}"</span>)\n<span class="fn">print</span>(<span class="s">f"Media: {s.mean():.3f} +/- {s.std():.3f}"</span>)`,
+tip:'<strong>Reportar sempre média ± std.</strong> Se o desvio padrão for alto (ex: 0.08), o modelo é instável — resultados variam muito dependendo do split. Um modelo com 0.95±0.01 é mais confiável que 0.98±0.07.'},
+{title:'Comparar 3 modelos com loop',time:'10 min',
+instrs:['Crie um dicionário com KNN (k=5), Decision Tree (random_state=42) e Random Forest (100 estimadores)','Use um for loop para calcular cross_val_score de cada modelo','Monte um DataFrame Pandas com nome, média e desvio padrão dos resultados','Ordene pelo melhor e identifique o vencedor'],
+code:`<span class="k">from</span> <span class="p">sklearn.tree</span>    <span class="k">import</span> <span class="fn">DecisionTreeClassifier</span>\n<span class="k">from</span> <span class="p">sklearn.ensemble</span> <span class="k">import</span> <span class="fn">RandomForestClassifier</span>\n<span class="k">import</span> <span class="p">pandas</span> <span class="k">as</span> <span class="p">pd</span>\n\n<span class="p">modelos</span> = {\n    <span class="s">"KNN"</span>  : <span class="fn">KNeighborsClassifier</span>(<span class="v">5</span>),\n    <span class="s">"DT"</span>   : <span class="fn">DecisionTreeClassifier</span>(<span class="p">random_state</span>=<span class="v">42</span>),\n    <span class="s">"RF"</span>   : <span class="fn">RandomForestClassifier</span>(<span class="v">100</span>, <span class="p">random_state</span>=<span class="v">42</span>),\n}\n<span class="p">res</span> = []\n<span class="k">for</span> <span class="p">n</span>, <span class="p">m</span> <span class="k">in</span> <span class="p">modelos</span>.<span class="fn">items</span>():\n    <span class="p">s</span> = <span class="fn">cross_val_score</span>(<span class="p">m</span>, <span class="p">X</span>, <span class="p">y</span>, <span class="p">cv</span>=<span class="v">5</span>)\n    <span class="p">res</span>.<span class="fn">append</span>({<span class="s">"Modelo"</span>:<span class="p">n</span>, <span class="s">"Media"</span>:<span class="p">s</span>.<span class="fn">mean</span>(), <span class="s">"Std"</span>:<span class="p">s</span>.<span class="fn">std</span>()})\n<span class="fn">print</span>(<span class="p">pd</span>.<span class="fn">DataFrame</span>(<span class="p">res</span>).<span class="fn">sort_values</span>(<span class="s">"Media"</span>, <span class="p">ascending</span>=<span class="v">False</span>))`,
+tip:'<strong>Esse padrão — dicionário de modelos + loop + DataFrame</strong> é padrão em qualquer projeto de ML profissional. Facilita adicionar novos modelos, manter código limpo e exportar resultados.'},
+{title:'Overfitting — Decision Tree vs max_depth',time:'8 min',
+instrs:['Treine Decision Tree sem restrição e compare score treino vs teste','Treine com max_depth=3 e compare novamente','Plote acurácia treino e teste para max_depth de 1 a 10','Identifique o max_depth ótimo (menor divergência treino/teste com bom teste)'],
+code:`<span class="k">from</span> <span class="p">sklearn.model_selection</span> <span class="k">import</span> <span class="fn">train_test_split</span>\n\n<span class="p">X_tr</span>, <span class="p">X_te</span>, <span class="p">y_tr</span>, <span class="p">y_te</span> = <span class="fn">train_test_split</span>(<span class="p">X</span>, <span class="p">y</span>, <span class="p">random_state</span>=<span class="v">42</span>)\n\n<span class="k">for</span> <span class="p">d</span> <span class="k">in</span> [<span class="v">1</span>, <span class="v">2</span>, <span class="v">3</span>, <span class="v">5</span>, <span class="p">None</span>]:\n    <span class="p">dt</span> = <span class="fn">DecisionTreeClassifier</span>(<span class="p">max_depth</span>=<span class="p">d</span>, <span class="p">random_state</span>=<span class="v">42</span>)\n    <span class="p">dt</span>.<span class="fn">fit</span>(<span class="p">X_tr</span>, <span class="p">y_tr</span>)\n    <span class="fn">print</span>(<span class="s">f"depth={str(d):4}  treino={dt.score(X_tr,y_tr):.2%}  teste={dt.score(X_te,y_te):.2%}"</span>)`,
+tip:'<strong>None = sem limite</strong> de profundidade — a árvore cresce até classificar cada exemplo de treino individualmente (100% treino). Isso é overfitting puro. max_depth=3 costuma ser o sweet spot no Iris.'},
+{title:'Pipeline com StandardScaler',time:'10 min',
+instrs:['Crie um Pipeline com StandardScaler + KNN(5) e rode cross_val_score','Compare com o KNN sem scaler — o resultado melhora?','Explique por que usar Pipeline em vez de escalar antes do split','Teste o Pipeline com Random Forest — o scaler ajuda em árvores?'],
+code:`<span class="k">from</span> <span class="p">sklearn.pipeline</span>      <span class="k">import</span> <span class="fn">Pipeline</span>\n<span class="k">from</span> <span class="p">sklearn.preprocessing</span>  <span class="k">import</span> <span class="fn">StandardScaler</span>\n\n<span class="p">pipe</span> = <span class="fn">Pipeline</span>([(<span class="s">"sc"</span>, <span class="fn">StandardScaler</span>()),\n                  (<span class="s">"knn"</span>, <span class="fn">KNeighborsClassifier</span>(<span class="v">5</span>))])\n\n<span class="p">s_raw</span>  = <span class="fn">cross_val_score</span>(<span class="fn">KNeighborsClassifier</span>(<span class="v">5</span>), <span class="p">X</span>, <span class="p">y</span>, <span class="p">cv</span>=<span class="v">5</span>)\n<span class="p">s_pipe</span> = <span class="fn">cross_val_score</span>(<span class="p">pipe</span>, <span class="p">X</span>, <span class="p">y</span>, <span class="p">cv</span>=<span class="v">5</span>)\n<span class="fn">print</span>(<span class="s">f"Sem scaler: {s_raw.mean():.3f}"</span>)\n<span class="fn">print</span>(<span class="s">f"Com scaler: {s_pipe.mean():.3f}"</span>)`,
+tip:'<strong>Árvores (DT, RF) nao precisam de escala</strong> — tomam decisões por thresholds em features individuais. KNN e SVM SIM precisam — a distância euclidiana é afetada pela escala das features.'},
+{title:'Feature importance com visualização',time:'10 min',
+instrs:['Treine Random Forest no conjunto de treino e acesse .feature_importances_','Crie um pd.Series com os valores e os nomes das features como índice','Use .sort_values() e .plot.barh() para um gráfico de barras horizontal','Adicione título e xlabel ao gráfico e salve com savefig()'],
+code:`<span class="k">import</span> <span class="p">matplotlib.pyplot</span> <span class="k">as</span> <span class="p">plt</span>\n\n<span class="p">iris_obj</span> = <span class="fn">load_iris</span>()\n<span class="p">rf</span> = <span class="fn">RandomForestClassifier</span>(<span class="v">100</span>, <span class="p">random_state</span>=<span class="v">42</span>)\n<span class="p">rf</span>.<span class="fn">fit</span>(<span class="p">X_tr</span>, <span class="p">y_tr</span>)\n\n<span class="p">imp</span> = <span class="p">pd</span>.<span class="fn">Series</span>(<span class="p">rf</span>.<span class="fn">feature_importances_</span>,\n               <span class="p">index</span>=<span class="p">iris_obj</span>.<span class="fn">feature_names</span>).<span class="fn">sort_values</span>()\n<span class="p">imp</span>.<span class="fn">plot</span>.<span class="fn">barh</span>(<span class="p">figsize</span>=(<span class="v">7</span>,<span class="v">3</span>), <span class="p">color</span>=<span class="s">"#334155"</span>)\n<span class="p">plt</span>.<span class="fn">title</span>(<span class="s">"Feature Importance — RF"</span>)\n<span class="p">plt</span>.<span class="fn">tight_layout</span>(); <span class="p">plt</span>.<span class="fn">show</span>()`,
+tip:'<strong>pd.Series com índice de feature names</strong> é o padrão para feature importance. O .sort_values() + .plot.barh() gera automaticamente um gráfico limpo com os nomes nos rótulos.'},
+{title:'Pipeline final — treinar e salvar',time:'14 min',
+instrs:['Escolha o melhor modelo com base na comparação de cross-validation','Crie um Pipeline com StandardScaler + melhor modelo','Treine no dataset completo (todos os 150 exemplos) e salve com joblib','Carregue o modelo salvo e faça uma previsão de uma nova flor'],
+code:`<span class="k">import</span> <span class="p">joblib</span>\n<span class="k">import</span> <span class="p">numpy</span> <span class="k">as</span> <span class="p">np</span>\n\n<span class="p">pipe_final</span> = <span class="fn">Pipeline</span>([\n    (<span class="s">"scaler"</span>, <span class="fn">StandardScaler</span>()),\n    (<span class="s">"rf"</span>,     <span class="fn">RandomForestClassifier</span>(<span class="v">100</span>, <span class="p">random_state</span>=<span class="v">42</span>))\n])\n<span class="p">pipe_final</span>.<span class="fn">fit</span>(<span class="p">X</span>, <span class="p">y</span>)\n<span class="fn">joblib</span>.<span class="fn">dump</span>(<span class="p">pipe_final</span>, <span class="s">"modelo_final.pkl"</span>)\n\n<span class="p">modelo</span> = <span class="fn">joblib</span>.<span class="fn">load</span>(<span class="s">"modelo_final.pkl"</span>)\n<span class="p">nova</span> = <span class="p">np</span>.<span class="fn">array</span>([[<span class="v">6.3</span>,<span class="v">3.3</span>,<span class="v">6.0</span>,<span class="v">2.5</span>]])\n<span class="p">iris_obj</span> = <span class="fn">load_iris</span>()\n<span class="fn">print</span>(<span class="p">iris_obj</span>.<span class="fn">target_names</span>[<span class="p">modelo</span>.<span class="fn">predict</span>(<span class="p">nova</span>)[<span class="v">0</span>]])`,
+tip:'<strong>Treinar no dataset completo</strong> ao final é correto — usamos o cross-validation para selecionar o modelo, nao para o treino final. O modelo em produção deve aprender de todos os dados disponíveis.'}
+];
+let done=new Set();
+function build(){
+  const list=document.getElementById('steps');STEPS.forEach((s,i)=>{
+    const card=document.createElement('div');card.className='sc'+(i===0?' open-c':'');card.id='sc-'+i;
+    card.innerHTML=`<div class="sh" onclick="tog(${i})"><div class="chk" id="chk-${i}" onclick="event.stopPropagation();mk(${i})"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="si"><div class="sn2">Passo ${i+1} de ${STEPS.length}</div><div class="st">${s.title}</div><div class="stm">${s.time}</div></div><span class="cv">${i===0?'▲':'▼'}</span></div><div class="sb"><div class="sbi"><div class="il">${s.instrs.map((t,j)=>`<div class="ii"><div class="in">${j+1}</div><span>${t}</span></div>`).join('')}</div>${s.code?`<div class="cb2">${s.code}</div>`:''}<div class="tip">${s.tip}</div><button class="mb" id="mb-${i}" onclick="mk(${i})"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5l3.5 3.5 5.5-5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Marcar como concluído</button></div></div>`;
+    list.appendChild(card);
+  });
+}
+function tog(i){const c=document.getElementById('sc-'+i);const o=c.classList.contains('open-c');document.querySelectorAll('.sc').forEach(x=>{x.classList.remove('open-c');x.querySelector('.cv').textContent='▼';});if(!o){c.classList.add('open-c');c.querySelector('.cv').textContent='▲';}}
+function mk(i){if(done.has(i))return;done.add(i);document.getElementById('chk-'+i).classList.add('done');document.getElementById('sc-'+i).classList.add('done-c');const mb=document.getElementById('mb-'+i);mb.classList.add('done-btn');mb.innerHTML='<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5l3.5 3.5 5.5-5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Concluído!';upd();if(i<STEPS.length-1){document.querySelectorAll('.sc').forEach(x=>{x.classList.remove('open-c');x.querySelector('.cv').textContent='▼';});const nx=document.getElementById('sc-'+(i+1));nx.classList.add('open-c');nx.querySelector('.cv').textContent='▲';setTimeout(()=>nx.scrollIntoView({behavior:'smooth',block:'nearest'}),100);}if(done.size===STEPS.length){document.getElementById('sbox').classList.add('show');document.getElementById('next-page').style.display='flex';setTimeout(()=>document.getElementById('next-page').scrollIntoView({behavior:'smooth',block:'nearest'}),300);}}
+function upd(){document.getElementById('pf').style.width=Math.round((done.size/STEPS.length)*100)+'%';document.getElementById('pt').textContent=done.size+' / '+STEPS.length;}
+build();upd();
+</script>
+</body>
+</html>

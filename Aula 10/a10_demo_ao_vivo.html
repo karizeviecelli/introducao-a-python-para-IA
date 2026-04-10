@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo ao Vivo — Comparando Modelos e Métricas Avançadas · Aula 10</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;color:#1e293b;background:#f8fafc;min-height:100vh;padding:20px}
+.wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.page-hdr{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
+.page-hdr h1{font-size:16px;font-weight:600}.page-hdr p{font-size:12px;color:#94a3b8}
+.prog-track{grid-column:1/-1;height:3px;background:#e2e8f0;border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:#334155;border-radius:2px;transition:width .3s ease;width:0%}
+.panel{border:1px solid #cbd5e1;border-radius:12px;overflow:hidden;background:#fff}
+.ph{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1px solid #cbd5e1;background:#f8fafc}
+.pt{font-size:12px;font-weight:500;color:#0f172a}
+.dots-r{display:flex;gap:5px}.dot{width:10px;height:10px;border-radius:50%}
+pre{background:#1e293b;color:#e2e8f0;padding:15px;font-family:'Courier New',monospace;font-size:12px;line-height:1.8;min-height:300px;overflow:auto;white-space:pre}
+.cursor{display:inline-block;width:2px;height:14px;background:#94a3b8;vertical-align:middle;animation:blink .9s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.preview-body{min-height:300px;overflow-y:auto;background:#f8fafc;padding:16px;font-family:'Courier New',monospace;font-size:12px;line-height:1.8}
+.out-line{padding:1px 0;color:#1e293b}
+.out-line.ok{color:#334155;font-weight:600}
+.out-line.cm{color:#64748b;font-style:italic}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:11.5px}
+th{background:#f1f5f9;color:#0f172a;font-weight:600;padding:5px 9px;text-align:left;border-bottom:2px solid #cbd5e1}
+td{padding:5px 9px;border-bottom:1px solid #f1f5f9;color:#475569}
+tr:hover td{background:#f8fafc}
+.step-bar{grid-column:1/-1;border:1px solid #cbd5e1;border-radius:12px;background:#fff;display:flex;align-items:center;gap:10px;padding:11px 15px;flex-wrap:wrap}
+.sbadge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#f1f5f9;color:#334155;border:1px solid #94a3b8}
+.slabel{font-size:12px;color:#64748b;flex:1;line-height:1.4}
+.cb{font-size:12px;font-weight:500;padding:6px 14px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#1e293b;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
+.cb:hover{background:#f1f5f9}.cb.go{background:#334155;color:#fff;border-color:#334155}.cb.go:hover{background:#1e293b}
+.cb:disabled{opacity:.35;pointer-events:none}
+.narr{grid-column:1/-1;border:1px solid #cbd5e1;border-radius:10px;padding:11px 15px;background:#f8fafc;font-size:13px;color:#0f172a;line-height:1.6;min-height:50px}
+.narr strong{color:#1e293b;font-weight:600}
+.next-page{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px}
+.next-page-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#334155}
+.next-page-title{font-size:13px;font-weight:600;color:#1e293b;margin-top:2px}
+.next-page-btn{background:#334155;color:#fff;border:none;padding:8px 18px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s;white-space:nowrap;text-decoration:none;display:inline-block}
+.next-page-btn:hover{background:#1e293b}
+.k{color:#93c5fd}.p{color:#c4b5fd}.v{color:#6ee7b7}.s{color:#fda4af}.cm2{color:#475569;font-style:italic}.fn{color:#fbbf24}
+@media(max-width:680px){.wrap{grid-template-columns:1fr}.panel:last-of-type{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="page-hdr"><h1>Demonstração ao vivo — Comparando Modelos e Métricas Avançadas</h1><p>Aula 10 · 45 min · Docente digita no Colab, alunos acompanham</p></div>
+  <div class="prog-track"><div class="prog-fill" id="prog"></div></div>
+  <div class="panel">
+    <div class="ph"><span class="pt">Google Colab — aula10.ipynb</span><div class="dots-r"><div class="dot" style="background:#ef4444"></div><div class="dot" style="background:#f59e0b"></div><div class="dot" style="background:#10b981"></div></div></div>
+    <pre><span id="code-out"></span><span class="cursor"></span></pre>
+  </div>
+  <div class="panel">
+    <div class="ph"><span class="pt">Output — resultado da célula</span><div class="dots-r"><div class="dot" style="background:#ef4444"></div><div class="dot" style="background:#f59e0b"></div><div class="dot" style="background:#10b981"></div></div></div>
+    <div class="preview-body" id="preview"></div>
+  </div>
+  <div class="narr" id="narr">Pronto para começar. Clique em <strong>Iniciar digitação</strong>.</div>
+  <div class="step-bar">
+    <span class="sbadge" id="sbadge">Etapa 1 / 8</span>
+    <span class="slabel" id="sdesc">Criando o primeiro DataFrame</span>
+    <button class="cb" id="bp" onclick="prevS()" disabled>← Anterior</button>
+    <button class="cb go" id="bplay" onclick="playS()">▶ Iniciar digitação</button>
+    <button class="cb" id="bn" onclick="nextS()" disabled>Próxima →</button>
+  </div>
+  <div class="next-page" id="next-page" style="display:none">
+    <div><div class="next-page-label">Demonstração concluída</div><div class="next-page-title">▶ Prática Guiada — Comparando Modelos e Métricas Avançadas</div></div>
+    <a class="next-page-btn" href="a10_pratica_guiada.html">Abrir Prática →</a>
+  </div>
+</div>
+<script>
+const STEPS=[
+{label:'Cross-validation — avaliação robusta',
+narr:'<strong>Docente:</strong> "cross_val_score divide os dados em 5 partes, treina em 4 e testa em 1, repete 5 vezes. Resultado: 5 scores. A média é mais confiável que um único split."',
+code:`<span class="k">from</span> <span class="p">sklearn.datasets</span>     <span class="k">import</span> <span class="fn">load_iris</span>
+<span class="k">from</span> <span class="p">sklearn.model_selection</span> <span class="k">import</span> <span class="fn">cross_val_score</span>, <span class="fn">train_test_split</span>
+<span class="k">from</span> <span class="p">sklearn.neighbors</span>    <span class="k">import</span> <span class="fn">KNeighborsClassifier</span>
+<span class="k">import</span> <span class="p">numpy</span> <span class="k">as</span> <span class="p">np</span>
+
+<span class="p">X</span>, <span class="p">y</span> = <span class="fn">load_iris</span>(<span class="p">return_X_y</span>=<span class="v">True</span>)
+
+<span class="p">knn</span>    = <span class="fn">KNeighborsClassifier</span>(<span class="p">n_neighbors</span>=<span class="v">5</span>)
+<span class="p">scores</span> = <span class="fn">cross_val_score</span>(<span class="p">knn</span>, <span class="p">X</span>, <span class="p">y</span>, <span class="p">cv</span>=<span class="v">5</span>)
+<span class="fn">print</span>(<span class="s">f"Scores: {scores.round(3)}"</span>)
+<span class="fn">print</span>(<span class="s">f"Media: {scores.mean():.3f} +/- {scores.std():.3f}"</span>)`,
+prev:`<div class="out-line ok">Scores: [1.    0.967 0.933 0.967 1.   ]</div><div class="out-line ok">Media: 0.973 +/- 0.025</div>`},
+{label:'Comparando 3 modelos',
+narr:'<strong>Docente:</strong> "Dicionário de modelos + loop — o padrão profissional. Todos usam a mesma API. Em 10 linhas comparamos KNN, Decision Tree e Random Forest."',
+code:`<span class="k">from</span> <span class="p">sklearn.tree</span>    <span class="k">import</span> <span class="fn">DecisionTreeClassifier</span>
+<span class="k">from</span> <span class="p">sklearn.ensemble</span> <span class="k">import</span> <span class="fn">RandomForestClassifier</span>
+
+<span class="p">modelos</span> = {
+    <span class="s">"KNN"</span>          : <span class="fn">KNeighborsClassifier</span>(<span class="p">n_neighbors</span>=<span class="v">5</span>),
+    <span class="s">"Decision Tree"</span>: <span class="fn">DecisionTreeClassifier</span>(<span class="p">random_state</span>=<span class="v">42</span>),
+    <span class="s">"Random Forest"</span>: <span class="fn">RandomForestClassifier</span>(<span class="p">n_estimators</span>=<span class="v">100</span>,
+                                               <span class="p">random_state</span>=<span class="v">42</span>),
+}
+<span class="k">for</span> <span class="p">nome</span>, <span class="p">m</span> <span class="k">in</span> <span class="p">modelos</span>.<span class="fn">items</span>():
+    <span class="p">s</span> = <span class="fn">cross_val_score</span>(<span class="p">m</span>, <span class="p">X</span>, <span class="p">y</span>, <span class="p">cv</span>=<span class="v">5</span>)
+    <span class="fn">print</span>(<span class="s">f"{nome:15} {s.mean():.3f} +/- {s.std():.3f}"</span>)`,
+prev:`<div class="out-line ok">KNN             0.973 +/- 0.025</div><div class="out-line ok">Decision Tree   0.953 +/- 0.030</div><div class="out-line ok">Random Forest   0.967 +/- 0.021</div>`},
+{label:'Feature importance — o que o modelo aprendeu',
+narr:'<strong>Docente:</strong> "Após treinar o Random Forest, .feature_importances_ revela quais features contribuíram mais. Petal length domina no Iris — confirma o que vimos no Pandas."',
+code:`<span class="p">X_tr</span>, <span class="p">X_te</span>, <span class="p">y_tr</span>, <span class="p">y_te</span> = <span class="fn">train_test_split</span>(
+    <span class="p">X</span>, <span class="p">y</span>, <span class="p">random_state</span>=<span class="v">42</span>, <span class="p">stratify</span>=<span class="p">y</span>)
+
+<span class="p">iris</span> = <span class="fn">load_iris</span>()
+<span class="p">rf</span>   = <span class="fn">RandomForestClassifier</span>(<span class="p">n_estimators</span>=<span class="v">100</span>, <span class="p">random_state</span>=<span class="v">42</span>)
+<span class="p">rf</span>.<span class="fn">fit</span>(<span class="p">X_tr</span>, <span class="p">y_tr</span>)
+
+<span class="k">for</span> <span class="p">feat</span>, <span class="p">imp</span> <span class="k">in</span> <span class="fn">sorted</span>(
+        <span class="fn">zip</span>(<span class="p">iris</span>.<span class="fn">feature_names</span>, <span class="p">rf</span>.<span class="fn">feature_importances_</span>),
+        <span class="p">key</span>=<span class="k">lambda</span> <span class="p">x</span>: -<span class="p">x</span>[<span class="v">1</span>]):
+    <span class="fn">print</span>(<span class="s">f"{feat[:22]:22} {imp:.3f}")`,
+prev:`<div class="out-line ok">petal length (cm)      0.441</div><div class="out-line ok">petal width (cm)       0.411</div><div class="out-line ok">sepal length (cm)      0.101</div><div class="out-line ok">sepal width (cm)       0.047</div>`},
+{label:'Overfitting na Decision Tree',
+narr:'<strong>Docente:</strong> "Decision Tree sem restrição tem score perfeito no treino — decorou cada exemplo. Limitando max_depth, o modelo generaliza melhor. Esse é o trade-off complexidade vs generalização."',
+code:`<span class="cm2"># Sem restrição: overfitting</span>
+<span class="p">dt_livre</span> = <span class="fn">DecisionTreeClassifier</span>(<span class="p">random_state</span>=<span class="v">42</span>)
+<span class="p">dt_livre</span>.<span class="fn">fit</span>(<span class="p">X_tr</span>, <span class="p">y_tr</span>)
+<span class="fn">print</span>(<span class="s">"Sem restrição:"</span>)
+<span class="fn">print</span>(<span class="s">f"  Treino: {dt_livre.score(X_tr, y_tr):.2%}"</span>)
+<span class="fn">print</span>(<span class="s">f"  Teste:  {dt_livre.score(X_te, y_te):.2%}"</span>)
+
+<span class="cm2"># Com max_depth: regularizado</span>
+<span class="p">dt_limit</span> = <span class="fn">DecisionTreeClassifier</span>(<span class="p">max_depth</span>=<span class="v">3</span>, <span class="p">random_state</span>=<span class="v">42</span>)
+<span class="p">dt_limit</span>.<span class="fn">fit</span>(<span class="p">X_tr</span>, <span class="p">y_tr</span>)
+<span class="fn">print</span>(<span class="s">"max_depth=3:"</span>)
+<span class="fn">print</span>(<span class="s">f"  Treino: {dt_limit.score(X_tr, y_tr):.2%}"</span>)
+<span class="fn">print</span>(<span class="s">f"  Teste:  {dt_limit.score(X_te, y_te):.2%}"</span>)`,
+prev:`<div class="out-line ok">Sem restrição:</div><div class="out-line ok">  Treino: 100.00%</div><div class="out-line ok">  Teste:  94.74%</div><div class="out-line ok">max_depth=3:</div><div class="out-line ok">  Treino: 97.33%</div><div class="out-line ok">  Teste:  97.37%</div>`},
+{label:'Pipeline com StandardScaler',
+narr:'<strong>Docente:</strong> "KNN é sensível à escala — features com valores maiores dominam a distância. StandardScaler padroniza para média 0 e desvio 1. Pipeline garante que o scaler use só dados de treino."',
+code:`<span class="k">from</span> <span class="p">sklearn.pipeline</span>      <span class="k">import</span> <span class="fn">Pipeline</span>
+<span class="k">from</span> <span class="p">sklearn.preprocessing</span>  <span class="k">import</span> <span class="fn">StandardScaler</span>
+
+<span class="p">pipe_sem</span> = <span class="fn">cross_val_score</span>(<span class="fn">KNeighborsClassifier</span>(<span class="v">5</span>),
+                            <span class="p">X</span>, <span class="p">y</span>, <span class="p">cv</span>=<span class="v">5</span>)
+
+<span class="p">pipe_com</span> = <span class="fn">cross_val_score</span>(
+    <span class="fn">Pipeline</span>([(<span class="s">"sc"</span>, <span class="fn">StandardScaler</span>()),
+               (<span class="s">"knn"</span>, <span class="fn">KNeighborsClassifier</span>(<span class="v">5</span>))]),
+    <span class="p">X</span>, <span class="p">y</span>, <span class="p">cv</span>=<span class="v">5</span>)
+
+<span class="fn">print</span>(<span class="s">f"KNN sem scaler: {pipe_sem.mean():.3f}"</span>)
+<span class="fn">print</span>(<span class="s">f"KNN com scaler: {pipe_com.mean():.3f}"</span>)`,
+prev:`<div class="out-line ok">KNN sem scaler: 0.973</div><div class="out-line ok">KNN com scaler: 0.980</div>`},
+{label:'Visualizando feature importance',
+narr:'<strong>Docente:</strong> "Barras horizontais ordenadas por importância — a visualização padrão. Matplotlib + Pandas juntos para um gráfico limpo e profissional."',
+code:`<span class="k">import</span> <span class="p">matplotlib.pyplot</span> <span class="k">as</span> <span class="p">plt</span>
+<span class="k">import</span> <span class="p">pandas</span> <span class="k">as</span> <span class="p">pd</span>
+
+<span class="p">imp</span> = <span class="p">pd</span>.<span class="fn">Series</span>(
+    <span class="p">rf</span>.<span class="fn">feature_importances_</span>,
+    <span class="p">index</span>=<span class="p">iris</span>.<span class="fn">feature_names</span>
+).<span class="fn">sort_values</span>()
+
+<span class="p">fig</span>, <span class="p">ax</span> = <span class="p">plt</span>.<span class="fn">subplots</span>(<span class="p">figsize</span>=(<span class="v">7</span>, <span class="v">3</span>))
+<span class="p">imp</span>.<span class="fn">plot</span>.<span class="fn">barh</span>(<span class="p">ax</span>=<span class="p">ax</span>, <span class="p">color</span>=<span class="s">"#334155"</span>)
+<span class="p">ax</span>.<span class="fn">set_title</span>(<span class="s">"Feature Importance — Random Forest"</span>)
+<span class="p">ax</span>.<span class="fn">set_xlabel</span>(<span class="s">"Importância"</span>)
+<span class="p">plt</span>.<span class="fn">tight_layout</span>()
+<span class="p">plt</span>.<span class="fn">show</span>()`,
+prev:`<div class="out-line cm"># Gráfico de barras horizontais gerado no Colab</div><div class="out-line ok">sepal width (cm)   ████ 0.047</div><div class="out-line ok">sepal length (cm)  ████████ 0.101</div><div class="out-line ok">petal width (cm)   ██████████████████████████ 0.411</div><div class="out-line ok">petal length (cm)  ████████████████████████████ 0.441</div>`},
+{label:'Comparação final — tabela de resultados',
+narr:'<strong>Docente:</strong> "Reunimos os resultados em um DataFrame Pandas — a forma profissional de apresentar comparação de modelos. Sort_values pelo mean e o melhor modelo fica no topo."',
+code:`<span class="p">resultados</span> = []
+<span class="k">for</span> <span class="p">nome</span>, <span class="p">m</span> <span class="k">in</span> <span class="p">modelos</span>.<span class="fn">items</span>():
+    <span class="p">s</span> = <span class="fn">cross_val_score</span>(<span class="p">m</span>, <span class="p">X</span>, <span class="p">y</span>, <span class="p">cv</span>=<span class="v">5</span>)
+    <span class="p">resultados</span>.<span class="fn">append</span>({
+        <span class="s">"Modelo"</span> : <span class="p">nome</span>,
+        <span class="s">"Media"</span>  : <span class="p">s</span>.<span class="fn">mean</span>().<span class="fn">round</span>(<span class="v">4</span>),
+        <span class="s">"Std"</span>    : <span class="p">s</span>.<span class="fn">std</span>().<span class="fn">round</span>(<span class="v">4</span>),
+    })
+
+<span class="p">df_res</span> = <span class="p">pd</span>.<span class="fn">DataFrame</span>(<span class="p">resultados</span>)
+<span class="fn">print</span>(<span class="p">df_res</span>.<span class="fn">sort_values</span>(<span class="s">"Media"</span>, <span class="p">ascending</span>=<span class="v">False</span>).<span class="fn">to_string</span>(<span class="p">index</span>=<span class="v">False</span>))`,
+prev:`<div class="out-line cm">          Modelo  Media    Std</div><div class="out-line ok">             KNN  0.973  0.025</div><div class="out-line ok">   Random Forest  0.967  0.021</div><div class="out-line ok">   Decision Tree  0.953  0.030</div>`},
+{label:'Projeto final — pipeline completo',
+narr:'<strong>Docente:</strong> "Fechamos o curso com o pipeline profissional completo: dados → split → pipeline com scaler → cross-validation → melhor modelo → salvar. Isso é o que se usa em produção."',
+code:`<span class="k">from</span> <span class="p">sklearn.pipeline</span> <span class="k">import</span> <span class="fn">Pipeline</span>
+<span class="k">import</span> <span class="p">joblib</span>
+
+<span class="cm2"># Pipeline profissional: scaler + Random Forest</span>
+<span class="p">pipe_final</span> = <span class="fn">Pipeline</span>([
+    (<span class="s">"scaler"</span>, <span class="fn">StandardScaler</span>()),
+    (<span class="s">"rf"</span>,     <span class="fn">RandomForestClassifier</span>(<span class="p">n_estimators</span>=<span class="v">100</span>,
+                                          <span class="p">random_state</span>=<span class="v">42</span>))
+])
+
+<span class="cm2"># Cross-validation do pipeline</span>
+<span class="p">s</span> = <span class="fn">cross_val_score</span>(<span class="p">pipe_final</span>, <span class="p">X</span>, <span class="p">y</span>, <span class="p">cv</span>=<span class="v">5</span>)
+<span class="fn">print</span>(<span class="s">f"Pipeline final: {s.mean():.3f} +/- {s.std():.3f}"</span>)
+
+<span class="cm2"># Treinar no dataset completo e salvar</span>
+<span class="p">pipe_final</span>.<span class="fn">fit</span>(<span class="p">X</span>, <span class="p">y</span>)
+<span class="fn">joblib</span>.<span class="fn">dump</span>(<span class="p">pipe_final</span>, <span class="s">"modelo_final.pkl"</span>)
+<span class="fn">print</span>(<span class="s">"Modelo salvo!"</span>)`,
+prev:`<div class="out-line ok">Pipeline final: 0.980 +/- 0.016</div><div class="out-line ok">Modelo salvo!</div>`}
+];
+
+let cur=0,playing=false,timer=null;
+function render(){
+  document.getElementById('sbadge').textContent=`Etapa ${cur+1} / ${STEPS.length}`;
+  document.getElementById('sdesc').textContent=STEPS[cur].label;
+  document.getElementById('narr').innerHTML=STEPS[cur].narr;
+  document.getElementById('preview').innerHTML=STEPS[cur].prev;
+  document.getElementById('code-out').innerHTML='';
+  document.getElementById('prog').style.width=((cur+1)/STEPS.length*100)+'%';
+  document.getElementById('bp').disabled=cur===0;
+  document.getElementById('bn').disabled=cur===STEPS.length-1;
+  const pb=document.getElementById('bplay');pb.textContent='▶ Iniciar digitação';pb.className='cb go';
+  document.getElementById('next-page').style.display=cur===STEPS.length-1?'flex':'none';
+}
+function playS(){
+  if(playing){clearTimeout(timer);playing=false;document.getElementById('bplay').textContent='▶ Iniciar digitação';return;}
+  playing=true;document.getElementById('bplay').textContent='⏸ Pausar';
+  const code=STEPS[cur].code;let i=0;const out=document.getElementById('code-out');out.innerHTML='';
+  function tick(){
+    if(!playing)return;
+    if(i<code.length){
+      if(code[i]==='<'){const end=code.indexOf('>',i);if(end>-1){out.innerHTML+=code.slice(i,end+1);i=end+1;}else{out.innerHTML+=code[i];i++;}}
+      else{out.innerHTML+=code[i];i++;}
+      timer=setTimeout(tick,i%7===0?16:4);
+    }else{playing=false;document.getElementById('bplay').textContent='✓ Concluído';document.getElementById('bn').disabled=cur===STEPS.length-1;if(cur===STEPS.length-1)document.getElementById('next-page').style.display='flex';}
+  }
+  tick();
+}
+function nextS(){if(cur<STEPS.length-1){cur++;render();}}
+function prevS(){if(cur>0){cur--;render();}}
+render();
+</script>
+</body>
+</html>
