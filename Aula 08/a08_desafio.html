@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Desafio — Visualização com Matplotlib · Aula 08</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;color:#1e293b;background:#fdf2f8;min-height:100vh;padding:22px}
+.wrap{max-width:920px;margin:0 auto;display:flex;flex-direction:column;gap:11px}
+.brief{border:1px solid #fbcfe8;border-radius:12px;overflow:hidden;background:#fff}
+.bt{background:#fce7f3;padding:17px 19px;border-bottom:1px solid #fbcfe8}
+.badge{font-size:11px;font-weight:600;background:#be185d;color:#fff;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:7px}
+.btitle{font-size:19px;font-weight:600;color:#500724;margin-bottom:3px}
+.bsub{font-size:13px;color:#be185d}
+.bb{padding:15px 19px}
+.ctx{background:#fdf2f8;border-radius:8px;padding:11px 13px;font-size:13px;color:#475569;line-height:1.6;margin-bottom:13px;border-left:3px solid #be185d}
+.ctx strong{color:#1e293b;font-weight:600;display:block;margin-bottom:3px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:600px){.two{grid-template-columns:1fr}}
+.colt{font-size:11px;font-weight:600;color:#64748b;margin-bottom:7px;text-transform:uppercase;letter-spacing:.05em}
+.req-wrap{display:flex;flex-direction:column;gap:5px}
+.ri{display:flex;gap:9px;align-items:flex-start}
+.rc{width:19px;height:19px;min-width:19px;border-radius:5px;border:1.5px solid #cbd5e1;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-top:2px;background:#fff;transition:all .15s;flex-shrink:0}
+.rc:hover{border-color:#be185d;background:#fce7f3}.rc.on{background:#22c55e;border-color:#22c55e}
+.rc svg{display:none}.rc.on svg{display:block}
+.rt{font-size:12.5px;color:#475569;line-height:1.5}.rt.done{color:#94a3b8;text-decoration:line-through}
+code{font-family:'Courier New',monospace;font-size:11.5px;background:#f1f5f9;padding:1px 5px;border-radius:3px;border:1px solid #e2e8f0}
+.crit-list{display:flex;flex-direction:column;gap:5px}
+.ci{display:flex;align-items:flex-start;gap:7px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:7px;padding:7px 10px;font-size:12px;color:#475569}
+.cd{width:5px;height:5px;min-width:5px;border-radius:50%;background:#be185d;flex-shrink:0;margin-top:5px}
+.cd.g{background:#22c55e}
+.pw{border:1px solid #e2e8f0;border-radius:12px;padding:13px 15px;background:#fff}
+.pl{font-size:12px;color:#64748b;margin-bottom:7px;display:flex;justify-content:space-between}
+.pl strong{color:#1e293b;font-weight:600}
+.pbg{height:7px;background:#e2e8f0;border-radius:4px;overflow:hidden;margin-bottom:9px}
+.pfill{height:100%;background:#be185d;border-radius:4px;transition:width .4s ease;width:0%}
+.pm{font-size:12px;color:#64748b;font-style:italic}
+.tr{display:flex;align-items:center;gap:9px;border:1px solid #fbcfe8;border-radius:12px;padding:11px 15px;background:#fff;flex-wrap:wrap}
+.tnum{font-size:26px;font-weight:500;font-family:'Courier New',monospace;color:#be185d;min-width:80px;transition:color .3s}
+.tnum.warn{color:#d97706}.tnum.danger{color:#dc2626}
+.tinfo{flex:1;min-width:130px}.tinfo p{font-size:12px;color:#64748b;margin-top:1px}
+.tinfo strong{font-size:13px;color:#1e293b;font-weight:600}
+.tbtn{font-size:12px;padding:6px 14px;border-radius:7px;border:none;background:#be185d;color:#fff;cursor:pointer;font-family:inherit;transition:background .15s;white-space:nowrap}
+.tbtn:hover{background:#9d174d}.tbtn.sec{background:#f1f5f9;color:#475569;border:1px solid #e2e8f0}
+.tbtn.sec:hover{background:#e2e8f0}.tbtn:disabled{opacity:.4;pointer-events:none}
+.ent{border:1px solid #86efac;border-radius:12px;padding:13px 15px;background:#f0fdf4}
+.et{font-size:11px;font-weight:600;color:#15803d;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+.ep{font-size:13px;color:#475569;line-height:1.9}
+.sbox{display:none;background:#fdf2f8;border:2px solid #f9a8d4;border-radius:14px;padding:22px;text-align:center}
+.sbox.show{display:block;animation:pop .4s ease}
+@keyframes pop{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
+.sbox h3{font-size:18px;font-weight:700;color:#be185d;margin-bottom:7px}
+.sbox p{font-size:13px;color:#9d174d;line-height:1.6}
+.next-page{display:none;align-items:center;justify-content:space-between;padding:12px 16px;background:#fdf2f8;border:1px solid #fbcfe8;border-radius:10px}
+.next-page.show{display:flex}
+.next-page-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#be185d}
+.next-page-title{font-size:13px;font-weight:600;color:#1e293b;margin-top:2px}
+.next-page-btn{background:#be185d;color:#fff;border:none;padding:8px 18px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s;white-space:nowrap;text-decoration:none;display:inline-block}
+.next-page-btn:hover{background:#9d174d}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brief">
+    <div class="bt">
+      <div class="badge">Desafio autônomo · 60 minutos</div>
+      <div class="btitle">Dashboard Visual de E-commerce — painel com 4 gráficos</div>
+      <div class="bsub">linha, barras, histograma e scatter em um painel 2×2 profissional.</div>
+    </div>
+    <div class="bb">
+      <div class="ctx">
+        <strong>Contexto do desafio</strong>
+        A gerência da loja de e-commerce quer um painel visual completo para a reunião de resultados. Você deve criar um painel 2×2 com: evolução de faturamento mensal (linha), faturamento por categoria (barras), distribuição de preços dos produtos (histograma) e correlação entre desconto e volume de vendas (scatter). O painel deve ter título geral, títulos individuais e ser salvo em PNG.
+      </div>
+      <div class="two">
+        <div>
+          <div class="colt">Requisitos — marque ao concluir</div>
+          <div class="req-wrap" id="req-list"></div>
+        </div>
+        <div>
+          <div class="colt">Critérios de avaliação</div>
+          <div class="crit-list">
+            <div class="ci"><div class="cd"></div>plt.subplots(2,2) com figsize adequado</div>
+            <div class="ci"><div class="cd"></div>4 tipos de gráfico diferentes no painel</div>
+            <div class="ci"><div class="cd"></div>Cada gráfico com título e rótulos de eixo</div>
+            <div class="ci"><div class="cd"></div>Cores diferentes e consistentes por gráfico</div>
+            <div class="ci"><div class="cd"></div>tight_layout() + savefig() com dpi>=120</div>
+            <div class="ci"><div class="cd g"></div>Bônus: suptitle() para título geral do painel</div>
+            <div class="ci"><div class="cd g"></div>Bônus: bar_label() ou axvline() em pelo menos 1 gráfico</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pw">
+    <div class="pl"><strong>Progresso</strong><span id="ptxt">0 de 7 concluídos</span></div>
+    <div class="pbg"><div class="pfill" id="pfill"></div></div>
+    <div class="pm" id="pmsg">Comece criando os dados e a estrutura plt.subplots(2, 2).</div>
+  </div>
+  <div class="tr">
+    <div class="tnum" id="tnum">60:00</div>
+    <div class="tinfo"><strong>Cronômetro</strong><p id="tmsg">Inicie quando o docente autorizar</p></div>
+    <button class="tbtn" id="tbtn" onclick="timerClick()">Iniciar</button>
+    <button class="tbtn sec" onclick="timerReset()">Zerar</button>
+  </div>
+  <div class="ent">
+    <div class="et">Dados para o desafio — copie para o Colab</div>
+    <div class="ep">
+      <code>import matplotlib.pyplot as plt</code><br>
+      <code>import numpy as np, pandas as pd</code><br>
+      <code>np.random.seed(42)</code><br><br>
+      <strong>Gráfico 1 — Linha (evolução mensal):</strong><br>
+      <code>meses = ["Jan","Fev","Mar","Abr","Mai","Jun"]</code><br>
+      <code>fat_mensal = [42000, 51000, 47000, 63000, 71000, 85000]</code><br><br>
+      <strong>Gráfico 2 — Barras (por categoria):</strong><br>
+      <code>categorias = ["Info","Periférico","Audio","Móvel","Acessório"]</code><br>
+      <code>fat_cat = [180000, 72000, 45000, 31000, 18000]</code><br><br>
+      <strong>Gráfico 3 — Histograma (preços):</strong><br>
+      <code>precos = np.random.lognormal(4.5, 0.9, 500)</code><br><br>
+      <strong>Gráfico 4 — Scatter (desconto × vendas):</strong><br>
+      <code>desconto = np.random.uniform(0, 30, 60)</code><br>
+      <code>vendas = desconto * 2.5 + np.random.normal(0, 10, 60)</code>
+    </div>
+  </div>
+  <div class="sbox" id="success">
+    <h3>📈 Dashboard entregue!</h3>
+    <p>Painel completo com 4 tipos de gráfico — pronto para apresentar.<br>Na Aula 09 construímos o primeiro modelo de Machine Learning!</p>
+  </div>
+  <div class="next-page" id="next-page">
+    <div><div class="next-page-label">Desafio concluído</div><div class="next-page-title">📋 Painel de Feedback — Aula 08</div></div>
+    <a class="next-page-btn" href="a08_feedback.html">Abrir Feedback →</a>
+  </div>
+</div>
+<script>
+const REQS=[
+{t:'Criar a estrutura <code>fig, axes = plt.subplots(2, 2, figsize=(12, 8))</code>'},
+{t:'Gráfico de linha em <code>axes[0,0]</code> com evolução mensal de faturamento'},
+{t:'Gráfico de barras em <code>axes[0,1]</code> com faturamento por categoria'},
+{t:'Histograma em <code>axes[1,0]</code> com distribuição de preços'},
+{t:'Scatter plot em <code>axes[1,1]</code> com desconto vs volume de vendas'},
+{t:'Todos os 4 gráficos com título, eixos rotulados e cores definidas'},
+{t:'<code>plt.tight_layout()</code> e <code>plt.savefig("dashboard.png", dpi=150)</code>'},
+];
+const MSGS=[
+'Comece com plt.subplots(2, 2, figsize=(12, 8)) e os dados fornecidos.',
+'Estrutura criada! Faça o gráfico de linha em axes[0,0].',
+'Linha pronta! Faça as barras em axes[0,1].',
+'Barras prontas! Faça o histograma em axes[1,0].',
+'Histograma pronto! Faça o scatter em axes[1,1].',
+'Quatro gráficos prontos! Adicione títulos e rótulos em todos.',
+'Quase lá! Finalize com tight_layout() e savefig() e mostre ao docente.',
+'Excelente! Dashboard completo entregue.',
+];
+let done=new Set(),ticking=false,tSec=60*60,tInterval=null;
+function buildReqs(){
+  const el=document.getElementById('req-list');REQS.forEach((r,i)=>{
+    const d=document.createElement('div');d.className='ri';d.style.marginBottom='5px';
+    d.innerHTML=`<div class="rc" id="rc-${i}" onclick="chk(${i})"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M1.5 5.5l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="rt" id="rt-${i}">${r.t}</div>`;
+    el.appendChild(d);
+  });
+}
+function chk(i){
+  if(done.has(i)){done.delete(i);document.getElementById('rc-'+i).classList.remove('on');document.getElementById('rt-'+i).classList.remove('done');}
+  else{done.add(i);document.getElementById('rc-'+i).classList.add('on');document.getElementById('rt-'+i).classList.add('done');}
+  const n=done.size;
+  document.getElementById('pfill').style.width=Math.round((n/REQS.length)*100)+'%';
+  document.getElementById('ptxt').textContent=n+' de '+REQS.length+' concluídos';
+  document.getElementById('pmsg').textContent=MSGS[Math.min(n,MSGS.length-1)];
+  if(n===REQS.length){document.getElementById('success').classList.add('show');document.getElementById('next-page').classList.add('show');}
+  else{document.getElementById('success').classList.remove('show');document.getElementById('next-page').classList.remove('show');}
+}
+function timerClick(){
+  if(!ticking){
+    ticking=true;document.getElementById('tbtn').textContent='Pausar';document.getElementById('tbtn').style.background='#475569';
+    document.getElementById('tmsg').textContent='Em andamento';
+    tInterval=setInterval(()=>{
+      tSec--;const m=Math.floor(tSec/60),s=tSec%60;
+      const el=document.getElementById('tnum');
+      el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+      el.className='tnum'+(tSec<=120?' danger':tSec<=600?' warn':'');
+      if(tSec===1800)document.getElementById('tmsg').textContent='30 min — finalize os 4 gráficos!';
+      if(tSec===600)document.getElementById('tmsg').textContent='10 min — salve o painel!';
+      if(tSec===120)document.getElementById('tmsg').textContent='2 min — chame o docente!';
+      if(tSec<=0){clearInterval(tInterval);ticking=false;document.getElementById('tbtn').disabled=true;}
+    },1000);
+  }else{
+    ticking=false;clearInterval(tInterval);
+    document.getElementById('tbtn').textContent='Continuar';document.getElementById('tbtn').style.background='#be185d';
+  }
+}
+function timerReset(){
+  clearInterval(tInterval);ticking=false;tSec=60*60;
+  document.getElementById('tnum').textContent='60:00';document.getElementById('tnum').className='tnum';
+  document.getElementById('tbtn').textContent='Iniciar';document.getElementById('tbtn').style.background='#be185d';
+  document.getElementById('tbtn').disabled=false;
+  document.getElementById('tmsg').textContent='Inicie quando o docente autorizar';
+}
+buildReqs();
+</script>
+</body>
+</html>
