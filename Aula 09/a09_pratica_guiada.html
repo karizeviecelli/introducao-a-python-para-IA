@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prática Guiada — Primeiro Modelo de ML com Scikit-learn · Aula 09</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;color:#1e293b;background:#f5f3ff;min-height:100vh;padding:22px}
+.wrap{max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:11px}
+.pg-header{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.pg-title{font-size:17px;font-weight:600}.pg-meta{font-size:12px;color:#64748b;margin-top:2px}
+.pg-time{font-size:12px;font-weight:600;background:#ede9fe;border:1px solid #ddd6fe;padding:4px 12px;border-radius:8px;color:#6d28d9}
+.prog-row{display:flex;align-items:center;gap:9px}
+.pb{flex:1;height:7px;background:#e2e8f0;border-radius:4px;overflow:hidden}
+.pf{height:100%;background:#6d28d9;border-radius:4px;transition:width .4s ease;width:0%}
+.pt{font-size:12px;font-weight:600;color:#64748b;min-width:60px;text-align:right}
+.sc{border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;background:#fff;transition:border-color .2s}
+.sc.done-c{border-color:#86efac}.sc.open-c{border-color:#c4b5fd}
+.sh{display:flex;align-items:flex-start;gap:11px;padding:12px 13px;cursor:pointer;user-select:none;transition:background .15s}
+.sh:hover{background:#f8fafc}.sc.open-c .sh{background:#f5f3ff}
+.chk{width:21px;height:21px;border-radius:6px;border:1.5px solid #cbd5e1;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:all .18s;cursor:pointer;background:#fff}
+.chk:hover{border-color:#6d28d9;background:#ede9fe}.chk.done{background:#22c55e;border-color:#22c55e}
+.chk svg{display:none}.chk.done svg{display:block}
+.si{flex:1}.sn2{font-size:11px;font-weight:600;color:#94a3b8;margin-bottom:2px;text-transform:uppercase;letter-spacing:.04em}
+.st{font-size:13px;font-weight:600;color:#1e293b;line-height:1.3}.stm{font-size:11px;color:#94a3b8;margin-top:2px}
+.cv{color:#94a3b8;font-size:11px;margin-top:4px;transition:transform .22s;flex-shrink:0}
+.sc.open-c .cv{transform:rotate(180deg)}
+.sb{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.sc.open-c .sb{max-height:1800px}
+.sbi{padding:0 13px 14px;border-top:1px solid #f1f5f9}
+.il{display:flex;flex-direction:column;gap:6px;margin:11px 0}
+.ii{display:flex;gap:9px;font-size:13px;color:#475569;line-height:1.55;align-items:flex-start}
+.in{width:19px;height:19px;min-width:19px;border-radius:5px;background:#ede9fe;color:#6d28d9;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;margin-top:1px}
+code{font-family:'Courier New',monospace;font-size:12px;background:#f1f5f9;padding:1px 5px;border-radius:3px;border:1px solid #e2e8f0}
+.cb2{background:#1e293b;border-radius:8px;padding:12px 15px;font-family:'Courier New',monospace;font-size:12px;line-height:1.8;color:#94a3b8;margin:9px 0;overflow-x:auto;white-space:pre}
+.k{color:#93c5fd}.p{color:#c4b5fd}.v{color:#6ee7b7}.s{color:#fda4af}.c{color:#475569;font-style:italic}.fn{color:#fbbf24}
+.tip{background:#f5f3ff;border-left:3px solid #6d28d9;padding:8px 12px;font-size:12px;color:#2e1065;line-height:1.5;margin-top:8px}
+.tip strong{color:#6d28d9;font-weight:600}
+.mb{display:inline-flex;align-items:center;gap:5px;background:#f8fafc;border:1px solid #cbd5e1;color:#64748b;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .18s;margin-top:10px}
+.mb:hover{background:#f0fdf4;color:#15803d;border-color:#86efac}
+.mb.done-btn{background:#f0fdf4;color:#15803d;border-color:#86efac;pointer-events:none}
+.sbox{background:#f5f3ff;border:1px solid #c4b5fd;border-radius:14px;padding:20px;text-align:center;display:none}
+.sbox.show{display:block}
+.sbox h3{font-size:16px;font-weight:600;color:#6d28d9;margin-bottom:6px}
+.sbox p{font-size:13px;color:#5b21b6;line-height:1.6}
+.next-page{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:10px;margin-top:4px}
+.next-page-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#6d28d9}
+.next-page-title{font-size:13px;font-weight:600;color:#1e293b;margin-top:2px}
+.next-page-btn{background:#6d28d9;color:#fff;border:none;padding:8px 18px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s;white-space:nowrap;text-decoration:none;display:inline-block}
+.next-page-btn:hover{background:#5b21b6}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="pg-header">
+    <div><div class="pg-title">Prática guiada — Primeiro Modelo de ML com Scikit-learn</div><div class="pg-meta">Siga os passos no Colab. Marque cada um quando terminar.</div></div>
+    <span class="pg-time">60 min disponíveis</span>
+  </div>
+  <div class="prog-row"><div class="pb"><div class="pf" id="pf"></div></div><div class="pt" id="pt">0 / 6</div></div>
+  <div id="steps"></div>
+  <div class="sbox" id="sbox">
+    <h3>🤖 Primeiro modelo treinado!</h3>
+    <p>KNN, split, métricas e previsão prontos.<br>Hora do desafio autônomo!</p>
+  </div>
+  <div class="next-page" id="next-page" style="display:none">
+    <div><div class="next-page-label">Prática concluída</div><div class="next-page-title">🏆 Desafio Autônomo — Primeiro Modelo de ML com Scikit-learn</div></div>
+    <a class="next-page-btn" href="a09_desafio.html">Abrir Desafio →</a>
+  </div>
+</div>
+<script>
+const STEPS=[
+{title:'Carregar e explorar o Iris',time:'8 min',
+instrs:['Importe load_iris e crie um DataFrame com as features e a coluna species','Rode head(), describe() e value_counts() em species','Use groupby("species").mean() para ver as médias por espécie','Identifique qual feature parece mais discriminante entre as 3 classes'],
+code:`<span class="k">from</span> <span class="p">sklearn.datasets</span> <span class="k">import</span> <span class="fn">load_iris</span>\n<span class="k">import</span> <span class="p">pandas</span> <span class="k">as</span> <span class="p">pd</span>\n\n<span class="p">iris</span> = <span class="fn">load_iris</span>()\n<span class="p">df</span> = <span class="p">pd</span>.<span class="fn">DataFrame</span>(<span class="p">iris</span>.<span class="fn">data</span>, <span class="p">columns</span>=<span class="p">iris</span>.<span class="fn">feature_names</span>)\n<span class="p">df</span>[<span class="s">"species"</span>] = <span class="p">iris</span>.<span class="fn">target_names</span>[<span class="p">iris</span>.<span class="fn">target</span>]\n<span class="fn">print</span>(<span class="p">df</span>.<span class="fn">groupby</span>(<span class="s">"species"</span>).<span class="fn">mean</span>().<span class="fn">round</span>(<span class="v">2</span>))`,
+tip:'<strong>Dica de exploração:</strong> a petal length (cm) tem médias muito diferentes entre classes (1.46, 4.26, 5.55) — isso indica boa separabilidade. Features com médias próximas entre classes sao menos úteis para o modelo.'},
+{title:'Dividir treino e teste',time:'8 min',
+instrs:['Crie X e y a partir do iris.data e iris.target','Use train_test_split com test_size=0.2, random_state=42 e stratify=y','Imprima os shapes de X_train, X_test, y_train, y_test','Verifique com np.bincount(y_train) e np.bincount(y_test) que as classes estao balanceadas'],
+code:`<span class="k">from</span> <span class="p">sklearn.model_selection</span> <span class="k">import</span> <span class="fn">train_test_split</span>\n<span class="k">import</span> <span class="p">numpy</span> <span class="k">as</span> <span class="p">np</span>\n\n<span class="p">X</span>, <span class="p">y</span> = <span class="p">iris</span>.<span class="fn">data</span>, <span class="p">iris</span>.<span class="fn">target</span>\n<span class="p">X_tr</span>, <span class="p">X_te</span>, <span class="p">y_tr</span>, <span class="p">y_te</span> = <span class="fn">train_test_split</span>(\n    <span class="p">X</span>, <span class="p">y</span>, <span class="p">test_size</span>=<span class="v">0.2</span>, <span class="p">random_state</span>=<span class="v">42</span>, <span class="p">stratify</span>=<span class="p">y</span>)\n<span class="fn">print</span>(<span class="p">X_tr</span>.<span class="fn">shape</span>, <span class="p">X_te</span>.<span class="fn">shape</span>)\n<span class="fn">print</span>(<span class="p">np</span>.<span class="fn">bincount</span>(<span class="p">y_tr</span>), <span class="p">np</span>.<span class="fn">bincount</span>(<span class="p">y_te</span>))`,
+tip:'<strong>stratify=y</strong> é essencial em datasets desbalanceados. Sem ele, um split aleatório pode colocar poucas amostras de uma classe no teste, tornando a avaliação não representativa.'},
+{title:'Treinar KNN e avaliar',time:'10 min',
+instrs:['Instancie KNeighborsClassifier com n_neighbors=5 e chame .fit(X_tr, y_tr)','Calcule accuracy_score em treino E teste — veja a diferença','Use .predict(X_te) para gerar previsões e compare com y_te','Tente com n_neighbors=1 e observe o overfitting (treino perfeito, teste pior)'],
+code:`<span class="k">from</span> <span class="p">sklearn.neighbors</span> <span class="k">import</span> <span class="fn">KNeighborsClassifier</span>\n<span class="k">from</span> <span class="p">sklearn.metrics</span> <span class="k">import</span> <span class="fn">accuracy_score</span>\n\n<span class="p">knn</span> = <span class="fn">KNeighborsClassifier</span>(<span class="p">n_neighbors</span>=<span class="v">5</span>)\n<span class="p">knn</span>.<span class="fn">fit</span>(<span class="p">X_tr</span>, <span class="p">y_tr</span>)\n\n<span class="fn">print</span>(<span class="s">f"Treino: {knn.score(X_tr, y_tr):.2%}"</span>)\n<span class="fn">print</span>(<span class="s">f"Teste:  {knn.score(X_te, y_te):.2%}"</span>)`,
+tip:'<strong>Treino perfeito nao é bom sinal.</strong> K=1 memoriza todos os pontos — score de treino 100%, mas generaliza mal. Esse é o overfitting. K maior suaviza as fronteiras e geralmente generaliza melhor.'},
+{title:'classification_report e confusion_matrix',time:'10 min',
+instrs:['Gere y_pred com knn.predict(X_te) e rode classification_report','Interprete os valores de precision, recall e F1 para cada espécie','Rode confusion_matrix(y_te, y_pred) e identifique onde o modelo errou','Visualize a matriz com seaborn heatmap ou matplotlib (bônus)'],
+code:`<span class="k">from</span> <span class="p">sklearn.metrics</span> <span class="k">import</span> <span class="fn">classification_report</span>, <span class="fn">confusion_matrix</span>\n\n<span class="p">y_pred</span> = <span class="p">knn</span>.<span class="fn">predict</span>(<span class="p">X_te</span>)\n\n<span class="fn">print</span>(<span class="fn">classification_report</span>(<span class="p">y_te</span>, <span class="p">y_pred</span>,\n    <span class="p">target_names</span>=<span class="p">iris</span>.<span class="fn">target_names</span>))\n\n<span class="fn">print</span>(<span class="fn">confusion_matrix</span>(<span class="p">y_te</span>, <span class="p">y_pred</span>))`,
+tip:'<strong>Na diagonal da confusion_matrix:</strong> acertos. Fora da diagonal: erros. Ex: se a linha virginica mostra [0,1,9], o modelo confundiu 1 virginica com versicolor. Entender onde o modelo erra é tao importante quanto a acurácia geral.'},
+{title:'Busca pelo melhor K',time:'10 min',
+instrs:['Teste K de 1 a 20 guardando acurácia de treino e teste em listas separadas','Plote as duas curvas no mesmo gráfico com cores diferentes','Identifique onde há overfitting (treino >> teste) e underfitting (ambos baixos)','Use np.argmax(acc_teste) para encontrar o melhor K automaticamente'],
+code:`<span class="p">k_vals</span>    = <span class="fn">range</span>(<span class="v">1</span>, <span class="v">21</span>)\n<span class="p">acc_tr</span>, <span class="p">acc_te</span> = [], []\n\n<span class="k">for</span> <span class="p">k</span> <span class="k">in</span> <span class="p">k_vals</span>:\n    <span class="p">m</span> = <span class="fn">KNeighborsClassifier</span>(<span class="p">n_neighbors</span>=<span class="p">k</span>)\n    <span class="p">m</span>.<span class="fn">fit</span>(<span class="p">X_tr</span>, <span class="p">y_tr</span>)\n    <span class="p">acc_tr</span>.<span class="fn">append</span>(<span class="p">m</span>.<span class="fn">score</span>(<span class="p">X_tr</span>, <span class="p">y_tr</span>))\n    <span class="p">acc_te</span>.<span class="fn">append</span>(<span class="p">m</span>.<span class="fn">score</span>(<span class="p">X_te</span>, <span class="p">y_te</span>))\n\n<span class="fn">print</span>(<span class="s">f"Melhor K: {list(k_vals)[np.argmax(acc_te)]}"</span>)`,
+tip:'<strong>A curva treino vs teste</strong> é o gráfico de validação clássico de ML. Treino alto + teste baixo = overfitting. Ambos baixos = underfitting. O ponto ótimo é onde teste é maximizado sem grande divergência do treino.'},
+{title:'Prever nova flor e salvar modelo',time:'14 min',
+instrs:['Crie uma nova observação como np.array([[5.1, 3.5, 1.4, 0.2]]) e use predict()','Use predict_proba() para ver a confiança do modelo em cada classe','Teste com medidas de uma flor de outra espécie e observe como a confiança muda','Bônus: use joblib para salvar o modelo treinado em disco'],
+code:`<span class="k">import</span> <span class="p">joblib</span>\n\n<span class="cm"># Prever nova flor</span>\n<span class="p">nova</span> = <span class="p">np</span>.<span class="fn">array</span>([[<span class="v">5.1</span>, <span class="v">3.5</span>, <span class="v">1.4</span>, <span class="v">0.2</span>]])\n<span class="fn">print</span>(<span class="p">iris</span>.<span class="fn">target_names</span>[<span class="p">knn</span>.<span class="fn">predict</span>(<span class="p">nova</span>)[<span class="v">0</span>]])\n<span class="fn">print</span>(<span class="p">knn</span>.<span class="fn">predict_proba</span>(<span class="p">nova</span>))\n\n<span class="cm"># Salvar modelo treinado</span>\n<span class="fn">joblib</span>.<span class="fn">dump</span>(<span class="p">knn</span>, <span class="s">"knn_iris.pkl"</span>)\n<span class="cm"># Carregar depois:</span>\n<span class="cm"># knn2 = joblib.load("knn_iris.pkl")</span>`,
+tip:'<strong>joblib.dump/load</strong> persiste o modelo treinado em disco. Em produção, você treina uma vez, salva o arquivo .pkl e carrega para fazer previsões sem retreinar. É o equivalente a salvar o "cérebro" do modelo.'}
+];
+let done=new Set();
+function build(){
+  const list=document.getElementById('steps');STEPS.forEach((s,i)=>{
+    const card=document.createElement('div');card.className='sc'+(i===0?' open-c':'');card.id='sc-'+i;
+    card.innerHTML=`<div class="sh" onclick="tog(${i})"><div class="chk" id="chk-${i}" onclick="event.stopPropagation();mk(${i})"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="si"><div class="sn2">Passo ${i+1} de ${STEPS.length}</div><div class="st">${s.title}</div><div class="stm">${s.time}</div></div><span class="cv">${i===0?'▲':'▼'}</span></div><div class="sb"><div class="sbi"><div class="il">${s.instrs.map((t,j)=>`<div class="ii"><div class="in">${j+1}</div><span>${t}</span></div>`).join('')}</div>${s.code?`<div class="cb2">${s.code}</div>`:''}<div class="tip">${s.tip}</div><button class="mb" id="mb-${i}" onclick="mk(${i})"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5l3.5 3.5 5.5-5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Marcar como concluído</button></div></div>`;
+    list.appendChild(card);
+  });
+}
+function tog(i){const c=document.getElementById('sc-'+i);const o=c.classList.contains('open-c');document.querySelectorAll('.sc').forEach(x=>{x.classList.remove('open-c');x.querySelector('.cv').textContent='▼';});if(!o){c.classList.add('open-c');c.querySelector('.cv').textContent='▲';}}
+function mk(i){if(done.has(i))return;done.add(i);document.getElementById('chk-'+i).classList.add('done');document.getElementById('sc-'+i).classList.add('done-c');const mb=document.getElementById('mb-'+i);mb.classList.add('done-btn');mb.innerHTML='<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5l3.5 3.5 5.5-5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Concluído!';upd();if(i<STEPS.length-1){document.querySelectorAll('.sc').forEach(x=>{x.classList.remove('open-c');x.querySelector('.cv').textContent='▼';});const nx=document.getElementById('sc-'+(i+1));nx.classList.add('open-c');nx.querySelector('.cv').textContent='▲';setTimeout(()=>nx.scrollIntoView({behavior:'smooth',block:'nearest'}),100);}if(done.size===STEPS.length){document.getElementById('sbox').classList.add('show');document.getElementById('next-page').style.display='flex';setTimeout(()=>document.getElementById('next-page').scrollIntoView({behavior:'smooth',block:'nearest'}),300);}}
+function upd(){document.getElementById('pf').style.width=Math.round((done.size/STEPS.length)*100)+'%';document.getElementById('pt').textContent=done.size+' / '+STEPS.length;}
+build();upd();
+</script>
+</body>
+</html>

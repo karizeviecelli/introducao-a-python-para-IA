@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo ao Vivo — Primeiro Modelo de ML com Scikit-learn · Aula 09</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;color:#1e293b;background:#f5f3ff;min-height:100vh;padding:20px}
+.wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.page-hdr{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
+.page-hdr h1{font-size:16px;font-weight:600}.page-hdr p{font-size:12px;color:#94a3b8}
+.prog-track{grid-column:1/-1;height:3px;background:#e2e8f0;border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:#6d28d9;border-radius:2px;transition:width .3s ease;width:0%}
+.panel{border:1px solid #ddd6fe;border-radius:12px;overflow:hidden;background:#fff}
+.ph{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1px solid #ddd6fe;background:#f5f3ff}
+.pt{font-size:12px;font-weight:500;color:#2e1065}
+.dots-r{display:flex;gap:5px}.dot{width:10px;height:10px;border-radius:50%}
+pre{background:#1e293b;color:#e2e8f0;padding:15px;font-family:'Courier New',monospace;font-size:12px;line-height:1.8;min-height:300px;overflow:auto;white-space:pre}
+.cursor{display:inline-block;width:2px;height:14px;background:#c4b5fd;vertical-align:middle;animation:blink .9s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.preview-body{min-height:300px;overflow-y:auto;background:#f8fafc;padding:16px;font-family:'Courier New',monospace;font-size:12px;line-height:1.8}
+.out-line{padding:1px 0;color:#1e293b}
+.out-line.ok{color:#6d28d9;font-weight:600}
+.out-line.cm{color:#64748b;font-style:italic}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:11.5px}
+th{background:#ede9fe;color:#2e1065;font-weight:600;padding:5px 9px;text-align:left;border-bottom:2px solid #ddd6fe}
+td{padding:5px 9px;border-bottom:1px solid #f1f5f9;color:#475569}
+tr:hover td{background:#f5f3ff}
+.step-bar{grid-column:1/-1;border:1px solid #ddd6fe;border-radius:12px;background:#fff;display:flex;align-items:center;gap:10px;padding:11px 15px;flex-wrap:wrap}
+.sbadge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#ede9fe;color:#6d28d9;border:1px solid #c4b5fd}
+.slabel{font-size:12px;color:#64748b;flex:1;line-height:1.4}
+.cb{font-size:12px;font-weight:500;padding:6px 14px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#1e293b;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
+.cb:hover{background:#f1f5f9}.cb.go{background:#6d28d9;color:#fff;border-color:#6d28d9}.cb.go:hover{background:#5b21b6}
+.cb:disabled{opacity:.35;pointer-events:none}
+.narr{grid-column:1/-1;border:1px solid #ddd6fe;border-radius:10px;padding:11px 15px;background:#f5f3ff;font-size:13px;color:#2e1065;line-height:1.6;min-height:50px}
+.narr strong{color:#5b21b6;font-weight:600}
+.next-page{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:10px}
+.next-page-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#6d28d9}
+.next-page-title{font-size:13px;font-weight:600;color:#1e293b;margin-top:2px}
+.next-page-btn{background:#6d28d9;color:#fff;border:none;padding:8px 18px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s;white-space:nowrap;text-decoration:none;display:inline-block}
+.next-page-btn:hover{background:#5b21b6}
+.k{color:#93c5fd}.p{color:#c4b5fd}.v{color:#6ee7b7}.s{color:#fda4af}.cm2{color:#475569;font-style:italic}.fn{color:#fbbf24}
+@media(max-width:680px){.wrap{grid-template-columns:1fr}.panel:last-of-type{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="page-hdr"><h1>Demonstração ao vivo — Primeiro Modelo de ML com Scikit-learn</h1><p>Aula 09 · 45 min · Docente digita no Colab, alunos acompanham</p></div>
+  <div class="prog-track"><div class="prog-fill" id="prog"></div></div>
+  <div class="panel">
+    <div class="ph"><span class="pt">Google Colab — aula09.ipynb</span><div class="dots-r"><div class="dot" style="background:#ef4444"></div><div class="dot" style="background:#f59e0b"></div><div class="dot" style="background:#10b981"></div></div></div>
+    <pre><span id="code-out"></span><span class="cursor"></span></pre>
+  </div>
+  <div class="panel">
+    <div class="ph"><span class="pt">Output — resultado da célula</span><div class="dots-r"><div class="dot" style="background:#ef4444"></div><div class="dot" style="background:#f59e0b"></div><div class="dot" style="background:#10b981"></div></div></div>
+    <div class="preview-body" id="preview"></div>
+  </div>
+  <div class="narr" id="narr">Pronto para começar. Clique em <strong>Iniciar digitação</strong>.</div>
+  <div class="step-bar">
+    <span class="sbadge" id="sbadge">Etapa 1 / 8</span>
+    <span class="slabel" id="sdesc">Criando o primeiro DataFrame</span>
+    <button class="cb" id="bp" onclick="prevS()" disabled>← Anterior</button>
+    <button class="cb go" id="bplay" onclick="playS()">▶ Iniciar digitação</button>
+    <button class="cb" id="bn" onclick="nextS()" disabled>Próxima →</button>
+  </div>
+  <div class="next-page" id="next-page" style="display:none">
+    <div><div class="next-page-label">Demonstração concluída</div><div class="next-page-title">▶ Prática Guiada — Primeiro Modelo de ML com Scikit-learn</div></div>
+    <a class="next-page-btn" href="a09_pratica_guiada.html">Abrir Prática →</a>
+  </div>
+</div>
+<script>
+const STEPS=[
+{label:'Importar e carregar o Iris',
+narr:'<strong>Docente:</strong> "Scikit-learn já vem com datasets clássicos embutidos. load_iris() retorna um objeto com .data (features), .target (classes numéricas) e .feature_names. Sempre exploramos antes de treinar."',
+code:`<span class="k">from</span> <span class="p">sklearn.datasets</span> <span class="k">import</span> <span class="fn">load_iris</span>
+<span class="k">import</span> <span class="p">pandas</span> <span class="k">as</span> <span class="p">pd</span>
+<span class="k">import</span> <span class="p">numpy</span> <span class="k">as</span> <span class="p">np</span>
+
+<span class="p">iris</span> = <span class="fn">load_iris</span>()
+<span class="fn">print</span>(<span class="p">iris</span>.<span class="fn">data</span>.<span class="fn">shape</span>)        <span class="cm2"># (150, 4)</span>
+<span class="fn">print</span>(<span class="p">iris</span>.<span class="fn">feature_names</span>)
+<span class="fn">print</span>(<span class="p">iris</span>.<span class="fn">target_names</span>)
+
+<span class="p">df</span> = <span class="p">pd</span>.<span class="fn">DataFrame</span>(<span class="p">iris</span>.<span class="fn">data</span>, <span class="p">columns</span>=<span class="p">iris</span>.<span class="fn">feature_names</span>)
+<span class="p">df</span>[<span class="s">"species"</span>] = <span class="p">iris</span>.<span class="fn">target_names</span>[<span class="p">iris</span>.<span class="fn">target</span>]
+<span class="fn">print</span>(<span class="p">df</span>.<span class="fn">head</span>())`,
+prev:`<div class="out-line ok">(150, 4)</div><div class="out-line ok">['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)']</div><div class="out-line ok">['setosa' 'versicolor' 'virginica']</div>`},
+{label:'Separar X e y — features e target',
+narr:'<strong>Docente:</strong> "Por convenção: X são as features (entradas do modelo), y é o target (o que queremos prever). X é uma matriz 2D, y é um vetor 1D. Sempre verificamos os shapes."',
+code:`<span class="p">X</span> = <span class="p">iris</span>.<span class="fn">data</span>    <span class="cm2"># features: (150, 4)</span>
+<span class="p">y</span> = <span class="p">iris</span>.<span class="fn">target</span>  <span class="cm2"># target: (150,)</span>
+
+<span class="fn">print</span>(<span class="s">f"X shape: {X.shape}"</span>)
+<span class="fn">print</span>(<span class="s">f"y shape: {y.shape}"</span>)
+<span class="fn">print</span>(<span class="s">f"Classes: {np.unique(y)}"</span>)
+<span class="fn">print</span>(<span class="s">f"Distribuicao: {np.bincount(y)}"</span>)`,
+prev:`<div class="out-line ok">X shape: (150, 4)</div><div class="out-line ok">y shape: (150,)</div><div class="out-line ok">Classes: [0 1 2]</div><div class="out-line ok">Distribuicao: [50 50 50]</div>`},
+{label:'train_test_split — dividir dados',
+narr:'<strong>Docente:</strong> "Antes de qualquer treino, separamos o conjunto de teste — e nunca mais o tocamos até a avaliação final. random_state=42 garante reprodutibilidade. stratify=y mantém a proporção de classes."',
+code:`<span class="k">from</span> <span class="p">sklearn.model_selection</span> <span class="k">import</span> <span class="fn">train_test_split</span>
+
+<span class="p">X_train</span>, <span class="p">X_test</span>, <span class="p">y_train</span>, <span class="p">y_test</span> = <span class="fn">train_test_split</span>(
+    <span class="p">X</span>, <span class="p">y</span>,
+    <span class="p">test_size</span>    = <span class="v">0.2</span>,
+    <span class="p">random_state</span> = <span class="v">42</span>,
+    <span class="p">stratify</span>     = <span class="p">y</span>
+)
+
+<span class="fn">print</span>(<span class="s">f"Treino: {X_train.shape}"</span>)
+<span class="fn">print</span>(<span class="s">f"Teste:  {X_test.shape}"</span>)
+<span class="fn">print</span>(<span class="s">f"Classes treino: {np.bincount(y_train)}"</span>)`,
+prev:`<div class="out-line ok">Treino: (120, 4)</div><div class="out-line ok">Teste:  (30, 4)</div><div class="out-line ok">Classes treino: [40 40 40]</div>`},
+{label:'Treinar o KNN',
+narr:'<strong>Docente:</strong> "Três linhas: importar, instanciar com parâmetros, chamar .fit(). O KNN memoriza os dados de treino. Verificamos o score no treino e no teste — e notamos a diferença."',
+code:`<span class="k">from</span> <span class="p">sklearn.neighbors</span> <span class="k">import</span> <span class="fn">KNeighborsClassifier</span>
+
+<span class="p">knn</span> = <span class="fn">KNeighborsClassifier</span>(<span class="p">n_neighbors</span>=<span class="v">5</span>)
+<span class="p">knn</span>.<span class="fn">fit</span>(<span class="p">X_train</span>, <span class="p">y_train</span>)
+
+<span class="fn">print</span>(<span class="s">f"Score treino: {knn.score(X_train, y_train):.2%}"</span>)
+<span class="fn">print</span>(<span class="s">f"Score teste:  {knn.score(X_test,  y_test):.2%}"</span>)`,
+prev:`<div class="out-line ok">Score treino: 96.67%</div><div class="out-line ok">Score teste:  100.00%</div>`},
+{label:'Fazer previsões',
+narr:'<strong>Docente:</strong> "predict() retorna as classes previstas. predict_proba() retorna as probabilidades de cada classe — muito útil para entender a confiança do modelo."',
+code:`<span class="p">y_pred</span> = <span class="p">knn</span>.<span class="fn">predict</span>(<span class="p">X_test</span>)
+
+<span class="cm2"># Ver primeiras previsões vs real</span>
+<span class="k">for</span> <span class="p">real</span>, <span class="p">prev</span> <span class="k">in</span> <span class="fn">zip</span>(<span class="p">y_test</span>[:<span class="v">5</span>], <span class="p">y_pred</span>[:<span class="v">5</span>]):
+    <span class="p">nome_real</span> = <span class="p">iris</span>.<span class="fn">target_names</span>[<span class="p">real</span>]
+    <span class="p">nome_prev</span> = <span class="p">iris</span>.<span class="fn">target_names</span>[<span class="p">prev</span>]
+    <span class="p">ok</span> = <span class="s">"OK"</span> <span class="k">if</span> <span class="p">real</span> == <span class="p">prev</span> <span class="k">else</span> <span class="s">"ERRO"</span>
+    <span class="fn">print</span>(<span class="s">f"{nome_real:12} → {nome_prev:12} {ok}"</span>)`,
+prev:`<div class="out-line ok">setosa       → setosa       OK</div><div class="out-line ok">versicolor   → versicolor   OK</div><div class="out-line ok">virginica    → virginica    OK</div><div class="out-line ok">setosa       → setosa       OK</div><div class="out-line ok">versicolor   → versicolor   OK</div>`},
+{label:'Métricas detalhadas',
+narr:'<strong>Docente:</strong> "classification_report mostra precision, recall e F1 por classe. confusion_matrix mostra a matriz de erros — diagonal são os acertos, o resto são erros. Para o Iris com K=5 fica quase perfeito."',
+code:`<span class="k">from</span> <span class="p">sklearn.metrics</span> <span class="k">import</span> (
+    <span class="fn">classification_report</span>, <span class="fn">confusion_matrix</span>
+)
+
+<span class="fn">print</span>(<span class="fn">classification_report</span>(
+    <span class="p">y_test</span>, <span class="p">y_pred</span>,
+    <span class="p">target_names</span>=<span class="p">iris</span>.<span class="fn">target_names</span>
+))
+
+<span class="fn">print</span>(<span class="fn">confusion_matrix</span>(<span class="p">y_test</span>, <span class="p">y_pred</span>))`,
+prev:`<div class="out-line cm">              precision  recall  f1-score</div><div class="out-line ok">    setosa       1.00      1.00      1.00</div><div class="out-line ok">versicolor       1.00      1.00      1.00</div><div class="out-line ok"> virginica       1.00      1.00      1.00</div><div class="out-line cm">  accuracy                           1.00</div><div class="out-line cm">[[10  0  0]</div><div class="out-line cm"> [ 0 10  0]</div><div class="out-line cm"> [ 0  0 10]]</div>`},
+{label:'Busca pelo melhor K',
+narr:'<strong>Docente:</strong> "Testamos K de 1 a 20 e plotamos a acurácia. K=1 pode ser perfeito no treino mas instável. O gráfico mostra o trade-off entre overfitting (K pequeno) e underfitting (K grande)."',
+code:`<span class="k">import</span> <span class="p">matplotlib.pyplot</span> <span class="k">as</span> <span class="p">plt</span>
+
+<span class="p">k_vals</span>    = <span class="fn">range</span>(<span class="v">1</span>, <span class="v">21</span>)
+<span class="p">acc_treino</span> = []
+<span class="p">acc_teste</span>  = []
+
+<span class="k">for</span> <span class="p">k</span> <span class="k">in</span> <span class="p">k_vals</span>:
+    <span class="p">m</span> = <span class="fn">KNeighborsClassifier</span>(<span class="p">n_neighbors</span>=<span class="p">k</span>)
+    <span class="p">m</span>.<span class="fn">fit</span>(<span class="p">X_train</span>, <span class="p">y_train</span>)
+    <span class="p">acc_treino</span>.<span class="fn">append</span>(<span class="p">m</span>.<span class="fn">score</span>(<span class="p">X_train</span>, <span class="p">y_train</span>))
+    <span class="p">acc_teste</span>.<span class="fn">append</span>(<span class="p">m</span>.<span class="fn">score</span>(<span class="p">X_test</span>,  <span class="p">y_test</span>))
+
+<span class="fn">print</span>(<span class="s">f"Melhor K={k_vals[np.argmax(acc_teste)]}"</span>)`,
+prev:`<div class="out-line ok">Melhor K=5</div><div class="out-line cm"># Gráfico gerado no Colab mostrando</div><div class="out-line cm"># acurácia treino (cai com K maior)</div><div class="out-line cm"># acurácia teste (sobe até K=5, estabiliza)</div>`},
+{label:'Previsão com nova flor',
+narr:'<strong>Docente:</strong> "O modelo treinado pode prever qualquer nova observação. Criamos uma nova flor com medidas hipotéticas e o modelo classifica com predict() e predict_proba() para ver a confiança."',
+code:`<span class="cm2"># Nova flor nunca vista</span>
+<span class="p">nova_flor</span> = <span class="p">np</span>.<span class="fn">array</span>([[<span class="v">5.1</span>, <span class="v">3.5</span>, <span class="v">1.4</span>, <span class="v">0.2</span>]])
+
+<span class="p">classe_num</span> = <span class="p">knn</span>.<span class="fn">predict</span>(<span class="p">nova_flor</span>)
+<span class="p">proba</span>      = <span class="p">knn</span>.<span class="fn">predict_proba</span>(<span class="p">nova_flor</span>)
+
+<span class="fn">print</span>(<span class="s">f"Previsao: {iris.target_names[classe_num[0]]}"</span>)
+<span class="k">for</span> <span class="p">nome</span>, <span class="p">p</span> <span class="k">in</span> <span class="fn">zip</span>(<span class="p">iris</span>.<span class="fn">target_names</span>, <span class="p">proba</span>[<span class="v">0</span>]):
+    <span class="fn">print</span>(<span class="s">f"  {nome:12}: {p:.0%}"</span>)`,
+prev:`<div class="out-line ok">Previsao: setosa</div><div class="out-line ok">  setosa      : 100%</div><div class="out-line ok">  versicolor  : 0%</div><div class="out-line ok">  virginica   : 0%</div>`}
+];
+
+let cur=0,playing=false,timer=null;
+function render(){
+  document.getElementById('sbadge').textContent=`Etapa ${cur+1} / ${STEPS.length}`;
+  document.getElementById('sdesc').textContent=STEPS[cur].label;
+  document.getElementById('narr').innerHTML=STEPS[cur].narr;
+  document.getElementById('preview').innerHTML=STEPS[cur].prev;
+  document.getElementById('code-out').innerHTML='';
+  document.getElementById('prog').style.width=((cur+1)/STEPS.length*100)+'%';
+  document.getElementById('bp').disabled=cur===0;
+  document.getElementById('bn').disabled=cur===STEPS.length-1;
+  const pb=document.getElementById('bplay');pb.textContent='▶ Iniciar digitação';pb.className='cb go';
+  document.getElementById('next-page').style.display=cur===STEPS.length-1?'flex':'none';
+}
+function playS(){
+  if(playing){clearTimeout(timer);playing=false;document.getElementById('bplay').textContent='▶ Iniciar digitação';return;}
+  playing=true;document.getElementById('bplay').textContent='⏸ Pausar';
+  const code=STEPS[cur].code;let i=0;const out=document.getElementById('code-out');out.innerHTML='';
+  function tick(){
+    if(!playing)return;
+    if(i<code.length){
+      if(code[i]==='<'){const end=code.indexOf('>',i);if(end>-1){out.innerHTML+=code.slice(i,end+1);i=end+1;}else{out.innerHTML+=code[i];i++;}}
+      else{out.innerHTML+=code[i];i++;}
+      timer=setTimeout(tick,i%7===0?16:4);
+    }else{playing=false;document.getElementById('bplay').textContent='✓ Concluído';document.getElementById('bn').disabled=cur===STEPS.length-1;if(cur===STEPS.length-1)document.getElementById('next-page').style.display='flex';}
+  }
+  tick();
+}
+function nextS(){if(cur<STEPS.length-1){cur++;render();}}
+function prevS(){if(cur>0){cur--;render();}}
+render();
+</script>
+</body>
+</html>
