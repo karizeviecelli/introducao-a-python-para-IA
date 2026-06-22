@@ -211,7 +211,26 @@ Aluno por aluno...
 
 Com NumPy:
 
-```text
+```Python
+import numpy as np
+
+# Notas de 40 alunos
+notas = np.array([
+    6, 7, 5, 8, 9, 4, 6, 7, 8, 5,
+    6, 9, 7, 8, 4, 5, 6, 7, 9, 10,
+    5, 6, 7, 8, 9, 4, 6, 7, 8, 5,
+    6, 9, 7, 8, 4, 5, 6, 7, 9, 10
+])
+
+# Aumentando 1 ponto em todas as notas
+notas_corrigidas = notas + 1
+
+print("Notas originais:")
+print(notas)
+
+print("Notas com +1 ponto:")
+print(notas_corrigidas)
+
 Todos ao mesmo tempo.
 ```
 
