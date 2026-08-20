@@ -1,0 +1,437 @@
+Categoria,Ícone Sugerido,Classe (para mod_links),Observações
+Geral/Interface/Menu,Casa,fas fa-home,Página inicial.
+Geral/Interface/Menu,Informação,fas fa-info-circle,Informações gerais.
+Geral/Interface/Menu,Aviso,fas fa-exclamation-triangle,Alertas ou avisos.
+Geral/Interface/Menu,Sucesso/Confirmar,fas fa-check-circle,Indicação de sucesso ou confirmação.
+Geral/Interface/Menu,Erro/Fechar,fas fa-times-circle,Indicação de erro ou para fechar.
+Geral/Interface/Menu,Pesquisar,fas fa-search,Funcionalidades de busca.
+Geral/Interface/Menu,Configurações,fas fa-cog,"Configurações, engrenagem."
+Geral/Interface/Menu,Configurações (alt),fas fa-cogs,Mais de uma engrenagem.
+Geral/Interface/Menu,Menu Hamburguer,fas fa-bars,Para menus responsivos.
+Geral/Interface/Menu,Usuário/Pessoa,fas fa-user,"Perfil, usuário individual."
+Geral/Interface/Menu,Usuários/Grupo,fas fa-users,"Mais de um usuário, grupo."
+Geral/Interface/Menu,Editar,fas fa-edit,Funcionalidades de edição.
+Geral/Interface/Menu,Deletar/Lixo,fas fa-trash,Funcionalidades de exclusão.
+Geral/Interface/Menu,Salvar,fas fa-save,Salvar dados.
+Geral/Interface/Menu,Carregar (upload),fas fa-upload,Envio de arquivos.
+Geral/Interface/Menu,Baixar (download),fas fa-download,Download de arquivos.
+Geral/Interface/Menu,Imprimir,fas fa-print,Impressão.
+Geral/Interface/Menu,Olho (ver/esconder),fas fa-eye,Mostrar/esconder.
+Geral/Interface/Menu,Bloquear,fas fa-lock,"Conteúdo bloqueado, segurança."
+Geral/Interface/Menu,Desbloquear,fas fa-unlock,Conteúdo desbloqueado.
+Geral/Interface/Menu,Link,fas fa-link,Links externos ou internos.
+Geral/Interface/Menu,Pastas,fas fa-folder,Pastas de arquivos.
+Geral/Interface/Menu,Arquivo,fas fa-file,Arquivos genéricos.
+Geral/Interface/Menu,Câmera,fas fa-camera,Funcionalidades de câmera ou fotos.
+Geral/Interface/Menu,Imagem,fas fa-image,Imagens.
+Geral/Interface/Menu,Vídeo,fas fa-video,Vídeos.
+Geral/Interface/Menu,Carrinho de compras,fas fa-shopping-cart,E-commerce.
+Geral/Interface/Menu,Estrela,fas fa-star,"Avaliações, favoritos, destaque."
+Geral/Interface/Menu,Coração,fas fa-heart,"Curtir, favorito, amor."
+Geral/Interface/Menu,Polegar para cima,fas fa-thumbs-up,"Curtir, aprovar."
+Geral/Interface/Menu,Polegar para baixo,fas fa-thumbs-down,"Não curtir, desaprovar."
+Geral/Interface/Menu,Sino/Notificação,fas fa-bell,Notificações.
+Geral/Interface/Menu,Calendário,fas fa-calendar-alt,"Datas, agendamentos."
+Geral/Interface/Menu,Relógio,fas fa-clock,"Horários, tempo."
+Geral/Interface/Menu,Localização/Pino,fas fa-map-marker-alt,"Endereços, mapas."
+Geral/Interface/Menu,Telefone,fas fa-phone,Contato telefônico.
+Geral/Interface/Menu,E-mail,fas fa-envelope,Contato por e-mail.
+Geral/Interface/Menu,Lápis,fas fa-pencil-alt,"Escrever, anotar."
+Geral/Interface/Menu,Ajuda,fas fa-question-circle,"Dúvidas, ajuda."
+Geral/Interface/Menu,Fechar (X),fas fa-times,"Fechar modal, limpar."
+Geral/Interface/Menu,Check,fas fa-check,"Confirmar, OK."
+Geral/Interface/Menu,Lupa (+),fas fa-search-plus,Zoom in.
+Geral/Interface/Menu,Lupa (-),fas fa-search-minus,Zoom out.
+Geral/Interface/Menu,Ferramenta,fas fa-wrench,"Ferramentas, manutenção."
+Geral/Interface/Menu,Rss Feed,fas fa-rss-square,Feeds de notícias.
+Geral/Interface/Menu,QR Code,fas fa-qrcode,Código QR.
+Setas/Direção,Seta para a direita,fas fa-arrow-right,"Navegação, próximo."
+Setas/Direção,Seta para a esquerda,fas fa-arrow-left,"Navegação, anterior."
+Setas/Direção,Seta para cima,fas fa-arrow-up,Rolar para cima.
+Setas/Direção,Seta para baixo,fas fa-arrow-down,Rolar para baixo.
+Setas/Direção,Chevron direita,fas fa-chevron-right,"Indicador de sub-menu, próximo."
+Setas/Direção,Chevron esquerda,fas fa-chevron-left,"Indicador de sub-menu, anterior."
+Setas/Direção,Chevron cima,fas fa-chevron-up,"Colapsar, expandir."
+Setas/Direção,Chevron baixo,fas fa-chevron-down,"Expandir, colapsar."
+Setas/Direção,Seta Circular (Esquerda),fas fa-arrow-circle-left,Voltar.
+Setas/Direção,Seta Circular (Direita),fas fa-arrow-circle-right,Avançar.
+Setas/Direção,Seta Circular (Cima),fas fa-arrow-circle-up,Rolar para o topo.
+Setas/Direção,Seta Circular (Baixo),fas fa-arrow-circle-down,Rolar para baixo.
+Negócios/Documentos,Gráfico de barras,fas fa-chart-bar,"Estatísticas, relatórios."
+Negócios/Documentos,Gráfico de linha,fas fa-chart-line,"Tendências, crescimento."
+Negócios/Documentos,Gráfico de pizza,fas fa-chart-pie,Proporções.
+Negócios/Documentos,Maleta,fas fa-briefcase,"Negócios, profissional."
+Negócios/Documentos,Dinheiro/Cifrão,fas fa-dollar-sign,"Finanças, valores."
+Negócios/Documentos,Banco,fas fa-university,Instituições financeiras.
+Negócios/Documentos,Contrato/Assinatura,fas fa-signature,"Assinaturas, acordos."
+Negócios/Documentos,Recibo/Fatura,fas fa-receipt,"Notas fiscais, recibos."
+Negócios/Documentos,Livro de Notas,fas fa-book-open,"Conhecimento, documentação."
+Negócios/Documentos,Selo/Carimbo,fas fa-stamp,"Aprovação, oficial."
+Negócios/Documentos,Porcentagem,fas fa-percent,"Descontos, taxas."
+Negócios/Documentos,Cálculo,fas fa-calculator,Cálculos.
+Mídia/Redes Sociais,Instagram,fab fa-instagram,"Marca, use fab."
+Mídia/Redes Sociais,Facebook,fab fa-facebook-f,"Marca, use fab."
+Mídia/Redes Sociais,Twitter,fab fa-twitter,"Marca, use fab."
+Mídia/Redes Sociais,YouTube,fab fa-youtube,"Marca, use fab."
+Mídia/Redes Sociais,LinkedIn,fab fa-linkedin-in,"Marca, use fab."
+Mídia/Redes Sociais,WhatsApp,fab fa-whatsapp,"Marca, use fab."
+Mídia/Redes Sociais,Google,fab fa-google,"Marca, use fab."
+Mídia/Redes Sociais,Apple,fab fa-apple,"Marca, use fab."
+Mídia/Redes Sociais,Android,fab fa-android,"Marca, use fab."
+Mídia/Redes Sociais,Pinterest,fab fa-pinterest,"Marca, use fab."
+Mídia/Redes Sociais,Reddit,fab fa-reddit,"Marca, use fab."
+Mídia/Redes Sociais,Snapchat,fab fa-snapchat,"Marca, use fab."
+Mídia/Redes Sociais,Spotify,fab fa-spotify,"Marca, use fab."
+Mídia/Redes Sociais,Twitch,fab fa-twitch,"Marca, use fab."
+Mídia/Redes Sociais,Vimeo,fab fa-vimeo,"Marca, use fab."
+Saúde/Médico,Estetoscópio,fas fa-stethoscope,"Saúde, medicina."
+Saúde/Médico,Médico,fas fa-user-md,"Médico, profissional da saúde."
+Saúde/Médico,Hospital,fas fa-hospital,"Hospitais, clínicas."
+Saúde/Médico,Ambulância,fas fa-ambulance,Emergência médica.
+Saúde/Médico,Cruz (Médica),fas fa-plus-square,Para cruz simples.
+Saúde/Médico,Cápsula,fas fa-capsules,Medicamentos.
+Saúde/Médico,Seringa,fas fa-syringe,"Vacinas, injeções."
+Saúde/Médico,Termômetro,fas fa-thermometer-half,"Febre, temperatura."
+Saúde/Médico,Dente,fas fa-tooth,Odontologia.
+Saúde/Médico,Cérebro,fas fa-brain,"Neurologia, mente."
+Tecnologia,Computador,fas fa-laptop,"Portátil, tecnologia."
+Tecnologia,Celular,fas fa-mobile-alt,Dispositivos móveis.
+Tecnologia,Tablet,fas fa-tablet-alt,Tablets.
+Tecnologia,Servidor,fas fa-server,"Hosting, infraestrutura."
+Tecnologia,Nuvem,fas fa-cloud,"Cloud computing, armazenamento."
+Tecnologia,Código,fas fa-code,"Programação, desenvolvimento."
+Tecnologia,Chip,fas fa-microchip,"Microchip, eletrônica."
+Tecnologia,Robô,fas fa-robot,"Robótica, automação."
+Tecnologia,Joystick,fas fa-gamepad,"Jogos, entretenimento."
+Tecnologia,Impressora,fas fa-print,Impressão de documentos.
+Tecnologia,Monitor,fas fa-desktop,"Tela, computador."
+Tecnologia,Teclado,fas fa-keyboard,Digitação.
+Tecnologia,Mouse,fas fa-mouse,Dispositivo de entrada.
+Transporte,Carro,fas fa-car,"Transporte, veículos."
+Transporte,Ônibus,fas fa-bus,Transporte público.
+Transporte,Caminhão,fas fa-truck,"Transporte de carga, logística."
+Transporte,Bicicleta,fas fa-bicycle,"Esporte, transporte ecológico."
+Transporte,Avião,fas fa-plane,Viagens aéreas.
+Transporte,Navio/Barco,fas fa-ship,Viagens marítimas.
+Transporte,Moto,fas fa-motorcycle,Motocicleta.
+Transporte,Táxi,fas fa-taxi,Serviço de táxi.
+Transporte,Trem,fas fa-train,Ferrovia.
+Militar/Guerra,Escudo,fas fa-shield-alt,"Defesa, proteção, militar."
+Militar/Guerra,Bandeira,fas fa-flag,"Nação, serviço militar."
+Militar/Guerra,Estrela (Geral),fas fa-star,"Patente, distinção (genérico)."
+Militar/Guerra,Uniforme/Soldado (Genérico),fas fa-user-tie,Pessoa uniformizada (não soldado exclusivo).
+Militar/Guerra,Capacete,fas fa-hard-hat,"Proteção, segurança (pode ser militar)."
+Militar/Guerra,Patente/Condecoração,fas fa-award,"Condecoração, mérito."
+Militar/Guerra,Faca/Lâmina,fas fa-knife-b,Arma branca (exemplo de arma no FA Free).
+Militar/Guerra,Punho Erguido,fas fa-fist-raised,"Força, combate, determinação."
+Militar/Guerra,Raio,fas fa-bolt,"Ataque, velocidade, poder."
+Militar/Guerra,Alvo,fas fa-bullseye,"Mira, objetivo, tiro ao alvo."
+Militar/Guerra,Cruz de mira,fas fa-crosshairs,"Mira, foco (pode ser mira de arma)."
+Militar/Guerra,Tiro (bala),fas fa-circle,"(Genérico, pode representar um ponto de impacto)."
+Militar/Guerra,Mira (sniper),fas fa-binoculars,"Binóculos (pode ser usado para ""observar"", ""mirar à distância"")."
+Militar/Guerra,Bomba,fas fa-bomb,"Explosivo, alerta."
+Documentos/Listas,Folha de Papel c/ Linhas,fas fa-file-alt,"Documento de texto, relatório."
+Documentos/Listas,Prancheta c/ Lista,fas fa-clipboard-list,"Planejamento, checklists."
+Documentos/Listas,Tarefas,fas fa-tasks,"Lista de tarefas, gerenciamento."
+Documentos/Listas,Lista Não Ordenada,fas fa-list-ul,Lista genérica.
+Documentos/Listas,Lista Ordenada,fas fa-list-ol,Lista numerada.
+Documentos/Listas,Prancheta (Vazia),fas fa-clipboard,"Documento, formulário."
+Documentos/Listas,Arquivo PDF,fas fa-file-pdf,Arquivos PDF.
+Documentos/Listas,Arquivo Word,fas fa-file-word,Arquivos Word.
+Documentos/Listas,Arquivo Excel,fas fa-file-excel,Arquivos Excel.
+Documentos/Listas,Arquivo Imagem,fas fa-file-image,Arquivos de imagem.
+Documentos/Listas,Arquivo Vídeo,fas fa-file-video,Arquivos de vídeo.
+Documentos/Listas,Arquivo Áudio,fas fa-file-audio,Arquivos de áudio.
+Documentos/Listas,Arquivo Código,fas fa-file-code,Arquivos de código.
+Alimentos/Bebidas,Talheres (Comida),fas fa-utensils,"Refeições, restaurantes, culinária."
+Alimentos/Bebidas,Hambúrguer,fas fa-hamburger,Comida rápida.
+Alimentos/Bebidas,Fatia de Pizza,fas fa-pizza-slice,Pizza.
+Alimentos/Bebidas,Maçã,fas fa-apple-alt,"Frutas, alimentação saudável."
+Alimentos/Bebidas,Caneca Quente,fas fa-mug-hot,"Café, chá, bebidas quentes."
+Alimentos/Bebidas,Xícara de Café,fas fa-coffee,Café.
+Alimentos/Bebidas,Fatia de Pão,fas fa-bread-slice,"Pão, padaria."
+Alimentos/Bebidas,Sorvete,fas fa-ice-cream,Sobremesas.
+Alimentos/Bebidas,Cenoura,fas fa-carrot,Vegetais.
+Alimentos/Bebidas,Ovo,fas fa-egg,"Café da manhã, ingredientes."
+Alimentos/Bebidas,Garrafa de Água,fas fa-bottle-water,Água.
+Alimentos/Bebidas,Taça de Vinho,fas fa-wine-glass-alt,Bebidas alcoólicas.
+Alimentos/Bebidas,Pimenta,fas fa-pepper-hot,Comida picante.
+Alimentos/Bebidas,Cookie,fas fa-cookie-bite,"Biscoitos, doces."
+Animais,Pata de Animal,fas fa-paw,"Animais de estimação, animais em geral."
+Animais,Gato,fas fa-cat,Ícone de gato.
+Animais,Cachorro,fas fa-dog,Ícone de cachorro.
+Animais,Peixe,fas fa-fish,Ícone de peixe.
+Animais,Inseto,fas fa-bug,"Insetos, bugs."
+Animais,Cavalo,fas fa-horse,Ícone de cavalo.
+Animais,Coruja,fas fa-owl,"Sabedoria, noite."
+Animais,Cobra,fas fa-snake,Répteis.
+Animais,Aranha,fas fa-spider,"Insetos, Halloween."
+Animais,Sapo,fas fa-frog,Anfíbios.
+Escritório,Prédio,fas fa-building,"Prédio de escritórios, sede."
+Escritório,Maleta (de negócios),fas fa-briefcase,"Trabalho, negócios, profissional."
+Escritório,Computador de Mesa,fas fa-desktop,"Estação de trabalho, tecnologia."
+Escritório,Laptop,fas fa-laptop,"Computador portátil, trabalho remoto."
+Escritório,Clipe de Papel,fas fa-paperclip,"Anexo, material de escritório."
+Escritório,Cadeira,fas fa-chair,"Ambiente de trabalho, mobília de escritório."
+Escritório,Tesoura,fas fa-cut,Cortar.
+Escritório,Régua,fas fa-ruler,Medição.
+Escritório,Lixeira,fas fa-recycle,"Reciclagem, lixo."
+Escritório,Carimbo,fas fa-stamp,"Oficial, aprovação."
+Escritório,Quadro Branco,fas fa-chalkboard,"Apresentações, aulas."
+Comunicação/Contato,Comentário/Mensagem,fas fa-comment,"Comentários, contato."
+Comunicação/Contato,Balão de Fala (com vários),fas fa-comments,"Múltiplos comentários, fóruns."
+Comunicação/Contato,Fone de Ouvido,fas fa-headphones,"Suporte, atendimento."
+Comunicação/Contato,Microfone,fas fa-microphone,"Áudio, gravação."
+Comunicação/Contato,Envelope Aberto,fas fa-envelope-open,E-mail lido.
+Comunicação/Contato,Papel de Carta,fas fa-paper-plane,Enviar mensagem.
+Comunicação/Contato,Globo Terrestre,fas fa-globe,"Idiomas, internacional."
+Conectividade/Rede,Wi-Fi,fas fa-wifi,Conexão sem fio.
+Conectividade/Rede,Sinal de Celular,fas fa-signal,Força do sinal.
+Conectividade/Rede,Plugue,fas fa-plug,Conexão elétrica.
+Conectividade/Rede,Servidor,fas fa-server,"Redes, hospedagem."
+Conectividade/Rede,Link (cadeia),fas fa-link,Ligação.
+Navegação/Ação,Voltar ao Início,fas fa-arrow-circle-up,Rolar para o topo da página.
+Navegação/Ação,Expandir (Tela Cheia),fas fa-expand,Ampliar visualização.
+Navegação/Ação,Encolher (Tela Cheia),fas fa-compress,Reduzir visualização.
+Navegação/Ação,Compartilhar,fas fa-share-alt,Compartilhamento social ou de conteúdo.
+Navegação/Ação,Sair/Desconectar,fas fa-sign-out-alt,Logout.
+Navegação/Ação,Entrar/Login,fas fa-sign-in-alt,Login.
+Navegação/Ação,Atualizar,fas fa-sync-alt,Recarregar.
+Navegação/Ação,Início (ângulo),fas fa-angle-double-right,Avançar rapidamente.
+Navegação/Ação,Fim (ângulo),fas fa-angle-double-left,Voltar rapidamente.
+Navegação/Ação,Pular (forward),fas fa-forward,Avançar.
+Navegação/Ação,Pular (backward),fas fa-backward,Retroceder.
+Conteúdo/Mídia,Tocar (Play),fas fa-play,Iniciar vídeo/áudio.
+Conteúdo/Mídia,Pausar,fas fa-pause,Pausar vídeo/áudio.
+Conteúdo/Mídia,Parar,fas fa-stop,Parar vídeo/áudio.
+Conteúdo/Mídia,Barra de Progresso,fas fa-spinner,"Carregando, processando (ícone animável)."
+Conteúdo/Mídia,Álbum de Fotos,fas fa-images,Galeria de imagens.
+Conteúdo/Mídia,Música,fas fa-music,"Áudio, música."
+Conteúdo/Mídia,Volume Alto,fas fa-volume-up,Aumentar volume.
+Conteúdo/Mídia,Volume Baixo,fas fa-volume-down,Diminuir volume.
+Conteúdo/Mídia,Mudo,fas fa-volume-mute,Sem som.
+Conteúdo/Mídia,TV,fas fa-tv,Televisão.
+Conteúdo/Mídia,Rádio,fas fa-radio,Rádio.
+Acessibilidade/Pessoas,Acessibilidade,fas fa-universal-access,Recurso de acessibilidade.
+Acessibilidade/Pessoas,Cadeira de Rodas,fas fa-wheelchair,Acessibilidade física.
+Acessibilidade/Pessoas,Braille,fas fa-braille,"Braille, deficiência visual."
+Acessibilidade/Pessoas,Olho Cego,fas fa-low-vision,Baixa visão.
+Acessibilidade/Pessoas,Ouvido,fas fa-ear-deaf,Deficiência auditiva (alt).
+Acessibilidade/Pessoas,Sino Cortado,fas fa-bell-slash,Notificações desativadas.
+Utilidades/Símbolos,Lâmpada (Ideia),fas fa-lightbulb,"Ideias, dicas."
+Utilidades/Símbolos,Copo/Bebida,fas fa-glass-whiskey,"Bebidas, bares (genérico)."
+Utilidades/Símbolos,Localização (Mapa),fas fa-map-marked-alt,"Mapa, rota."
+Utilidades/Símbolos,Coroa,fas fa-crown,"Premium, destaque, realeza."
+Utilidades/Símbolos,Ferramentas,fas fa-tools,"Ferramentas, manutenção, utilitários."
+Utilidades/Símbolos,Carrinho de Mão,fas fa-shopping-basket,Alternativa ao carrinho de compras.
+Utilidades/Símbolos,Desconto/Preço,fas fa-tag,"Tag, preço, desconto."
+Utilidades/Símbolos,Caixa de Presente,fas fa-gift,"Presentes, promoções."
+Utilidades/Símbolos,Certificado/Diploma,fas fa-award,"Certificados, prêmios, conquistas."
+Utilidades/Símbolos,Caminho (Roadmap),fas fa-road,"Rota, progresso."
+Utilidades/Símbolos,Pin,fas fa-thumbtack,"Fixar, importante."
+Utilidades/Símbolos,Guarda-chuva,fas fa-umbrella,"Proteção, tempo."
+Utilidades/Símbolos,Chave,fas fa-key,"Acesso, senha."
+Utilidades/Símbolos,Balança,fas fa-balance-scale,"Justiça, equilíbrio."
+Utilidades/Símbolos,Moeda,fas fa-coins,Dinheiro.
+Utilidades/Símbolos,Lupa,fas fa-search,Busca.
+Utilidades/Símbolos,Bomba de Combustível,fas fa-gas-pump,Combustível.
+Utilidades/Símbolos,Sinal de Perigo,fas fa-exclamation,Alerta.
+Utilidades/Símbolos,Seta para Cima (seta única),fas fa-caret-up,Direção.
+Utilidades/Símbolos,Seta para Baixo (seta única),fas fa-caret-down,Direção.
+Utilidades/Símbolos,Coração (preenchido),fas fa-heart,Favorito.
+Utilidades/Símbolos,Estrela (preenchida),fas fa-star,Classificação.
+Utilidades/Símbolos,Lua,fas fa-moon,"Modo escuro, noite."
+Utilidades/Símbolos,Sol,fas fa-sun,"Dia, brilho."
+Utilidades/Símbolos,Fogo,fas fa-fire,"Alerta, emergência."
+Utilidades/Símbolos,Gota,fas fa-tint,"Água, líquidos."
+Utilidades/Símbolos,Medidor,fas fa-tachometer-alt,Desempenho.
+Utilidades/Símbolos,Árvore,fas fa-tree,"Natureza, meio ambiente."
+Utilidades/Símbolos,Flor,fas fa-leaf,"Natureza, folhas."
+Utilidades/Símbolos,Globo (rede),fas fa-globe,"Rede, internacional."
+Utilidades/Símbolos,Cifra/Hash,fas fa-hashtag,Hashtag.
+Utilidades/Símbolos,Cifra/Número,fas fa-sort-numeric-down,Ordenação numérica.
+Utilidades/Símbolos,Alfabeto,fas fa-sort-alpha-down,Ordenação alfabética.
+Utilidades/Símbolos,Tabela,fas fa-table,"Tabelas, dados."
+Utilidades/Símbolos,Grade,fas fa-th,Layout de grade.
+Utilidades/Símbolos,Lista de Colunas,fas fa-columns,Colunas.
+Utilidades/Símbolos,Caixas Empilhadas,fas fa-boxes,"Estoque, armazenamento."
+Utilidades/Símbolos,Caminhão de Bombeiro,fas fa-fire-extinguisher,"Extintor, emergência."
+Utilidades/Símbolos,Martelo,fas fa-hammer,"Construção, reparo."
+Utilidades/Símbolos,Régua e Lápis,fas fa-pencil-ruler,"Design, desenho."
+Utilidades/Símbolos,Tesoura (alternativa),fas fa-cut,Cortar.
+Utilidades/Símbolos,Balão de Fala (pergunta),fas fa-question-circle,Perguntas.
+Utilidades/Símbolos,Balão de Fala (exclamação),fas fa-exclamation-circle,Aviso.
+Utilidades/Símbolos,Balão de Fala (informação),fas fa-info-circle,Informação.
+Utilidades/Símbolos,Símbolo de Música,fas fa-headphones,Música.
+Utilidades/Símbolos,Símbolo de Vídeo,fas fa-video,Vídeos.
+Utilidades/Símbolos,Imagem (Alternativa),fas fa-image,Imagens.
+Utilidades/Símbolos,Pasta Aberta,fas fa-folder-open,Pasta aberta.
+Utilidades/Símbolos,Carrinho de compras (adic.),fas fa-cart-plus,Adicionar ao carrinho.
+Utilidades/Símbolos,Código de Barras,fas fa-barcode,Códigos de barras.
+Utilidades/Símbolos,Selo de Aprovação,fas fa-badge-check,"Verificado, aprovado."
+Utilidades/Símbolos,Coroa (Alternativa),fas fa-gem,"Joia, premium."
+Utilidades/Símbolos,Cadeado Aberto,fas fa-unlock-alt,Desbloqueado.
+Utilidades/Símbolos,Câmera de Vídeo,fas fa-video-camera,Gravação de vídeo.
+Utilidades/Símbolos,Câmera de Foto,fas fa-camera-retro,Câmera antiga.
+Utilidades/Símbolos,Sinal de Trânsito,fas fa-traffic-light,Trânsito.
+Utilidades/Símbolos,Sinal de Pare,fas fa-stop-circle,Parar.
+Utilidades/Símbolos,Sinal de Mão,fas fa-hand-paper,"Parar, mão."
+Utilidades/Símbolos,Gráfico de Barras Empilhadas,fas fa-chart-area,Área de gráfico.
+Utilidades/Símbolos,Gráfico de Setores,fas fa-chart-pie,Setores.
+Utilidades/Símbolos,Símbolo de Carga,fas fa-battery-half,Bateria.
+Utilidades/Símbolos,Símbolo de Carga Completa,fas fa-battery-full,Bateria cheia.
+Utilidades/Símbolos,Símbolo de Carga Baixa,fas fa-battery-empty,Bateria vazia.
+Utilidades/Símbolos,Símbolo de Carregando,fas fa-charging-station,Estação de carregamento.
+Utilidades/Símbolos,Símbolo de Tomada,fas fa-plug,Tomada.
+Utilidades/Símbolos,Símbolo de Sem Conexão,fas fa-wifi,Sem conexão.
+Utilidades/Símbolos,Símbolo de Sinal de Celular,fas fa-signal,Sinal fraco.
+Utilidades/Símbolos,Símbolo de Fone,fas fa-headphones,Áudio.
+Utilidades/Símbolos,Símbolo de Silenciar,fas fa-volume-mute,Mudo.
+Utilidades/Símbolos,Símbolo de Volume,fas fa-volume-up,Volume.
+Utilidades/Símbolos,Símbolo de Microfone Cortado,fas fa-microphone-slash,Microfone desativado.
+Utilidades/Símbolos,Símbolo de Câmera Cortada,fas fa-video-slash,Câmera desativada.
+Utilidades/Símbolos,Símbolo de Webcam,fas fa-webcam,Webcam.
+Utilidades/Símbolos,Símbolo de Computador Portátil,fas fa-laptop-code,Codificação em laptop.
+Utilidades/Símbolos,Símbolo de Computador Terminal,fas fa-terminal,Terminal de comando.
+Utilidades/Símbolos,Símbolo de Servidor em Nuvem,fas fa-cloud-server,Servidor em nuvem.
+Utilidades/Símbolos,Símbolo de Nuvem de Upload,fas fa-cloud-upload-alt,Upload para nuvem.
+Utilidades/Símbolos,Símbolo de Nuvem de Download,fas fa-cloud-download-alt,Download da nuvem.
+Utilidades/Símbolos,Símbolo de Firewall,fas fa-firewall,Segurança de rede.
+Utilidades/Símbolos,Símbolo de Virus,fas fa-virus,Vírus.
+Utilidades/Símbolos,Símbolo de Máscara Médica,fas fa-head-side-mask,Máscara.
+Utilidades/Símbolos,Símbolo de Escudo com Check,fas fa-shield-check,Segurança verificada.
+Utilidades/Símbolos,Símbolo de Fita de Prêmios,fas fa-ribbon,Fita de prêmios.
+Utilidades/Símbolos,Símbolo de Troféu,fas fa-trophy,Troféu.
+Utilidades/Símbolos,Símbolo de Medalha,fas fa-medal,Medalha.
+Utilidades/Símbolos,Símbolo de Martelo e Chave,fas fa-tools,Ferramentas gerais.
+Utilidades/Símbolos,Símbolo de Chave de Fenda,fas fa-screwdriver,Ferramenta.
+Utilidades/Símbolos,Símbolo de Alicate,fas fa-pliers,Ferramenta.
+Utilidades/Símbolos,Símbolo de Bússola,fas fa-compass,Direção.
+Utilidades/Símbolos,Símbolo de Lupa de Lupa,fas fa-search,Pesquisa.
+Utilidades/Símbolos,Símbolo de Contrato,fas fa-file-contract,Contratos.
+Utilidades/Símbolos,Símbolo de Identificação,fas fa-id-card,Carteira de identidade.
+Utilidades/Símbolos,Símbolo de Crachá,fas fa-id-badge,Crachá.
+Utilidades/Símbolos,Símbolo de Etiqueta,fas fa-tags,"Etiquetas, tags."
+Utilidades/Símbolos,Símbolo de Código de Barras,fas fa-barcode,Código de barras.
+Utilidades/Símbolos,Símbolo de Qr Code,fas fa-qrcode,QR Code.
+Utilidades/Símbolos,Símbolo de Leitor de Cartão,fas fa-credit-card,Cartão de crédito.
+Utilidades/Símbolos,Símbolo de Conta Bancária,fas fa-money-check-alt,"Cheque, conta."
+Utilidades/Símbolos,Símbolo de Saque,fas fa-money-bill-wave,Dinheiro.
+Utilidades/Símbolos,Símbolo de Depósito,fas fa-money-bill-alt,Dinheiro.
+Utilidades/Símbolos,Símbolo de Calculadora,fas fa-calculator,Calculadora.
+Utilidades/Símbolos,Símbolo de Gráfico Crescente,fas fa-chart-line,Crescimento.
+Utilidades/Símbolos,Símbolo de Gráfico Decrescente,fas fa-chart-area,Declínio.
+Utilidades/Símbolos,Símbolo de Sinal de Trânsito,fas fa-traffic-light,Trânsito.
+Utilidades/Símbolos,Símbolo de Mapa Mundi,fas fa-map,Mapa.
+Utilidades/Símbolos,Símbolo de Ponto de Parada,fas fa-stop-circle,Parada.
+Utilidades/Símbolos,Símbolo de Sinal de Cuidado,fas fa-exclamation-triangle,Cuidado.
+Utilidades/Símbolos,Símbolo de Sem Proibição,fas fa-ban,Proibido.
+Utilidades/Símbolos,Símbolo de Regras,fas fa-gavel,Lei.
+Utilidades/Símbolos,Símbolo de Cesta de Lixo,fas fa-trash-alt,Lixeira.
+Utilidades/Símbolos,Símbolo de Reciclar,fas fa-recycle,Reciclagem.
+Utilidades/Símbolos,Símbolo de Lâmpada (ligada),fas fa-lightbulb,Ideia.
+Utilidades/Símbolos,Símbolo de Lâmpada (desligada),fas fa-lightbulb-slash,Sem ideia.
+Utilidades/Símbolos,Símbolo de Chave,fas fa-key,Acesso.
+Utilidades/Símbolos,Símbolo de Câmera de Vídeo,fas fa-video,Vídeo.
+Utilidades/Símbolos,Símbolo de Câmera de Foto,fas fa-camera,Foto.
+Utilidades/Símbolos,Símbolo de Álbum de Fotos,fas fa-images,Galeria.
+Utilidades/Símbolos,Símbolo de Música,fas fa-music,Música.
+Utilidades/Símbolos,Símbolo de Alto-falante,fas fa-volume-up,Volume.
+Utilidades/Símbolos,Símbolo de Fone de Ouvido,fas fa-headphones,Áudio.
+Utilidades/Símbolos,Símbolo de Microfone,fas fa-microphone,Gravação.
+Utilidades/Símbolos,Símbolo de Mudo,fas fa-volume-mute,Mudo.
+Utilidades/Símbolos,Símbolo de Silenciar Microfone,fas fa-microphone-slash,Microfone mudo.
+Utilidades/Símbolos,Símbolo de Transmissão,fas fa-broadcast-tower,Transmissão.
+Utilidades/Símbolos,Símbolo de Rádio,fas fa-radio,Rádio.
+Utilidades/Símbolos,Símbolo de Televisão,fas fa-tv,Televisão.
+Utilidades/Símbolos,Símbolo de Relógio,fas fa-clock,Tempo.
+Utilidades/Símbolos,Símbolo de Alarme,fas fa-bell,Notificação.
+Utilidades/Símbolos,Símbolo de Calendário,fas fa-calendar-alt,Calendário.
+Utilidades/Símbolos,Símbolo de Localização,fas fa-map-marker-alt,Ponto no mapa.
+Utilidades/Símbolos,Símbolo de Rota,fas fa-route,Rota.
+Utilidades/Símbolos,Símbolo de Bússola,fas fa-compass,Bússola.
+Utilidades/Símbolos,Símbolo de Sol,fas fa-sun,Dia.
+Utilidades/Símbolos,Símbolo de Lua,fas fa-moon,Noite.
+Utilidades/Símbolos,Símbolo de Estrela,fas fa-star,Favorito.
+Utilidades/Símbolos,Símbolo de Coração,fas fa-heart,Curtir.
+Utilidades/Símbolos,Símbolo de Fogo,fas fa-fire,Incêndio.
+Utilidades/Símbolos,Símbolo de Gota,fas fa-tint,Água.
+Utilidades/Símbolos,Símbolo de Neve,fas fa-snowflake,Neve.
+Utilidades/Símbolos,Símbolo de Chuva,fas fa-cloud-showers-heavy,Chuva.
+Utilidades/Símbolos,Símbolo de Vento,fas fa-wind,Vento.
+Utilidades/Símbolos,Símbolo de Relâmpago,fas fa-bolt,Raio.
+Utilidades/Símbolos,Símbolo de Árvore,fas fa-tree,Natureza.
+Utilidades/Símbolos,Símbolo de Folha,fas fa-leaf,Natureza.
+Utilidades/Símbolos,Símbolo de Montanha,fas fa-mountain,Montanha.
+Utilidades/Símbolos,Símbolo de Rio,fas fa-water,Rio.
+Utilidades/Símbolos,Símbolo de Terra,fas fa-globe-americas,Mundo.
+Utilidades/Símbolos,Símbolo de Planeta,fas fa-globe,Planeta.
+Utilidades/Símbolos,Símbolo de Foguete,fas fa-rocket,Lançamento.
+Utilidades/Símbolos,Símbolo de UFO,fas fa-pastafarianism,"(Ícone divertido para ""alien"")."
+Utilidades/Símbolos,Símbolo de Dinheiro,fas fa-money-bill-wave,Dinheiro.
+Utilidades/Símbolos,Símbolo de Presente,fas fa-gift,Presente.
+Utilidades/Símbolos,Símbolo de Coroa,fas fa-crown,Realeza.
+Utilidades/Símbolos,Símbolo de Troféu,fas fa-trophy,Vitória.
+Utilidades/Símbolos,Símbolo de Medalha,fas fa-medal,Honra.
+Utilidades/Símbolos,Símbolo de Crachá,fas fa-badge-check,Verificado.
+Utilidades/Símbolos,Símbolo de Certificado,fas fa-award,Diploma.
+Utilidades/Símbolos,Símbolo de Livro Aberto,fas fa-book-open,Leitura.
+Utilidades/Símbolos,Símbolo de Lápis,fas fa-pencil-alt,Escrever.
+Utilidades/Símbolos,Símbolo de Régua,fas fa-ruler,Medir.
+Utilidades/Símbolos,Símbolo de Tesoura,fas fa-cut,Cortar.
+Utilidades/Símbolos,Símbolo de Borracha,fas fa-eraser,Apagar.
+Utilidades/Símbolos,Símbolo de Cola,fas fa-grip-lines,Linhas.
+Utilidades/Símbolos,Símbolo de Alfinete,fas fa-thumbtack,Fixar.
+Utilidades/Símbolos,Símbolo de Fita Métrica,fas fa-tape,Medida.
+Utilidades/Símbolos,Símbolo de Martelo,fas fa-hammer,Construção.
+Utilidades/Símbolos,Símbolo de Chave de Boca,fas fa-wrench,Ferramenta.
+Utilidades/Símbolos,Símbolo de Caminhão de Carga,fas fa-truck-loading,Carregamento.
+Utilidades/Símbolos,Símbolo de Empilhadeira,fas fa-pallet,Pallet.
+Utilidades/Símbolos,Símbolo de Envio,fas fa-shipping-fast,Entrega rápida.
+Utilidades/Símbolos,Símbolo de Armazém,fas fa-warehouse,Armazém.
+Utilidades/Símbolos,Símbolo de Fábrica,fas fa-industry,Indústria.
+Utilidades/Símbolos,Símbolo de Robô,fas fa-robot,Robótica.
+Utilidades/Símbolos,Símbolo de Engrenagem,fas fa-cogs,Configurações.
+Utilidades/Símbolos,Símbolo de Escala,fas fa-balance-scale,Justiça.
+Utilidades/Símbolos,Símbolo de Martelo de Juiz,fas fa-gavel,Lei.
+Utilidades/Símbolos,Símbolo de Algemas,fas fa-handcuffs,Algemas.
+Utilidades/Símbolos,Símbolo de Policial,fas fa-user-secret,Secreto.
+Utilidades/Símbolos,Símbolo de Proteção,fas fa-shield-alt,Proteção.
+Utilidades/Símbolos,Símbolo de Alerta,fas fa-bell,Alerta.
+Utilidades/Símbolos,Símbolo de Bloqueio,fas fa-lock,Segurança.
+Utilidades/Símbolos,Símbolo de Desbloqueio,fas fa-unlock,Desbloquear.
+Utilidades/Símbolos,Símbolo de Câmera de Segurança,fas fa-video,Vigilância.
+Utilidades/Símbolos,Símbolo de Visão Noturna,fas fa-eye-slash,Esconder.
+Utilidades/Símbolos,Símbolo de Impressão Digital,fas fa-fingerprint,Autenticação.
+Utilidades/Símbolos,Símbolo de Reconhecimento Facial,fas fa-face-grimace,"(Genérico, pode ser adaptado)."
+Utilidades/Símbolos,Símbolo de Cadeia,fas fa-link,Conexão.
+Utilidades/Símbolos,Símbolo de Nuvem,fas fa-cloud,Nuvem.
+Utilidades/Símbolos,Símbolo de Código,fas fa-code,Programação.
+Utilidades/Símbolos,Símbolo de Terminal,fas fa-terminal,Linha de comando.
+Utilidades/Símbolos,Símbolo de Computador,fas fa-laptop,Computador.
+Utilidades/Símbolos,Símbolo de Celular,fas fa-mobile-alt,Celular.
+Utilidades/Símbolos,Símbolo de Tablet,fas fa-tablet-alt,Tablet.
+Utilidades/Símbolos,Símbolo de Desktop,fas fa-desktop,Desktop.
+Utilidades/Símbolos,Símbolo de Servidor,fas fa-server,Servidor.
+Utilidades/Símbolos,Símbolo de Wi-Fi,fas fa-wifi,Wireless.
+Utilidades/Símbolos,Símbolo de Sinal,fas fa-signal,Sinal.
+Utilidades/Símbolos,Símbolo de Bluetooth,fab fa-bluetooth-b,Bluetooth.
+Utilidades/Símbolos,Símbolo de NFC,fas fa-id-card,"(Genérico, pode ser adaptado)."
+Utilidades/Símbolos,Símbolo de Cartão de Crédito,fas fa-credit-card,Pagamento.
+Utilidades/Símbolos,Símbolo de Banco,fas fa-university,Banco.
+Utilidades/Símbolos,Símbolo de Dinheiro,fas fa-money-bill-wave,Cash.
+Utilidades/Símbolos,Símbolo de Cifrão,fas fa-dollar-sign,Moeda.
+Utilidades/Símbolos,Símbolo de Euro,fas fa-euro-sign,Moeda.
+Utilidades/Símbolos,Símbolo de Libra,fas fa-pound-sign,Moeda.
+Utilidades/Símbolos,Símbolo de Iene,fas fa-yen-sign,Moeda.
+Utilidades/Símbolos,Símbolo de Bitcoin,fab fa-bitcoin,Criptomoeda.
+Utilidades/Símbolos,Símbolo de Carrinho de Compras,fas fa-shopping-cart,Compras.
+Utilidades/Símbolos,Símbolo de Sacola de Compras,fas fa-shopping-bag,Compras.
+Utilidades/Símbolos,Símbolo de Presente,fas fa-gift,Presente.
+Utilidades/Símbolos,Símbolo de Etiqueta de Preço,fas fa-tag,Preço.
+Utilidades/Símbolos,Símbolo de Desconto,fas fa-percentage,Desconto.
+Utilidades/Símbolos,Símbolo de Gráfico de Pizza,fas fa-chart-pie,Estatísticas.
+Utilidades/Símbolos,Símbolo de Gráfico de Linha,fas fa-chart-line,Tendências.
+Utilidades/Símbolos,Símbolo de Gráfico de Barras,fas fa-chart-bar,Dados.
+Utilidades/Símbolos,Símbolo de Tabela,fas fa-table,Tabela.
+Utilidades/Símbolos,Símbolo de Calculadora,fas fa-calculator,Cálculo.

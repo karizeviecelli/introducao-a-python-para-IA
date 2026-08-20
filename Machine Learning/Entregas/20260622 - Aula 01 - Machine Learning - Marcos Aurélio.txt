@@ -1,0 +1,20 @@
+20260622 - Aula 01 - Introdução ao Machine Learning com Python, Pandas e Scikit-Learn
+
+01) Explique com suas palavras: O que é Machine Learning?
+R: É o aprendizado (treinamento) da inteligência Artificial.
+
+02) Explique a diferença entre: X e y
+R:O "X" representa as Features(entrada);
+  O "y" representa as Target's (saídas).
+
+03) O que faz esta linha "import pandas as pd"?
+R: Importa a biblioteca pandas e atribui um apelido(Alias) para ela. Esse apelido serve com abreviação do nome para ser referenciada no momento do código.
+
+04) O que é um DataFrame?
+R: É a base de dados que a AI usará.
+
+05) Explique: "modelo.fit(X, Y)"
+R: fit: significa aprender e treinar um modelo, ou seja ele recebe os valor X e y, aprende os valores recebidos e compara.
+
+
+
